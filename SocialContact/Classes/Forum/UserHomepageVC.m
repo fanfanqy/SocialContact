@@ -8,11 +8,13 @@
 
 #import "UserHomepageVC.h"
 
+#import "ForumVC.h"
+
 #import "UserInfoHomePageCell.h"
 #import "VipStatusCell.h"
 #import "UserImagesCell.h"
 #import "SelectConditionCell.h"
-#import "NewDynamicsTableViewCell.h"
+#import "MeListTableViewCell.h"
 
 @interface UserHomepageVC ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,VipStatusCellDelegate>
 
@@ -22,7 +24,7 @@
 
 @property(nonatomic,strong) InsLoadDataTablView *tableView;
 
-@property(nonatomic,strong) NSMutableArray *momentListArray;
+//@property(nonatomic,strong) NSMutableArray *momentListArray;
 
 @property(nonatomic,assign) NSInteger page;
 
@@ -40,8 +42,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.tableHeaderView = self.cycleScrollView;
     
-    //
-    self.momentListArray = [NSMutableArray array];
+   
     
     @weakify(self);
     [self.tableView setLoadNewData:^{
@@ -49,22 +50,13 @@
         [self fetchData];
     }];
     
-    [self.tableView setLoadMoreData:^{
-        @normalize(self);
-        [self fetchMomentList:NO];
-    }];
     
-//    [self.tableView hideFooter];
+    [self.tableView hideFooter];
     [self showLoading];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self fetchData];
-        [self fetchMomentList:YES];
     });
-    
-}
-
-- (void)fetchMomentList:(BOOL)refresh{
     
 }
 
@@ -78,6 +70,7 @@
         if (!request.error) {
             if (request.responseObject[@"data"]) {
                 weakSelf.userInfo = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
+                [weakSelf refresh];
             }else{
                 [weakSelf.view makeToast:request.responseObject[@"msg"]];
             }
@@ -135,14 +128,12 @@
     if (indexPath.section == 0) {
         UserInfoHomePageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoHomePageCell"];
         cell.userInfo = self.userInfo;
-        
         return cell;
         
     }else if (indexPath.section == 1) {
         
         VipStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VipStatusCell"];
         cell.delegate = self;
-        
         return cell;
         
     }else if (indexPath.section == 2) {
@@ -155,11 +146,14 @@
         
         UserImagesCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserImagesCell"];
         cell.userInfo = self.userInfo;
+        return cell;
         
     }else if (indexPath.section == 4) {
         
-        
-        
+        MeListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeListTableViewCell"];
+        cell.titleLB.text = @"个人动态";
+        cell.leftImgV.image = [UIImage imageNamed:@"main_tab_item_icon2_selected"];
+        return cell;
     }
     
     return nil;
@@ -186,7 +180,7 @@
         
     }else if (section == 4) {
         
-        return self.momentListArray.count;
+        return 1;
         
     }
     
@@ -196,15 +190,15 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
    
     if (indexPath.section == 0) {
-        return 150;
+        return 200;
         
     }else if (indexPath.section == 1) {
         
-        return 100;
+        return 110;
         
     }else if (indexPath.section == 2) {
         
-        return 200;
+        return 260;
         
     }else if (indexPath.section == 3) {
         
@@ -212,7 +206,7 @@
         
     }else if (indexPath.section == 4) {
         
-        return 100;
+        return 60;
         
     }
     return 0.00001;
@@ -222,7 +216,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    if (indexPath.section == 4) {
+        ForumVC *vc = [ForumVC new];
+        vc.momentUIType = MomentUITypeList;
+        vc.momentRequestType = MomentRequestTypeUserList;
+        vc.forumVCType = ForumVCTypeMoment;
+        vc.uesrInfo = self.userInfo;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -233,6 +234,28 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 10;
+}
+
+- (InsLoadDataTablView *)tableView {
+    if ( !_tableView ) {
+        CGRect rect = CGRectMake(0, 0, self.view.width, kScreenHeight-GuaTopHeight);
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:rect style:UITableViewStylePlain];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _tableView.separatorColor = Line;
+        [_tableView setSeparatorInset:UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15)];
+        _tableView.tableFooterView = [UIView new];
+        
+        [_tableView registerNib:[UINib nibWithNibName:@"VipStatusCell" bundle:nil] forCellReuseIdentifier:@"VipStatusCell"];
+        [_tableView registerNib:[UINib nibWithNibName:@"UserImagesCell" bundle:nil] forCellReuseIdentifier:@"UserImagesCell"];
+        [_tableView registerNib:[UINib nibWithNibName:@"UserInfoHomePageCell" bundle:nil] forCellReuseIdentifier:@"UserInfoHomePageCell"];
+        [_tableView registerNib:[UINib nibWithNibName:@"SelectConditionCell" bundle:nil] forCellReuseIdentifier:@"SelectConditionCell"];
+        [_tableView registerNib:[UINib nibWithNibName:@"MeListTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeListTableViewCell"];
+        
+    }
+    return _tableView;
 }
 
 /*

@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserImagesCell : UITableViewCell
 
 @property (nonatomic,strong) SCUserInfo *userInfo;
+@property (weak, nonatomic) IBOutlet UIImageView *img1;
+@property (weak, nonatomic) IBOutlet UIImageView *img2;
+@property (weak, nonatomic) IBOutlet UIImageView *img3;
 
 @end
 

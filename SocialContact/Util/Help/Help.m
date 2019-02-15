@@ -25,8 +25,28 @@
     return imageData;
 }
 
++ (NSString *)height:(CGFloat)height{
+    NSString *str = @"未知";
+    if (height<1) {
+        return str;
+    }else{
+        return [NSString stringWithFormat:@"%.1lfcm",height];
+    }
+    return str;
+}
+
++ (NSString *)age:(NSInteger)age{
+    NSString *str = @"未知";
+    if (age<1) {
+        return str;
+    }else{
+        return [NSString stringWithFormat:@"%ld岁",age];
+    }
+    return str;
+}
+
 + (NSString *)profession:(NSInteger)professionType{
-    NSString *str;
+    NSString *str = @"工作职业";
     switch (professionType) {
         case 0:
             str = @"未知";
@@ -54,7 +74,7 @@
 
 // 教育
 + (NSString *)education:(NSInteger)educationType{
-    NSString *str;
+    NSString *str = @"教育程度";
     switch (educationType) {
         case 0:
             str = @"未知";
@@ -97,7 +117,7 @@
 //    (3, '20万~50万'),
 //    (4, '50万以上'),
 //    )
-    NSString *str;
+    NSString *str = @"收入水平";
     switch (incomeType) {
         case 0:
             str = @"未知";
@@ -129,7 +149,7 @@
 //                             (2, '离异'),
 //                             (3, '丧偶'),
 //                             )
-    NSString *str;
+    NSString *str = @"婚姻状态";
     switch (marital_statusType) {
         case 0:
             str = @"未知";
@@ -158,7 +178,7 @@
 //                           (2, '有，和我在一起'),
 //                           (3, '有，不和我在一起'),
 //                           )
-    NSString *str;
+    NSString *str=@"子女状态";
     switch (child_statusType) {
         case 0:
             str = @"未知";
@@ -178,15 +198,10 @@
     return str;
 }
 
-// 小孩状态
+
 + (NSString *)yearsToMarial:(NSInteger)yearsToMarialType{
-    //    CHILD_STATUS_CHOICE = (
-    //                           (0, '未知'),
-    //                           (1, '无'),
-    //                           (2, '有，和我在一起'),
-    //                           (3, '有，不和我在一起'),
-    //                           )
-    NSString *str;
+    
+    NSString *str = @"结婚考虑";
     switch (yearsToMarialType) {
         case 0:
             str = @"未知";

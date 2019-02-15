@@ -15,9 +15,12 @@
 #import "BottomToolView.h"
 #import "NewDynamicsTableViewCell.h"
 
+#import "NearByUserCell.h"
+
 #import "DCIMGroupConversationViewController.h"
 
 #import "TopicModel.h"
+#import "Notice.h"
 
 #import "XHInputView.h"
 
@@ -95,7 +98,7 @@
     NSString *url = @"";
     if (_forumVCType ==  ForumVCTypeTopic || _forumVCType ==  ForumVCTypeTopicSelect) {
         url = @"/moments/topic/";
-    }else if (_forumVCType == ForumVCTypeMoment) {
+    }else if (_forumVCType == ForumVCTypeMoment || _forumVCType == ForumVCTypeNoticeOrNearBy) {
         if (refresh) {
             _page = 1;
         }else{
@@ -163,7 +166,7 @@
                 
             case MomentRequestTypeNearby:
                 // TODO
-                url = @"/moments/topic/";
+                url = @"/customer/around/";
                 param = @{@"page": [NSNumber numberWithInteger:_page]};
                 break;
                 
@@ -199,7 +202,11 @@
                 url = @"/customer/followerslist/";
                 param = @{@"page": [NSNumber numberWithInteger:_page]};
                 break;
-               
+                
+            case MomentRequestTypeNotice:
+                url = @"/notices/lists/";
+                param = @{@"page": [NSNumber numberWithInteger:_page]};
+                break;
                 
             default:
                 break;
@@ -233,22 +240,43 @@
 //                [weakSelf.tableView hideFooter];
             }
             
-            if (weakSelf.forumVCType ==  ForumVCTypeTopic || weakSelf.forumVCType ==  ForumVCTypeTopicSelect) {
+            if (refresh) {
                 [weakSelf.array removeAllObjects];
+            }else{
+                if (resultArray.count < 10) {
+                    [weakSelf.tableView endRefreshNoMoreData];
+                }
+            }
+            
+            if (weakSelf.forumVCType ==  ForumVCTypeTopic || weakSelf.forumVCType ==  ForumVCTypeTopicSelect) {
+                
+                
                 [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     [weakSelf.array addObject:[TopicModel modelWithDictionary:obj]];
                     
                 }];
                 [weakSelf.tableView reloadData];
-            }else if (weakSelf.forumVCType == ForumVCTypeMoment || weakSelf.forumVCType == ForumVCTypeGoToMomentDetail ) {
                 
-                if (refresh) {
-                    [weakSelf.array removeAllObjects];
-                }else{
-                    if (resultArray.count == 0) {
-                        [weakSelf.tableView endRefreshNoMoreData];
-                    }
+            }else if (weakSelf.forumVCType == ForumVCTypeNoticeOrNearBy) {
+                
+             
+                if (weakSelf.momentRequestType == MomentRequestTypeNotice) {
+                    [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [weakSelf.array addObject:[Notice modelWithDictionary:obj]];
+                        
+                    }];
+                    
+                }else if (weakSelf.momentRequestType == MomentRequestTypeNearby) {
+                    [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [weakSelf.array addObject:[SCUserInfo modelWithDictionary:obj]];
+                        
+                    }];
                 }
+                
+                [weakSelf.tableView reloadData];
+                
+                
+            }else if (weakSelf.forumVCType == ForumVCTypeMoment) {
                 
                 [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     MomentModel *momentModel = [MomentModel modelWithDictionary:obj];
@@ -360,6 +388,21 @@
         cell.titleLB.text = topicModel.name;
         cell.contentLB.text = topicModel.desc;
         return cell;
+    }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
+        
+        NearByUserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NearByUserCell"];
+        
+        if (self.momentRequestType == MomentUITypeNotice) {
+            Notice *notice = self.array[indexPath.row];
+            cell.notice = notice;
+            
+        }else if (self.momentRequestType == MomentRequestTypeNearby) {
+            SCUserInfo *userInfo = self.array[indexPath.row];
+            cell.userInfo = userInfo;
+            
+        }
+        return cell;
+        
     }else if (_forumVCType == ForumVCTypeMoment) {
         
         NewDynamicsLayout *layout = self.array[indexPath.row];
@@ -383,6 +426,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.forumVCType ==  ForumVCTypeTopic || _forumVCType ==  ForumVCTypeTopicSelect) {
         return 100;
+    }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
+        
+        return 85.f;
+        
     }else if (self.forumVCType == ForumVCTypeMoment) {
         NewDynamicsLayout *layout = self.array[indexPath.row];
         return layout.height;
@@ -411,6 +458,16 @@
             
             vc.topicModel = topicModel;
             [self.fatherVC.navigationController pushViewController:vc animated:YES];
+        }
+        
+    }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
+        
+        
+        if (self.momentRequestType == MomentUITypeNotice) {
+            // 进入帖子主页
+            
+        }else if (self.momentRequestType == MomentRequestTypeNearby) {
+            // 进入用户主页
         }
         
     }else if (self.forumVCType == ForumVCTypeMoment) {
@@ -547,6 +604,10 @@
 //        }
         if (_forumVCType ==  ForumVCTypeTopic || _forumVCType ==  ForumVCTypeTopicSelect) {
             [_tableView registerNib:[UINib nibWithNibName:@"TopicCell" bundle:nil] forCellReuseIdentifier:@"TopicCell"];
+        }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
+            
+            [_tableView registerNib:[UINib nibWithNibName:@"NearByUserCell" bundle:nil] forCellReuseIdentifier:@"NearByUserCell"];
+            
         }else if (_forumVCType == ForumVCTypeMoment) {
             if (_momentRequestType == MomentRequestTypeTopicList) {
                 _tableView.tableHeaderView = self.topicListsHeaderView;

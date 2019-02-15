@@ -12,29 +12,52 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="117" id="KGk-i7-Jjw" customClass="UserImagesCell">
-            <rect key="frame" x="0.0" y="0.0" width="328" height="117"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="111" id="KGk-i7-Jjw" customClass="UserImagesCell">
+            <rect key="frame" x="0.0" y="0.0" width="328" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="328" height="116.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="328" height="99.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rqp-pz-EvY">
-                        <rect key="frame" x="0.0" y="6" width="100" height="100"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rqp-pz-EvY">
+                        <rect key="frame" x="5" y="5" width="89.5" height="89.5"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="rqp-pz-EvY" secondAttribute="height" multiplier="1:1" id="yq8-wS-WqO"/>
+                        </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xyC-OF-hSR">
-                        <rect key="frame" x="108" y="8" width="100" height="100"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xyC-OF-hSR">
+                        <rect key="frame" x="104.5" y="5" width="89.5" height="89.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="xyC-OF-hSR" secondAttribute="height" multiplier="1:1" id="NOR-oY-HtL"/>
+                        </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LKu-6U-jCX">
-                        <rect key="frame" x="216" y="8" width="100" height="100"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LKu-6U-jCX">
+                        <rect key="frame" x="204" y="5" width="89.5" height="89.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="LKu-6U-jCX" secondAttribute="height" multiplier="1:1" id="qjj-6F-IuU"/>
+                        </constraints>
                     </imageView>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="xyC-OF-hSR" secondAttribute="bottom" constant="5" id="3QK-W9-Whj"/>
+                    <constraint firstItem="LKu-6U-jCX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="6TR-iD-WsI"/>
+                    <constraint firstItem="xyC-OF-hSR" firstAttribute="leading" secondItem="rqp-pz-EvY" secondAttribute="trailing" constant="10" id="Ah8-ds-cvl"/>
+                    <constraint firstAttribute="bottom" secondItem="rqp-pz-EvY" secondAttribute="bottom" constant="5" id="FoW-dK-2Hq"/>
+                    <constraint firstItem="xyC-OF-hSR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="Mnc-dk-JG8"/>
+                    <constraint firstItem="rqp-pz-EvY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="OSP-r0-gUT"/>
+                    <constraint firstAttribute="bottom" secondItem="LKu-6U-jCX" secondAttribute="bottom" constant="5" id="UhW-Yn-prA"/>
+                    <constraint firstItem="rqp-pz-EvY" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="lVz-VE-qfO"/>
+                    <constraint firstItem="LKu-6U-jCX" firstAttribute="leading" secondItem="xyC-OF-hSR" secondAttribute="trailing" constant="10" id="mTO-UO-CW2"/>
+                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
-            <point key="canvasLocation" x="80" y="129.08545727136433"/>
+            <connections>
+                <outlet property="img1" destination="rqp-pz-EvY" id="ZFm-nn-tDa"/>
+                <outlet property="img2" destination="xyC-OF-hSR" id="kvv-YU-Cmm"/>
+                <outlet property="img3" destination="LKu-6U-jCX" id="CRR-Ga-6kf"/>
+            </connections>
+            <point key="canvasLocation" x="80" y="126.38680659670166"/>
         </tableViewCell>
     </objects>
 </document>

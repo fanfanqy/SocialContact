@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger,MomentUIType){
 	MomentUITypeDetail = 2, //详情 UI
 	MomentUITypeMineList = 3,// 个人列表 UI
     MomentUITypeNearby = 4, // 附近的人，谁看过我，我的粉丝，我的关注
-    
+    MomentUITypeNotice = 5, // 通知
 };
 
 typedef NS_ENUM(NSInteger,MomentRequestType){
@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger,MomentRequestType){
     MomentRequestTypeFollowMe = 14,// 我的粉丝
     MomentRequestTypeFollows = 15,// 我关注的
     MomentRequestTypeTop = 16,// 置顶用户
+    MomentRequestTypeNotice = 17,// 通知
 };
 
 

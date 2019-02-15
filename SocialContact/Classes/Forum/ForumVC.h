@@ -15,6 +15,8 @@ typedef NS_ENUM(NSInteger,ForumVCType){
     ForumVCTypeMoment = 1, //  UI
     ForumVCTypeTopic = 2, // UI
     ForumVCTypeTopicSelect = 3,
+    ForumVCTypeNoticeOrNearBy = 4,
+    
 };
 
 typedef NS_ENUM(NSInteger,ForumVCGoToType){

@@ -62,10 +62,12 @@ NS_ASSUME_NONNULL_BEGIN
  (2, '有，和我在一起'),
  (3, '有，不和我在一起'),
  )
+*/
 
++ (NSString *)height:(CGFloat)height;
  
++ (NSString *)age:(NSInteger)age;
  
- */
 // 职业
 + (NSString *)profession:(NSInteger)professionType;
 

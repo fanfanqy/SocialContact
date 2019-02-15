@@ -34,7 +34,7 @@
         NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
         _formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
         
-    }else if (_momentRequestType == MomentRequestTypeNewest  || _momentRequestType == MomentRequestTypeFollow || _momentRequestType == MomentRequestTypeTopicList){
+    }else{
         NSDate *date = [NSDate dateWithISOFormatString:_model.update_at];
         _formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
     }
@@ -86,7 +86,7 @@
              return;
          }
          text = _model.skills;
-     }else if(_momentRequestType == MomentRequestTypeNewest || _momentRequestType == MomentRequestTypeFollow || _momentRequestType == MomentRequestTypeTopicList ||  _momentRequestType == MomentRequestTypeUserMomentDetail || _momentRequestType == MomentRequestTypeMyMomentDetail){
+     }else{
          if (!_model.text) {
              return;
          }

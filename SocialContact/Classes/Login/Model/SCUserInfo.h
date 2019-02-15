@@ -164,6 +164,8 @@ typedef NS_ENUM(NSInteger,CHILD_STATUS_CHOICE){
  service_show_index_expired_at    string        置顶过期时间
  invitecode    string        邀请码
  
+
+ 
  */
 
 INS_P_ASSIGN(NSInteger, iD);

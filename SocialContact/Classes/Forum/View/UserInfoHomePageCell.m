@@ -17,6 +17,8 @@
 
 - (void)setUserInfo:(SCUserInfo *)userInfo{
     
+    _userInfo = userInfo;
+    
     self.nick.text = userInfo.name;
     
     UIImage *genderImage;// 未知
@@ -29,14 +31,46 @@
     }
     self.gender.image = genderImage;
     
-    self.introduce.text = userInfo.intro;
+    if (userInfo) {
+        [self creatUI:userInfo];
+    }
     
+    if ([NSString ins_String:userInfo.intro]) {
+        self.introduce.text = userInfo.intro;
+    }else{
+        self.introduce.text = @"暂无个人介绍";
+    }
     
+
 }
 
 // 标签云
-- (void )creatUI{
-    NSArray *array = @[@"测试",@"测试测试测试测试测试",@"测试",@"测试测试测试测试测试测试",@"测试",@"测试测试",@"测试测试测试",@"测试测试测试测试",@"测试"];
+- (void )creatUI:(SCUserInfo *)userInfo{
+    
+//    150，摩羯座，24，**镇，期望半年结婚，5万及以下，未婚，无子女
+    
+    NSString *height = [Help height:_userInfo.height];
+    NSString *age = [Help age:_userInfo.age];
+    
+    NSString *address_home = _userInfo.address_home;
+    
+    NSString *profession = [Help profession:_userInfo.profession];
+    NSString *income = [Help income:_userInfo.income];
+    
+    NSString *marital_status = [Help marital_status:_userInfo.marital_status];
+    NSString *child_status = [Help child_status:_userInfo.child_status];
+    NSString *years_to_marry = [Help yearsToMarial:_userInfo.years_to_marry];
+    
+    NSMutableArray *array = [NSMutableArray array];
+    [array addObject:height];
+    [array addObject:age];
+    [array addObject:address_home];
+    [array addObject:[NSString stringWithFormat:@"职业：%@",profession]];
+    [array addObject:[NSString stringWithFormat:@"收入：%@",income]];
+    [array addObject:[NSString stringWithFormat:@"婚姻状态：%@",marital_status]];
+    [array addObject:[NSString stringWithFormat:@"子女：%@",child_status]];
+    [array addObject:[NSString stringWithFormat:@"结婚：%@",years_to_marry]];
+ 
     
     UIButton *listButton;
     
@@ -63,7 +97,7 @@
                 //当前按钮右侧坐标
                 buttonRight = buttonRight + 15 + titleW;
                 if (buttonRight > self.tagView.frame.size.width) {
-                    make.top.mas_equalTo(listButton.mas_bottom).offset(15);
+                    make.top.mas_equalTo(listButton.mas_bottom).offset(10);
                     make.left.mas_equalTo(10);
                     buttonRight = 30 + titleW;
                 }else{
@@ -71,7 +105,7 @@
                     make.left.mas_equalTo(listButton.mas_right).offset(15);
                 }
             }else{
-                make.top.mas_equalTo(25);
+                make.top.mas_equalTo(5);
                 make.left.mas_equalTo(10);
                 buttonRight = 30 + titleW;
             }

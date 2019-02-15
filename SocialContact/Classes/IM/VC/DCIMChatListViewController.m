@@ -8,6 +8,8 @@
 
 #import "DCIMChatListViewController.h"
 
+#import "ForumVC.h"
+
 #import "DCIMChatViewController.h"
 
 #import "DCIMGroupConversationViewController.h"
@@ -127,7 +129,23 @@
 	if ([self.conversationListTableView respondsToSelector:@selector(setSeparatorInset:)]) { [self.conversationListTableView setSeparatorInset:UIEdgeInsetsZero]; }
 	if ([self.conversationListTableView respondsToSelector:@selector(setLayoutMargins:)]) { [self.conversationListTableView setLayoutMargins:UIEdgeInsetsZero]; }
 
+    DCIMButton *noticeBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
+    [noticeBtn setImage:[[UIImage imageNamed:@"ic_notice"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    noticeBtn.tintColor = MAIN_COLOR;
+    
+    [noticeBtn addTarget:self action:@selector(noticeBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:noticeBtn];
 
+}
+
+- (void)noticeBtnAction{
+    
+    ForumVC *vc = [ForumVC new];
+    vc.forumVCType = ForumVCTypeNoticeOrNearBy;
+    vc.momentRequestType = MomentRequestTypeNotice;
+    vc.momentUIType = MomentUITypeNotice;
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 - (IMHeaderView *)conversationListTableViewHeaderView{
@@ -140,7 +158,11 @@
 }
 
 - (void)nearbyUserCLick{
-    
+    ForumVC *vc = [ForumVC new];
+    vc.forumVCType = ForumVCTypeNoticeOrNearBy;
+    vc.momentRequestType = MomentRequestTypeNearby;
+    vc.momentUIType = MomentUITypeNearby;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)driftingBottleCLick{

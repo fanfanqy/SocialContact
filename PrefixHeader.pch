@@ -73,6 +73,7 @@
 #import "UIScrollView+LoadData.h"
 #import "AppDelegate.h"
 #import "AppDelegate+ThirdLibraryConfig.h"
+#import "DCIMButton.h"
 #import "UIScrollView+Addition.h"
 #import "UIView+JKBlockGesture.h"
 #import "NSString+Ins_Verify.h"

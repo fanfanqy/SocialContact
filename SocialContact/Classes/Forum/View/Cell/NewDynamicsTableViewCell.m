@@ -336,15 +336,13 @@
         self.time.text = layout.formatedTimeString?:@"";
         self.content.textLayout = layout.contentLayout;
         
-    }else if (layout.momentRequestType == MomentRequestTypeNewest || layout.momentRequestType == MomentRequestTypeFollow || layout.momentRequestType == MomentRequestTypeTopicList || layout.momentRequestType == MomentRequestTypeUserMomentDetail || layout.momentRequestType == MomentRequestTypeMyMomentDetail) {
+    }else {
         [self.portrait sd_setImageWithURL:[NSURL URLWithString:model.customer.avatar_url?:@""]];
         self.name.text = model.customer.name?:@"";
         self.address.text = model.customer.address_home?:@"";
         self.time.text = layout.formatedTimeString?:@"";
         self.content.textLayout = layout.contentLayout;
     }
-    
-    [self.name sizeToFit];
     
     self.content.height = layout.contentHeight;
     

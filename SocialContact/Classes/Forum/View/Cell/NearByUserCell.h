@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SCUserInfo.h"
-
+#import "Notice.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NearByUserCell : UITableViewCell
@@ -19,6 +19,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *personalSignature;
 @property (weak, nonatomic) IBOutlet UILabel *distance;
 
+
+/**
+ 通知
+ */
+@property (strong, nonatomic) Notice *notice;
+
+/**
+ 附近的人
+ */
 @property (strong, nonatomic) SCUserInfo *userInfo;
 
 @end

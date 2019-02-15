@@ -80,6 +80,8 @@
 		00829C2421EF149300A1F297 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00829C2221EF149300A1F297 /* MatchTableViewCell.xib */; };
 		00829C2C21F099B600A1F297 /* RecommendUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00829C2A21F099B600A1F297 /* RecommendUserCell.m */; };
 		00829C2D21F099B600A1F297 /* RecommendUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00829C2B21F099B600A1F297 /* RecommendUserCell.xib */; };
+		0087CF5C2216A48C00161CA6 /* Notice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF5B2216A48C00161CA6 /* Notice.m */; };
+		0087CF5F2216A8ED00161CA6 /* DCIMButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF5E2216A8ED00161CA6 /* DCIMButton.m */; };
 		0088DB9A21E4843000C52C76 /* OSSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088DB8021E4843000C52C76 /* OSSConstants.m */; };
 		0088DB9B21E4843000C52C76 /* InsLoadDataTablView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088DB8521E4843000C52C76 /* InsLoadDataTablView.m */; };
 		0088DB9C21E4843000C52C76 /* CommonWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088DB8821E4843000C52C76 /* CommonWebViewController.m */; };
@@ -424,6 +426,10 @@
 		00829C2921F099B600A1F297 /* RecommendUserCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecommendUserCell.h; sourceTree = "<group>"; };
 		00829C2A21F099B600A1F297 /* RecommendUserCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecommendUserCell.m; sourceTree = "<group>"; };
 		00829C2B21F099B600A1F297 /* RecommendUserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecommendUserCell.xib; sourceTree = "<group>"; };
+		0087CF5A2216A48C00161CA6 /* Notice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Notice.h; sourceTree = "<group>"; };
+		0087CF5B2216A48C00161CA6 /* Notice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Notice.m; sourceTree = "<group>"; };
+		0087CF5D2216A8EC00161CA6 /* DCIMButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIMButton.h; sourceTree = "<group>"; };
+		0087CF5E2216A8ED00161CA6 /* DCIMButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCIMButton.m; sourceTree = "<group>"; };
 		0088DB8021E4843000C52C76 /* OSSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSConstants.m; sourceTree = "<group>"; };
 		0088DB8121E4843000C52C76 /* NetApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetApi.h; sourceTree = "<group>"; };
 		0088DB8221E4843000C52C76 /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
@@ -1164,6 +1170,8 @@
 		0088DBBC21E499E200C52C76 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				0087CF5D2216A8EC00161CA6 /* DCIMButton.h */,
+				0087CF5E2216A8ED00161CA6 /* DCIMButton.m */,
 				0088DBF421E4A55F00C52C76 /* NSString */,
 				0088DBC121E49B9300C52C76 /* UIView+JKBlockGesture.h */,
 				0088DBC021E49B9300C52C76 /* UIView+JKBlockGesture.m */,
@@ -1763,6 +1771,8 @@
 		00F3C78421E866FB005CA742 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0087CF5A2216A48C00161CA6 /* Notice.h */,
+				0087CF5B2216A48C00161CA6 /* Notice.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2395,6 +2405,7 @@
 				00BB695321E38AF400ED831F /* YYTimer.m in Sources */,
 				00F3C82E21E9B785005CA742 /* JXCategoryImageCellModel.m in Sources */,
 				0010DAE021F72F2300DA0EFF /* DCIMDataSource.m in Sources */,
+				0087CF5F2216A8ED00161CA6 /* DCIMButton.m in Sources */,
 				00BB693B21E38AF400ED831F /* NSNumber+YYAdd.m in Sources */,
 				00BB694C21E38AF400ED831F /* YYThreadSafeDictionary.m in Sources */,
 				001802AD21FC41C0007E0656 /* BottleModel.m in Sources */,
@@ -2461,6 +2472,7 @@
 				00BB692021E38AF400ED831F /* YYTextKeyboardManager.m in Sources */,
 				00F3C79521E8C34D005CA742 /* NetDelegateManager.m in Sources */,
 				00BB693021E38AF400ED831F /* UIApplication+YYAdd.m in Sources */,
+				0087CF5C2216A48C00161CA6 /* Notice.m in Sources */,
 				0088DC1021E4A55F00C52C76 /* NSString+Emoji.m in Sources */,
 				00F3C84521E9C656005CA742 /* TopicCell.m in Sources */,
 				0018029921FBF985007E0656 /* MomentListModel.m in Sources */,

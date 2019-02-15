@@ -17,8 +17,8 @@
 
 - (void)setUserInfo:(SCUserInfo *)userInfo{
     
-    self.height.text = [NSString stringWithFormat:@"%.1lfcm",userInfo.height];
-    self.age.text = [NSString stringWithFormat:@"%ld岁",userInfo.age];
+    self.height.text = [Help height:userInfo.height];
+    self.age.text = [Help age:userInfo.age];
     
     self.profession.text = [Help profession:userInfo.profession];
     self.income.text = [Help income:userInfo.income];
