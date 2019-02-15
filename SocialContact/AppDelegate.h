@@ -12,6 +12,11 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property (strong, nonatomic) MapManager *mapManager;
+
++(AppDelegate *)sharedDelegate;
+
+- (void)configRootVC;
 
 @end
 
