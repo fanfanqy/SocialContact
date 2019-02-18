@@ -1,1 +1,4 @@
+.gitignore
+SocialContact.xcworkspace/
+SocialContact.xcodeproj/
 Pods/
