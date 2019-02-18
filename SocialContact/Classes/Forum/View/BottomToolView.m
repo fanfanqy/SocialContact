@@ -18,13 +18,20 @@
 - (void)layoutSubviews{
     
     [super layoutSubviews];
+    
     self.partiBtn.layer.cornerRadius = self.partiBtn.height/2.0;
     self.joinBtn.layer.cornerRadius = self.partiBtn.height/2.0;
     self.partiBtn.layer.masksToBounds = YES;
     self.joinBtn.layer.masksToBounds = YES;
-    [self.partiBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"279DFC"]] forState:UIControlStateNormal];
-    [self.joinBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"F57C00"]] forState:UIControlStateNormal];
+    [self.partiBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
+    [self.joinBtn setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
     
+    if (self.type == 1) {
+        [self.partiBtn setTitle:@"  对话" forState:UIControlStateNormal];
+        [self.joinBtn setTitle:@"  加关注" forState:UIControlStateNormal];
+        [self.partiBtn setImage:[UIImage imageNamed:@"ic_chat_white"] forState:UIControlStateNormal];
+        [self.partiBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
+    }
     
 }
 

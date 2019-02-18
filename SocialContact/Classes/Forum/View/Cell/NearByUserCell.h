@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SCUserInfo.h"
 #import "Notice.h"
+#import "WhoLookMeModel.h"
+#import "UserPointsModel.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NearByUserCell : UITableViewCell
@@ -29,6 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
  附近的人
  */
 @property (strong, nonatomic) SCUserInfo *userInfo;
+
+@property (strong, nonatomic) WhoLookMeModel *lookMeModel;
+
+@property (strong, nonatomic) UserPointsModel *userPointsModel;
 
 @end
 

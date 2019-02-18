@@ -13,7 +13,8 @@
 #import "GeRenZiLiaoVC.h"
 #import "LoverConditionVC.h"
 
-
+#import "ForumVC.h"
+#import "DangQianJiFenVC.h"
 #import "SettingVC.h"
 
 @interface MineVC ()<UITableViewDelegate,UITableViewDataSource,UserInfoTableViewCellDelegate>
@@ -38,6 +39,8 @@ INS_P_STRONG(SCUserInfo *, userModel);
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    // 修改个人信息后刷新界面
+    [self.tableView reloadData];
     
 }
 
@@ -89,24 +92,34 @@ INS_P_STRONG(SCUserInfo *, userModel);
 
 - (void)zeOuBiaoZhun{
     LoverConditionVC *vc = [LoverConditionVC new];
+    vc.userModel = self.userModel;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)woYaoRenZheng{
     
 }
+
 - (void)shuiKanGuoWo{
-    
+    ForumVC *vc = [ForumVC new];
+    vc.forumVCType = ForumVCTypeNoticeOrNearBy;
+    vc.momentRequestType = MomentRequestTypeWhoLookMe;
+    vc.momentUIType = MomentUITypeNearby;
+    [self.navigationController pushViewController:vc animated:YES];
 }
+
 - (void)fenXiangRuanJian{
     
 }
+
 - (void)dangQianJiFen{
-    
+    DangQianJiFenVC *vc = [DangQianJiFenVC new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)shezhi{
-    
+    SettingVC *vc = [SettingVC new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

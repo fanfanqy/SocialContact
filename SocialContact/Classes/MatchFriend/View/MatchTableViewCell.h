@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *otherInfo;
 @property (weak, nonatomic) IBOutlet UILabel *years_to_marry;
 
-@property (strong, nonatomic) MomentModel *model;
+@property (strong, nonatomic) SCUserInfo *model;
 @property (strong, nonatomic) NSIndexPath *indexPath;
 
 @property (weak, nonatomic)  id <MatchTableViewCellDelegate> delegate;

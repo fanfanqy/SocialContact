@@ -78,6 +78,7 @@
 #import "UIView+JKBlockGesture.h"
 #import "NSString+Ins_Verify.h"
 #import "NSString+RemoveEmoji.h"
+#import "UIImage+animatedGIF.h"
 #import "Help.h"
 
 

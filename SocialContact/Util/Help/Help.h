@@ -10,10 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^VipIsExpired)(BOOL expired);
+
 @interface Help : NSObject
 
 //在最大压缩条件下,文件小于 maxFileSize
 + (NSData *)compressImage:(UIImage *)image;
+
++ (void)vipIsExpired:(VipIsExpired)completion topIsExpired:(VipIsExpired)topExpiredCompletion;
 
 /*
  PROFESSION_CHOICE = (
@@ -63,6 +67,8 @@ NS_ASSUME_NONNULL_BEGIN
  (3, '有，不和我在一起'),
  )
 */
+
++ (NSString *)gender:(NSInteger)gender;
 
 + (NSString *)height:(CGFloat)height;
  

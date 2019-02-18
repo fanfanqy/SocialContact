@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *address;
 @property (weak, nonatomic) IBOutlet UILabel *lastLoginTime;
 
-@property (strong, nonatomic) MomentModel *model;
+@property (strong, nonatomic) SCUserInfo *model;
 @property (strong, nonatomic) NSIndexPath *indexPath;
 
 @end

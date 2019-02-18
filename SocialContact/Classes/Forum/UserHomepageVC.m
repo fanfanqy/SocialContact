@@ -16,11 +16,15 @@
 #import "SelectConditionCell.h"
 #import "MeListTableViewCell.h"
 
-@interface UserHomepageVC ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,VipStatusCellDelegate>
+#import "BottomToolView.h"
+
+@interface UserHomepageVC ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,VipStatusCellDelegate,BottomToolViewDelegate>
 
 @property(nonatomic,strong)SDCycleScrollView *cycleScrollView;
 
 @property(nonatomic,strong)SCUserInfo *userInfo;
+
+@property(nonatomic,strong) BottomToolView   *bottomToolView;
 
 @property(nonatomic,strong) InsLoadDataTablView *tableView;
 
@@ -37,11 +41,32 @@
     [self setUpUI];
 }
 
+- (BottomToolView *)bottomToolView {
+    
+    if (!_bottomToolView) {
+        _bottomToolView = [[NSBundle mainBundle]loadNibNamed:@"BottomToolView" owner:nil options:nil][0];
+        _bottomToolView.type = 1;
+        CGFloat top = kScreenHeight - GuaTopHeight;
+        _bottomToolView.frame = CGRectMake(0, top , kScreenWidth, 50);
+        _bottomToolView.delegate = self;
+    }
+    return _bottomToolView;
+}
+
+- (void)partiClick{
+    
+}
+
+- (void)joinClick{
+    
+}
+
 - (void)setUpUI{
     
     [self.view addSubview:self.tableView];
     self.tableView.tableHeaderView = self.cycleScrollView;
     
+    [self.view addSubview:self.bottomToolView];
    
     
     @weakify(self);

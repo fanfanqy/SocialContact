@@ -38,4 +38,5 @@ pod 'AAPullToRefresh'
 #pod 'JXCategoryView'
 pod 'FLAnimatedImage'
 pod 'AlipaySDK-iOS'
+pod 'WRNavigationBar','~>1.2.0’
 end

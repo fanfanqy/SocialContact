@@ -14,7 +14,12 @@
 #define MAIN_COLOR_Blur [UIColor colorWithHexString:@"619fff"]
 
 #define LINE_COLOR [UIColor colorWithHexString:@"e9e9ea"]
-#define RED [UIColor colorWithHexString:@"ff4800"]
+
+#define RED [UIColor colorWithHexString:@"F55269"]
+#define ORANGE [UIColor colorWithHexString:@"F57C00"]
+#define BLUE [UIColor colorWithHexString:@"03A9F4"]
+
+
 #define LOGO_BG    [UIColor colorWithHexString:@"3a404e"]
 #define BackGroundColor    [UIColor colorWithHexString:@"efeff4"]
 #define NavigationBarLine  [UIColor colorWithHexString:@"e9e9ea"]

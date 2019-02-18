@@ -7,6 +7,8 @@
 //
 
 #import "SettingVC.h"
+#import "RetrieveViewController.h"
+#import "FeedBackVC.h"
 
 @interface SettingVC ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -31,6 +33,11 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (void)configUI{
 	self.title = @"系统设置";
+    
+    [self.view addSubview:self.tableView];
+    
+    
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -62,7 +69,22 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+    
+    if (indexPath.row == 0) {
+        RetrieveViewController *vc = [RetrieveViewController new];
+        vc.phone = [SCUserCenter sharedCenter].currentUser.userInfo.account;
+        vc.phoneTF.text = [SCUserCenter sharedCenter].currentUser.userInfo.account;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }else if (indexPath.row == 1) {
+        FeedBackVC *vc = [FeedBackVC new];
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }else if (indexPath.row == 2) {
+        
+    }else if (indexPath.row == 3) {
+        
+    }
 	
 }
 

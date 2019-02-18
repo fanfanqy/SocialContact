@@ -10,6 +10,8 @@
 
 #import "ForumVC.h"
 
+#import "BottleVC.h"
+
 #import "DCIMChatViewController.h"
 
 #import "DCIMGroupConversationViewController.h"
@@ -166,6 +168,8 @@
 }
 
 - (void)driftingBottleCLick{
+    BottleVC *vc = [BottleVC new];
+    [self.navigationController pushViewController:vc animated:YES];
     
 }
 

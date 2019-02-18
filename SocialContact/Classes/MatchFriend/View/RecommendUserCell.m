@@ -18,7 +18,7 @@
     self.layer.masksToBounds = YES;
 }
 
-- (void)setModel:(MomentModel *)model{
+- (void)setModel:(SCUserInfo *)model{
     
     _model = model;
     NSString *avatarUrl = @"";
@@ -31,7 +31,7 @@
     }
     
     self.nick.text = model.name;
-    self.address.text = model.address;
+    self.address.text = model.address_home;
     NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
     self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];
 }

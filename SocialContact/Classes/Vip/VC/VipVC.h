@@ -12,6 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VipVC : InsViewController
 
+/*
+ * 0:置顶
+ 1: 会员
+ */
+INS_P_ASSIGN(NSInteger, type);
+
 @end
 
 NS_ASSUME_NONNULL_END

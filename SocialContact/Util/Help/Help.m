@@ -7,6 +7,7 @@
 //
 
 #import "Help.h"
+#import "ProductModel.h"
 
 @implementation Help
 
@@ -23,6 +24,74 @@
     }
     NSLog(@"compressImage:compress:%f kb",imageData.length/1024.0);
     return imageData;
+}
+
++ (void)vipIsExpired:(VipIsExpired)completion topIsExpired:(VipIsExpired)topExpiredCompletion{
+//    /api/virtual-services/mine/
+    
+    GETRequest *request = [GETRequest requestWithPath:@"/api/virtual-services/mine/" parameters:nil completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            
+            if(completion){
+                completion(YES);
+            }
+            if (topExpiredCompletion) {
+                topExpiredCompletion(YES);
+            }
+            
+            
+        }else{
+            NSArray *resultArray = request.responseObject[@"data"][@"results"];
+            NSMutableArray *array = [NSMutableArray array];
+            
+            if ( resultArray && resultArray.count > 0 ) {
+                
+                [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    ProductModel *productModel = [ProductModel modelWithDictionary:obj];
+                    [array addObject:productModel];
+                    
+                }];
+                
+                for (ProductModel *model in array) {
+                    if(completion){
+                        if (!model.expired && model.virtual_service.service_type == 1) {
+                            completion(NO);
+                            return ;
+                        }
+                    }
+                
+                    if (topExpiredCompletion) {
+                        if (!model.expired && model.virtual_service.service_type == 2) {
+                            completion(NO);
+                            return ;
+                        }
+                    }
+                }
+                
+                if(completion){
+                    completion(YES);
+                }
+                if (topExpiredCompletion) {
+                    completion(YES);
+                }
+                
+            }
+        }
+    }];
+    [InsNetwork addRequest:request];
+    
+    
+}
+
++ (NSString *)gender:(NSInteger)gender{
+    NSString *str = @"未知";
+    if (gender == 1) {
+        str = @"男";
+    }else if (gender == 2) {
+        str = @"女";
+    }
+    return str;
 }
 
 + (NSString *)height:(CGFloat)height{
@@ -46,7 +115,7 @@
 }
 
 + (NSString *)profession:(NSInteger)professionType{
-    NSString *str = @"工作职业";
+    NSString *str = @"不限";
     switch (professionType) {
         case 0:
             str = @"未知";
@@ -74,7 +143,7 @@
 
 // 教育
 + (NSString *)education:(NSInteger)educationType{
-    NSString *str = @"教育程度";
+    NSString *str = @"不限";
     switch (educationType) {
         case 0:
             str = @"未知";
@@ -117,7 +186,7 @@
 //    (3, '20万~50万'),
 //    (4, '50万以上'),
 //    )
-    NSString *str = @"收入水平";
+    NSString *str = @"不限";
     switch (incomeType) {
         case 0:
             str = @"未知";
@@ -149,7 +218,7 @@
 //                             (2, '离异'),
 //                             (3, '丧偶'),
 //                             )
-    NSString *str = @"婚姻状态";
+    NSString *str = @"不限";
     switch (marital_statusType) {
         case 0:
             str = @"未知";
@@ -178,7 +247,7 @@
 //                           (2, '有，和我在一起'),
 //                           (3, '有，不和我在一起'),
 //                           )
-    NSString *str=@"子女状态";
+    NSString *str=@"不限";
     switch (child_statusType) {
         case 0:
             str = @"未知";
@@ -201,7 +270,7 @@
 
 + (NSString *)yearsToMarial:(NSInteger)yearsToMarialType{
     
-    NSString *str = @"结婚考虑";
+    NSString *str = @"不限";
     switch (yearsToMarialType) {
         case 0:
             str = @"未知";

@@ -28,7 +28,7 @@ INS_P_STRONG(NSString *,name);
 
 INS_P_ASSIGN(NSInteger,days);
 
-INS_P_ASSIGN(NSInteger,price);
+INS_P_ASSIGN(CGFloat,price);
 
 
 

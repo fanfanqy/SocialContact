@@ -49,15 +49,17 @@
 - (void)setLoadNewData:(void (^)(void))loadNewData {
     _loadNewData = loadNewData;
     __weak typeof(self)weakSelf = self;
-    /*
+    
     MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingBlock:^{
         weakSelf.loadNewData();
     }];
-    NSData *data = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"pullToRefresh" ofType:@"gif"]];
+    header.height = 100;
+    
+    NSData *data = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"refresh" ofType:@"gif"]];
 
     NSDictionary *dict = [UIImage imagesFromGif:data];
     NSArray *images = dict[@"images"] ?: [NSArray array];
-    [header setImages:images forState:MJRefreshStateRefreshing];
+//    [header setImages:images forState:MJRefreshStateRefreshing];
     if (images.count > 0) {
         [header setImages:@[images.firstObject] forState:MJRefreshStatePulling];
         [header setImages:@[images.firstObject] forState:MJRefreshStateWillRefresh];
@@ -69,19 +71,21 @@
     [header setTitle:@"将要加载" forState:MJRefreshStateWillRefresh];
     [header setTitle:@"正在加载..." forState:MJRefreshStateRefreshing];
     
+//    header.stateLabel.hidden = YES;
     header.lastUpdatedTimeLabel.hidden = YES;
     [header.gifView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(0);
-        make.centerX.mas_equalTo(-50);
-        make.width.mas_equalTo(55);
-        make.height.mas_equalTo(46);
+        make.centerX.mas_equalTo(-75);
+        make.centerX.mas_equalTo(0);
+        make.width.mas_equalTo(75);
+        make.height.mas_equalTo(96);
     }];
     [header.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(header.gifView.mas_right).offset(10);
         make.centerY.mas_equalTo(header.gifView.mas_centerY);
     }];
     self.mj_header = header;
-     */
+    
 }
 
 

@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface LoverConditionVC : InsViewController
 
+INS_P_STRONG(SCUserInfo *, userModel);
+
 @end
 
 NS_ASSUME_NONNULL_END

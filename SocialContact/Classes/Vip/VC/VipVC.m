@@ -8,8 +8,9 @@
 
 #import "VipVC.h"
 #import "ServiceModel.h"
+#import "ViewTopView.h"
 
-@interface VipVC ()
+@interface VipVC ()<ViewTopViewDelegate>
 
 INS_P_STRONG(NSMutableArray *, dataArray);
 
@@ -17,6 +18,15 @@ INS_P_STRONG(NSMutableArray *, dataArray);
 INS_P_STRONG(ProductInfoModel *, productInfoModel);
 
 INS_P_STRONG(ServiceModel *, serviceModel);
+
+INS_P_STRONG(UIScrollView *, bgScrollView);
+
+INS_P_STRONG(UIImageView *, bgImgView);
+
+// 置顶项目 收费视图
+INS_P_STRONG(ViewTopView *, viewTopView);
+
+INS_P_ASSIGN(NSInteger, selectedIndex);
 
 @end
 
@@ -26,8 +36,61 @@ INS_P_STRONG(ServiceModel *, serviceModel);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.dataArray = [NSMutableArray array];
-    [self serviceProduct];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(PayBackApp) name:@"PayBackApp" object:nil];
+    
+    [self.view addSubview:self.bgScrollView];
+    [self.bgScrollView addSubview:self.bgImgView];
+    [self.bgScrollView addSubview:self.viewTopView];
+    [self serviceProduct];
+}
+
+- (UIScrollView *)bgScrollView{
+    if (!_bgScrollView) {
+        _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-GuaTopHeight)];
+        _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 4*kScreenWidth);
+        _bgScrollView.showsVerticalScrollIndicator = NO;
+    }
+    return _bgScrollView;
+    
+}
+
+- (UIImageView *)bgImgView{
+    if (!_bgImgView) {
+        _bgImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 4*kScreenWidth)];
+        _bgImgView.image = [UIImage imageNamed:@"vip_top"];
+        _bgImgView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    return _bgImgView;
+    
+}
+
+- (ViewTopView *)viewTopView{
+    if (!_viewTopView) {
+        _viewTopView = [[[NSBundle mainBundle]loadNibNamed:@"ViewTopView" owner:self options:nil] lastObject];
+        _viewTopView.delegate = self;
+        _viewTopView.frame = CGRectMake(0, 2.85*kScreenWidth, kScreenWidth, 1.15*kScreenWidth);
+    }
+    return _viewTopView;
+}
+
+- (void)btn1Clicked{
+
+    _selectedIndex = 0;
+}
+
+- (void)btn2Clicked{
+
+    _selectedIndex = 1;
+}
+
+- (void)btn3Clicked{
+
+    _selectedIndex = 2;
+}
+
+- (void)dredgeBtnClicked{
+    [self buy:_selectedIndex];
 }
 
 - (void)PayBackApp{
@@ -35,18 +98,6 @@ INS_P_STRONG(ServiceModel *, serviceModel);
     SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
     
     alert.labelTitle.textColor = [UIColor redColor];
-//    alert.attributedFormatBlock = ^NSAttributedString* (NSString *value)
-//    {
-//        NSMutableAttributedString *subTitle = [[NSMutableAttributedString alloc]initWithString:value];
-//        
-//        
-//        [subTitle addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:subTitle.rangeOfAll];
-//        
-//      
-//        
-//        return subTitle;
-//    };
-    
     [alert showSuccess:[NSString stringWithFormat:@"%@充值成功",_productInfoModel.name] subTitle:_serviceModel.detail closeButtonTitle:@"确定" duration:0];
     
 }
@@ -73,12 +124,25 @@ INS_P_STRONG(ServiceModel *, serviceModel);
             NSArray *resultArray = request.responseObject[@"data"][@"results"];
             if ( resultArray && resultArray.count > 0 ) {
             
+                weakSelf.viewTopView.hidden = NO;
+                
                 [weakSelf.dataArray removeAllObjects];
                 [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     ServiceModel *productModel = [ServiceModel modelWithDictionary:obj];
                     [weakSelf.dataArray addObject:productModel];
                     
                 }];
+                
+                for (ServiceModel *model in self.dataArray) {
+                    if (model.service_type == 2) {
+                        weakSelf.serviceModel = model;
+                    }
+                }
+                
+                weakSelf.viewTopView.serviceModel = weakSelf.serviceModel;
+                
+            }else{
+                weakSelf.viewTopView.hidden = YES;
             }
         }
         
@@ -87,28 +151,13 @@ INS_P_STRONG(ServiceModel *, serviceModel);
     [InsNetwork addRequest:request];
 }
 
-- (IBAction)vip1Clicked:(id)sender {
-    
-    [self buy:0];
-    
-}
-
-- (IBAction)vip2Clicked:(id)sender {
-    
-    [self buy:1];
-}
-
-- (IBAction)vip3Clicked:(id)sender {
-    
-    [self buy:2];
-}
-
-
 - (void)buy:(NSInteger)index{
     
     /*
     购买服务
     
+     service_type    int    服务类型, 1: VIP服务; 2: 置顶服务
+     
     Request
     
 LoginRequired: False
@@ -121,8 +170,16 @@ URL:  /api/virtual-services/<int:pk>/buy/
      price_index    int    True        价格套餐: 价格套餐对应index, 默认：0
      
      */
-    ServiceModel *serviceModel = self.dataArray[0];
-    _serviceModel = serviceModel;
+    ServiceModel *serviceModel;
+    for (ServiceModel *model in self.dataArray) {
+        if (model.service_type == 2) {
+            serviceModel = model;
+            _serviceModel = serviceModel;
+        }
+    }
+    if (!serviceModel) {
+        return;
+    }
     
     if (serviceModel.pricelist.count > index) {
         self.productInfoModel = serviceModel.pricelist[index];

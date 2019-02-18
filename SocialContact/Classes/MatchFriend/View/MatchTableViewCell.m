@@ -29,17 +29,10 @@
     self.img.layer.masksToBounds = YES;
 }
 
-- (void)setModel:(MomentModel *)model{
+- (void)setModel:(SCUserInfo *)model{
     
     _model = model;
-    
-//    @property (weak, nonatomic) IBOutlet UIImageView *img;
-//    @property (weak, nonatomic) IBOutlet UILabel *nickName;
-//    @property (weak, nonatomic) IBOutlet UILabel *loveDeclaration;
-//    @property (weak, nonatomic) IBOutlet UILabel *ageGender;
-//    @property (weak, nonatomic) IBOutlet UILabel *address;
-//    @property (weak, nonatomic) IBOutlet UILabel *otherInfo;
-//    @property (weak, nonatomic) IBOutlet UILabel *loveGoal;
+
     NSString *avatarUrl = @"";
     if ([NSString ins_String:model.avatar_url]) {
         avatarUrl = model.avatar_url;
@@ -48,11 +41,9 @@
     self.nick.text = model.name;
     self.loveDeclaration.text = model.intro;
     self.ageGender.text = [NSString stringWithFormat:@"%@ %ld",model.gender == 1 ?@"男":@"女",model.age];
-    self.address.text = model.address;
+    self.address.text = model.address_home;
     self.otherInfo.text = [NSString stringWithFormat:@"%.0lf·%ld·%@",model.height,model.income,@"双子座"];
-//    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
-//    self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];
-    
+
 }
 
 - (IBAction)heartBeat:(id)sender {

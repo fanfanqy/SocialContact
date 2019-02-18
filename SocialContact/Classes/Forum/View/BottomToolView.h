@@ -31,6 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<BottomToolViewDelegate> delegate;
 
+
+/**
+ 0: 话题列表页
+ 1: 个人主页
+ */
+@property (assign, nonatomic) NSInteger type;
+
 @end
 
 NS_ASSUME_NONNULL_END

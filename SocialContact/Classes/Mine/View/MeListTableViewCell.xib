@@ -43,20 +43,34 @@
                             <constraint firstAttribute="width" constant="6" id="mKj-Yr-YmC"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D5V-He-kh9">
+                        <rect key="frame" x="257" y="19.5" width="42" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="6q4-6g-sbl"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="f3c-2N-KvC"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="6Y4-Nf-tz7" firstAttribute="centerY" secondItem="D5V-He-kh9" secondAttribute="centerY" id="3jF-Vo-HGk"/>
                     <constraint firstItem="9RB-uX-cPe" firstAttribute="leading" secondItem="XPd-4h-WRc" secondAttribute="trailing" constant="11" id="H5L-Rl-MLe"/>
                     <constraint firstAttribute="trailing" secondItem="6Y4-Nf-tz7" secondAttribute="trailing" constant="15" id="Y7d-zS-eUs"/>
                     <constraint firstItem="XPd-4h-WRc" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="bfK-Pe-i4J"/>
                     <constraint firstItem="9RB-uX-cPe" firstAttribute="centerY" secondItem="XPd-4h-WRc" secondAttribute="centerY" id="c4Z-V7-AEg"/>
                     <constraint firstItem="6Y4-Nf-tz7" firstAttribute="centerY" secondItem="XPd-4h-WRc" secondAttribute="centerY" id="dUJ-yi-ILu"/>
                     <constraint firstItem="XPd-4h-WRc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="rd5-Am-ce0"/>
+                    <constraint firstItem="6Y4-Nf-tz7" firstAttribute="leading" secondItem="D5V-He-kh9" secondAttribute="trailing" id="ugS-6z-Yaf"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
                 <outlet property="leftImgV" destination="XPd-4h-WRc" id="hUZ-tU-hr1"/>
+                <outlet property="subTitleLB" destination="D5V-He-kh9" id="98f-lE-BF6"/>
                 <outlet property="titleLB" destination="9RB-uX-cPe" id="pRn-UM-Nfy"/>
+                <outlet property="titleLBLeading" destination="H5L-Rl-MLe" id="dHC-te-vnE"/>
             </connections>
             <point key="canvasLocation" x="129.59999999999999" y="154.72263868065968"/>
         </tableViewCell>

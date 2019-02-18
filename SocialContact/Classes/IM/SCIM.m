@@ -176,8 +176,8 @@ static SCIM *_dcim = nil;
         
         
     } error:^(RCConnectErrorCode status) {
-        @normalize(self);
-        [self refreshToken];
+//        @normalize(self);
+//        [self refreshToken];
     } tokenIncorrect:^{
         @normalize(self);
         [self refreshToken];

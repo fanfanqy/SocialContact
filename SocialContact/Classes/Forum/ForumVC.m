@@ -21,6 +21,8 @@
 
 #import "TopicModel.h"
 #import "Notice.h"
+#import "WhoLookMeModel.h"
+#import "UserPointsModel.h"
 
 #import "XHInputView.h"
 
@@ -208,6 +210,15 @@
                 param = @{@"page": [NSNumber numberWithInteger:_page]};
                 break;
                 
+            case MomentRequestTypeWhoLookMe:
+                url = @"/stats/visitors/";
+                param = @{@"page": [NSNumber numberWithInteger:_page]};
+                break;
+                
+            case MomentRequestTypeJiFenList:
+                url = @"/api/points/";
+                param = @{@"page": [NSNumber numberWithInteger:_page]};
+                break;
             default:
                 break;
         }
@@ -271,6 +282,18 @@
                         [weakSelf.array addObject:[SCUserInfo modelWithDictionary:obj]];
                         
                     }];
+                }else if (weakSelf.momentRequestType == MomentRequestTypeWhoLookMe){
+                    [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [weakSelf.array addObject:[WhoLookMeModel modelWithDictionary:obj]];
+                        
+                    }];
+                    
+                }else if (weakSelf.momentRequestType == MomentRequestTypeJiFenList){
+                    [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [weakSelf.array addObject:[UserPointsModel modelWithDictionary:obj]];
+                        
+                    }];
+                    
                 }
                 
                 [weakSelf.tableView reloadData];
@@ -392,13 +415,21 @@
         
         NearByUserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NearByUserCell"];
         
-        if (self.momentRequestType == MomentUITypeNotice) {
+        if (self.momentRequestType == MomentRequestTypeNotice) {
             Notice *notice = self.array[indexPath.row];
             cell.notice = notice;
             
         }else if (self.momentRequestType == MomentRequestTypeNearby) {
             SCUserInfo *userInfo = self.array[indexPath.row];
             cell.userInfo = userInfo;
+            
+        }else if (self.momentRequestType == MomentRequestTypeWhoLookMe){
+            WhoLookMeModel *model = self.array[indexPath.row];
+            cell.lookMeModel = model;
+            
+        }else if (self.momentRequestType == MomentRequestTypeJiFenList){
+            
+            
             
         }
         return cell;
@@ -463,11 +494,16 @@
     }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
         
         
-        if (self.momentRequestType == MomentUITypeNotice) {
+         if (self.momentRequestType == MomentRequestTypeNotice) {
             // 进入帖子主页
             
         }else if (self.momentRequestType == MomentRequestTypeNearby) {
             // 进入用户主页
+        }else if (self.momentRequestType == MomentRequestTypeWhoLookMe){
+            WhoLookMeModel *model = self.array[indexPath.row];
+            
+        }else if (self.momentRequestType == MomentRequestTypeJiFenList){
+            
         }
         
     }else if (self.forumVCType == ForumVCTypeMoment) {
@@ -554,7 +590,7 @@
         _participateTopicBtn.layer.cornerRadius = 22.f;
         _participateTopicBtn.layer.masksToBounds = YES;
         [_participateTopicBtn setTitle:@"立即参与" forState:UIControlStateNormal];
-        [_participateTopicBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"279DFC"]] forState:UIControlStateNormal];
+        [_participateTopicBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
         [_participateTopicBtn addTarget:self action:@selector(partiClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _participateTopicBtn;
@@ -574,7 +610,7 @@
         _joinDiscussion.layer.cornerRadius = 22.f;
         _joinDiscussion.layer.masksToBounds = YES;
         [_joinDiscussion setTitle:@"加入讨论" forState:UIControlStateNormal];
-        [_joinDiscussion setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"F57C00"]] forState:UIControlStateNormal];
+        [_joinDiscussion setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
         [_joinDiscussion addTarget:self action:@selector(joinClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _joinDiscussion;

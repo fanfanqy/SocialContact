@@ -31,18 +31,20 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WNx-n7-ckq">
                                 <rect key="frame" x="0.0" y="262" width="262" height="50"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWs-LC-mHJ">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWs-LC-mHJ">
                                         <rect key="frame" x="0.0" y="0.0" width="131" height="50"/>
-                                        <state key="normal" title="心动">
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" title="  心动" image="ic_guanzhu_white">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="heartBeat:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Zeg-DF-rvC"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oGp-uU-dNs">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oGp-uU-dNs">
                                         <rect key="frame" x="131" y="0.0" width="131" height="50"/>
-                                        <state key="normal" title="对话">
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" title="  对话" image="ic_chat_white">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -58,7 +60,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588234" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="OU7-XH-QQi" firstAttribute="centerX" secondItem="WNx-n7-ckq" secondAttribute="centerX" id="0eW-Gi-CH4"/>
                                     <constraint firstAttribute="trailing" secondItem="oGp-uU-dNs" secondAttribute="trailing" id="BID-LT-Plu"/>
@@ -188,4 +190,8 @@
             <point key="canvasLocation" x="118.40000000000001" y="280.20989505247377"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="ic_chat_white" width="16" height="16"/>
+        <image name="ic_guanzhu_white" width="16" height="16"/>
+    </resources>
 </document>

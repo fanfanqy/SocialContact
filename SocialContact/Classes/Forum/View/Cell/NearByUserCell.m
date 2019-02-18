@@ -47,6 +47,43 @@
     
 }
 
+- (void)setLookMeModel:(WhoLookMeModel *)lookMeModel{
+    
+    _lookMeModel = lookMeModel;
+    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:lookMeModel.customer.avatar_url]];
+    
+    self.nickName.text = lookMeModel.customer.name;
+    
+    NSDate *date = [NSDate dateWithISOFormatString:lookMeModel.create_at];
+    NSString *formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
+    self.last_RequestTime.text = formatedTimeString;
+    
+    self.personalSignature.text = lookMeModel.customer.intro;
+    
+    self.address.text = lookMeModel.customer.address_home;
+    self.distance.text = @"__";
+}
+
+- (void)setUserPointsModel:(UserPointsModel *)userPointsModel{
+    
+    _userPointsModel = userPointsModel;
+//    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:userPointsModel.customer.avatar_url]];
+    
+    self.nickName.text = userPointsModel.desc;
+    
+    
+    self.last_RequestTime.text = [NSString stringWithFormat:@"%ld",userPointsModel.amount];
+    
+    self.personalSignature.text = @"";
+    
+    self.address.text = @"";
+    
+    NSDate *date = [NSDate dateWithISOFormatString:userPointsModel.create_at];
+    NSString *formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
+    self.distance.text = formatedTimeString;
+    
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

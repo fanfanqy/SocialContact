@@ -33,7 +33,6 @@
 		0020886922140AC200F1E666 /* SelectConditionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0020886722140AC200F1E666 /* SelectConditionCell.m */; };
 		0020886A22140AC200F1E666 /* SelectConditionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0020886822140AC200F1E666 /* SelectConditionCell.xib */; };
 		0020886F2214238400F1E666 /* VipVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0020886D2214238400F1E666 /* VipVC.m */; };
-		002088702214238400F1E666 /* VipVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0020886E2214238400F1E666 /* VipVC.xib */; };
 		002088792215034D00F1E666 /* ServiceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 002088782215034D00F1E666 /* ServiceModel.m */; };
 		0054786721F0D30A00B74054 /* UserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0054786221F0D30900B74054 /* UserInfoTableViewCell.m */; };
 		0054786821F0D30A00B74054 /* MeListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0054786321F0D30900B74054 /* MeListTableViewCell.xib */; };
@@ -82,6 +81,22 @@
 		00829C2D21F099B600A1F297 /* RecommendUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00829C2B21F099B600A1F297 /* RecommendUserCell.xib */; };
 		0087CF5C2216A48C00161CA6 /* Notice.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF5B2216A48C00161CA6 /* Notice.m */; };
 		0087CF5F2216A8ED00161CA6 /* DCIMButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF5E2216A8ED00161CA6 /* DCIMButton.m */; };
+		0087CF632217CBF100161CA6 /* UserAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF612217CBF100161CA6 /* UserAvatarCell.m */; };
+		0087CF642217CBF100161CA6 /* UserAvatarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0087CF622217CBF100161CA6 /* UserAvatarCell.xib */; };
+		0087CF6722185D2700161CA6 /* WhoLookMeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF6622185D2700161CA6 /* WhoLookMeModel.m */; };
+		0087CF6A2219054F00161CA6 /* BottleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF692219054F00161CA6 /* BottleVC.m */; };
+		0087CF7022191A5700161CA6 /* ViewTopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0087CF6F22191A5700161CA6 /* ViewTopView.xib */; };
+		0087CF73221921AA00161CA6 /* ViewTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF72221921AA00161CA6 /* ViewTopView.m */; };
+		0087CF7622192FED00161CA6 /* FeedBackVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF7522192FED00161CA6 /* FeedBackVC.m */; };
+		0087CF792219301700161CA6 /* AboutUsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF782219301700161CA6 /* AboutUsVC.m */; };
+		0087CF7C2219304100161CA6 /* ModifyPasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF7B2219304100161CA6 /* ModifyPasswordVC.m */; };
+		0087CF7F2219A2A300161CA6 /* DangQianJiFenVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF7E2219A2A300161CA6 /* DangQianJiFenVC.m */; };
+		0087CF832219A50400161CA6 /* JiFenCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF812219A50400161CA6 /* JiFenCell.m */; };
+		0087CF842219A50400161CA6 /* JiFenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0087CF822219A50400161CA6 /* JiFenCell.xib */; };
+		0087CF882219AE6300161CA6 /* LiPinTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF862219AE6300161CA6 /* LiPinTableViewCell.m */; };
+		0087CF892219AE6300161CA6 /* LiPinTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0087CF872219AE6300161CA6 /* LiPinTableViewCell.xib */; };
+		0087CF90221A82CF00161CA6 /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 0087CF8F221A82CE00161CA6 /* UIImage+animatedGIF.m */; };
+		0087CF9A221A8F8D00161CA6 /* refresh.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0087CF99221A8F8D00161CA6 /* refresh.gif */; };
 		0088DB9A21E4843000C52C76 /* OSSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088DB8021E4843000C52C76 /* OSSConstants.m */; };
 		0088DB9B21E4843000C52C76 /* InsLoadDataTablView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088DB8521E4843000C52C76 /* InsLoadDataTablView.m */; };
 		0088DB9C21E4843000C52C76 /* CommonWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0088DB8821E4843000C52C76 /* CommonWebViewController.m */; };
@@ -344,7 +359,6 @@
 		0020886822140AC200F1E666 /* SelectConditionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectConditionCell.xib; sourceTree = "<group>"; };
 		0020886C2214238400F1E666 /* VipVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VipVC.h; sourceTree = "<group>"; };
 		0020886D2214238400F1E666 /* VipVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VipVC.m; sourceTree = "<group>"; };
-		0020886E2214238400F1E666 /* VipVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VipVC.xib; sourceTree = "<group>"; };
 		002088772215034D00F1E666 /* ServiceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceModel.h; sourceTree = "<group>"; };
 		002088782215034D00F1E666 /* ServiceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServiceModel.m; sourceTree = "<group>"; };
 		0054786221F0D30900B74054 /* UserInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfoTableViewCell.m; sourceTree = "<group>"; };
@@ -430,6 +444,33 @@
 		0087CF5B2216A48C00161CA6 /* Notice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Notice.m; sourceTree = "<group>"; };
 		0087CF5D2216A8EC00161CA6 /* DCIMButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIMButton.h; sourceTree = "<group>"; };
 		0087CF5E2216A8ED00161CA6 /* DCIMButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCIMButton.m; sourceTree = "<group>"; };
+		0087CF602217CBF100161CA6 /* UserAvatarCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserAvatarCell.h; sourceTree = "<group>"; };
+		0087CF612217CBF100161CA6 /* UserAvatarCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserAvatarCell.m; sourceTree = "<group>"; };
+		0087CF622217CBF100161CA6 /* UserAvatarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserAvatarCell.xib; sourceTree = "<group>"; };
+		0087CF6522185D2700161CA6 /* WhoLookMeModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhoLookMeModel.h; sourceTree = "<group>"; };
+		0087CF6622185D2700161CA6 /* WhoLookMeModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhoLookMeModel.m; sourceTree = "<group>"; };
+		0087CF682219054F00161CA6 /* BottleVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BottleVC.h; sourceTree = "<group>"; };
+		0087CF692219054F00161CA6 /* BottleVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BottleVC.m; sourceTree = "<group>"; };
+		0087CF6F22191A5700161CA6 /* ViewTopView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewTopView.xib; sourceTree = "<group>"; };
+		0087CF71221921AA00161CA6 /* ViewTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewTopView.h; sourceTree = "<group>"; };
+		0087CF72221921AA00161CA6 /* ViewTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewTopView.m; sourceTree = "<group>"; };
+		0087CF7422192FED00161CA6 /* FeedBackVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedBackVC.h; sourceTree = "<group>"; };
+		0087CF7522192FED00161CA6 /* FeedBackVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedBackVC.m; sourceTree = "<group>"; };
+		0087CF772219301700161CA6 /* AboutUsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutUsVC.h; sourceTree = "<group>"; };
+		0087CF782219301700161CA6 /* AboutUsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutUsVC.m; sourceTree = "<group>"; };
+		0087CF7A2219304100161CA6 /* ModifyPasswordVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModifyPasswordVC.h; sourceTree = "<group>"; };
+		0087CF7B2219304100161CA6 /* ModifyPasswordVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ModifyPasswordVC.m; sourceTree = "<group>"; };
+		0087CF7D2219A2A300161CA6 /* DangQianJiFenVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DangQianJiFenVC.h; sourceTree = "<group>"; };
+		0087CF7E2219A2A300161CA6 /* DangQianJiFenVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DangQianJiFenVC.m; sourceTree = "<group>"; };
+		0087CF802219A50400161CA6 /* JiFenCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JiFenCell.h; sourceTree = "<group>"; };
+		0087CF812219A50400161CA6 /* JiFenCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JiFenCell.m; sourceTree = "<group>"; };
+		0087CF822219A50400161CA6 /* JiFenCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JiFenCell.xib; sourceTree = "<group>"; };
+		0087CF852219AE6300161CA6 /* LiPinTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiPinTableViewCell.h; sourceTree = "<group>"; };
+		0087CF862219AE6300161CA6 /* LiPinTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiPinTableViewCell.m; sourceTree = "<group>"; };
+		0087CF872219AE6300161CA6 /* LiPinTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LiPinTableViewCell.xib; sourceTree = "<group>"; };
+		0087CF8E221A82CE00161CA6 /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
+		0087CF8F221A82CE00161CA6 /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
+		0087CF99221A8F8D00161CA6 /* refresh.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = refresh.gif; sourceTree = "<group>"; };
 		0088DB8021E4843000C52C76 /* OSSConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSConstants.m; sourceTree = "<group>"; };
 		0088DB8121E4843000C52C76 /* NetApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetApi.h; sourceTree = "<group>"; };
 		0088DB8221E4843000C52C76 /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
@@ -916,8 +957,6 @@
 		001802A521FC3B8B007E0656 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				001802A621FC3BA9007E0656 /* UserPointsModel.h */,
-				001802A721FC3BA9007E0656 /* UserPointsModel.m */,
 				001802AB21FC41C0007E0656 /* BottleModel.h */,
 				001802AC21FC41C0007E0656 /* BottleModel.m */,
 			);
@@ -936,6 +975,7 @@
 		0020886B2214236900F1E666 /* Vip */ = {
 			isa = PBXGroup;
 			children = (
+				0087CF6E22191A3600161CA6 /* View */,
 				002088762215031C00F1E666 /* Model */,
 				002088752215030700F1E666 /* VC */,
 			);
@@ -947,7 +987,6 @@
 			children = (
 				0020886C2214238400F1E666 /* VipVC.h */,
 				0020886D2214238400F1E666 /* VipVC.m */,
-				0020886E2214238400F1E666 /* VipVC.xib */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -976,6 +1015,15 @@
 				0020885321FF44C200F1E666 /* PointsOrLoveSkillCell.h */,
 				0020885421FF44C200F1E666 /* PointsOrLoveSkillCell.m */,
 				0020885521FF44C200F1E666 /* PointsOrLoveSkillCell.xib */,
+				0087CF602217CBF100161CA6 /* UserAvatarCell.h */,
+				0087CF612217CBF100161CA6 /* UserAvatarCell.m */,
+				0087CF622217CBF100161CA6 /* UserAvatarCell.xib */,
+				0087CF802219A50400161CA6 /* JiFenCell.h */,
+				0087CF812219A50400161CA6 /* JiFenCell.m */,
+				0087CF822219A50400161CA6 /* JiFenCell.xib */,
+				0087CF852219AE6300161CA6 /* LiPinTableViewCell.h */,
+				0087CF862219AE6300161CA6 /* LiPinTableViewCell.m */,
+				0087CF872219AE6300161CA6 /* LiPinTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -994,6 +1042,14 @@
 				005478F721F3771900B74054 /* JiFenVC.h */,
 				005478F821F3771900B74054 /* JiFenVC.m */,
 				005478F921F3771900B74054 /* JiFenVC.xib */,
+				0087CF7422192FED00161CA6 /* FeedBackVC.h */,
+				0087CF7522192FED00161CA6 /* FeedBackVC.m */,
+				0087CF772219301700161CA6 /* AboutUsVC.h */,
+				0087CF782219301700161CA6 /* AboutUsVC.m */,
+				0087CF7A2219304100161CA6 /* ModifyPasswordVC.h */,
+				0087CF7B2219304100161CA6 /* ModifyPasswordVC.m */,
+				0087CF7D2219A2A300161CA6 /* DangQianJiFenVC.h */,
+				0087CF7E2219A2A300161CA6 /* DangQianJiFenVC.m */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -1050,6 +1106,8 @@
 				0054790221F3775D00B74054 /* LoveSkillVC.m */,
 				0054790421F3778900B74054 /* DriftingBottleVC.h */,
 				0054790521F3778900B74054 /* DriftingBottleVC.m */,
+				0087CF682219054F00161CA6 /* BottleVC.h */,
+				0087CF692219054F00161CA6 /* BottleVC.m */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -1089,6 +1147,24 @@
 			children = (
 			);
 			path = model;
+			sourceTree = "<group>";
+		};
+		0087CF6E22191A3600161CA6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0087CF71221921AA00161CA6 /* ViewTopView.h */,
+				0087CF72221921AA00161CA6 /* ViewTopView.m */,
+				0087CF6F22191A5700161CA6 /* ViewTopView.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0087CF8B221A81FD00161CA6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0087CF99221A8F8D00161CA6 /* refresh.gif */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		0088DB7F21E4843000C52C76 /* Macros */ = {
@@ -1170,6 +1246,8 @@
 		0088DBBC21E499E200C52C76 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				0087CF8E221A82CE00161CA6 /* UIImage+animatedGIF.h */,
+				0087CF8F221A82CE00161CA6 /* UIImage+animatedGIF.m */,
 				0087CF5D2216A8EC00161CA6 /* DCIMButton.h */,
 				0087CF5E2216A8ED00161CA6 /* DCIMButton.m */,
 				0088DBF421E4A55F00C52C76 /* NSString */,
@@ -1282,6 +1360,7 @@
 		00BB681E21E37F9F00ED831F /* SocialContact */ = {
 			isa = PBXGroup;
 			children = (
+				0087CF8B221A81FD00161CA6 /* Resources */,
 				001802A921FC3C00007E0656 /* ReadMe.rtf */,
 				001802A521FC3B8B007E0656 /* Model */,
 				0088DBA721E48D5900C52C76 /* PrefixHeader.pch */,
@@ -1764,6 +1843,8 @@
 		00F3C78321E866F0005CA742 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				001802A621FC3BA9007E0656 /* UserPointsModel.h */,
+				001802A721FC3BA9007E0656 /* UserPointsModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1794,6 +1875,8 @@
 				0018029521FBF7D8007E0656 /* CommentListModel.m */,
 				0018029721FBF985007E0656 /* MomentListModel.h */,
 				0018029821FBF985007E0656 /* MomentListModel.m */,
+				0087CF6522185D2700161CA6 /* WhoLookMeModel.h */,
+				0087CF6622185D2700161CA6 /* WhoLookMeModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2168,7 +2251,6 @@
 			files = (
 				005478C621F3574D00B74054 /* UserImagesCell.xib in Resources */,
 				0054791521F3A97000B74054 /* BottomToolView.xib in Resources */,
-				002088702214238400F1E666 /* VipVC.xib in Resources */,
 				0088DBA621E48CE200C52C76 /* BaseTableViewCell.xib in Resources */,
 				00BB682C21E37FA200ED831F /* LaunchScreen.storyboard in Resources */,
 				00F3C76D21E85CB9005CA742 /* NewPasswordViewController.xib in Resources */,
@@ -2177,10 +2259,15 @@
 				00F3C76C21E85CB9005CA742 /* RetrieveViewController.xib in Resources */,
 				0020886A22140AC200F1E666 /* SelectConditionCell.xib in Resources */,
 				0020885721FF44C200F1E666 /* PointsOrLoveSkillCell.xib in Resources */,
+				0087CF892219AE6300161CA6 /* LiPinTableViewCell.xib in Resources */,
 				0054790021F3773D00B74054 /* InviteFriendVC.xib in Resources */,
 				001802AA21FC3C00007E0656 /* ReadMe.rtf in Resources */,
+				0087CF7022191A5700161CA6 /* ViewTopView.xib in Resources */,
 				005478CD21F3581700B74054 /* IMHeaderView.xib in Resources */,
+				0087CF9A221A8F8D00161CA6 /* refresh.gif in Resources */,
+				0087CF642217CBF100161CA6 /* UserAvatarCell.xib in Resources */,
 				00BB682921E37FA200ED831F /* Assets.xcassets in Resources */,
+				0087CF842219A50400161CA6 /* JiFenCell.xib in Resources */,
 				00BB682721E37F9F00ED831F /* Main.storyboard in Resources */,
 				0054786821F0D30A00B74054 /* MeListTableViewCell.xib in Resources */,
 				00829C2D21F099B600A1F297 /* RecommendUserCell.xib in Resources */,
@@ -2235,6 +2322,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
 				"${BUILT_PRODUCTS_DIR}/TOCropViewController/TOCropViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/TZImagePickerController/TZImagePickerController.framework",
+				"${BUILT_PRODUCTS_DIR}/WRNavigationBar/WRNavigationBar.framework",
 				"${BUILT_PRODUCTS_DIR}/ZLSwipeableView/ZLSwipeableView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -2271,6 +2359,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TOCropViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TZImagePickerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WRNavigationBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZLSwipeableView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2341,10 +2430,12 @@
 				0020885621FF44C200F1E666 /* PointsOrLoveSkillCell.m in Sources */,
 				0010DADA21F6E53500DA0EFF /* ChartListTableViewCell.m in Sources */,
 				00BB693821E38AF400ED831F /* UIControl+YYAdd.m in Sources */,
+				0087CF832219A50400161CA6 /* JiFenCell.m in Sources */,
 				00F3C83521E9B785005CA742 /* JXCategoryCollectionView.m in Sources */,
 				0088DC1821E4A55F00C52C76 /* NSString+Size.m in Sources */,
 				005478C021F354ED00B74054 /* VipStatusCell.m in Sources */,
 				00BB693921E38AF400ED831F /* UIFont+YYAdd.m in Sources */,
+				0087CF90221A82CF00161CA6 /* UIImage+animatedGIF.m in Sources */,
 				0088DC1721E4A55F00C52C76 /* NSString+Date.m in Sources */,
 				00F3C77121E85CB9005CA742 /* ForgetViewController.m in Sources */,
 				00BB691221E38AF400ED831F /* MKAnnotationView+YYWebImage.m in Sources */,
@@ -2363,6 +2454,7 @@
 				00BB692121E38AF400ED831F /* YYTextDebugOption.m in Sources */,
 				0088DB9C21E4843000C52C76 /* CommonWebViewController.m in Sources */,
 				00F3C7B521E906FE005CA742 /* MomentModel.m in Sources */,
+				0087CF792219301700161CA6 /* AboutUsVC.m in Sources */,
 				00F3C82721E9B785005CA742 /* JXCategoryTitleImageCell.m in Sources */,
 				00BB695121E38AF400ED831F /* YYGestureRecognizer.m in Sources */,
 				00829C2321EF149300A1F297 /* MatchTableViewCell.m in Sources */,
@@ -2416,6 +2508,7 @@
 				00F3C82221E9B785005CA742 /* JXCategoryIndicatorView.m in Sources */,
 				0054789F21F3162400B74054 /* NSDate+CGXPicker.m in Sources */,
 				00BB694221E38AF400ED831F /* NSObject+YYAddForARC.m in Sources */,
+				0087CF6A2219054F00161CA6 /* BottleVC.m in Sources */,
 				002088642213F35800F1E666 /* UserInfoHomePageCell.m in Sources */,
 				00BB690721E38AF400ED831F /* YYMemoryCache.m in Sources */,
 				00F3C82421E9B785005CA742 /* JXCategoryDotView.m in Sources */,
@@ -2430,6 +2523,7 @@
 				001802A821FC3BA9007E0656 /* UserPointsModel.m in Sources */,
 				00BB684221E3890800ED831F /* NSObject+YDModel.m in Sources */,
 				00BB695021E38AF400ED831F /* YYKeychain.m in Sources */,
+				0087CF6722185D2700161CA6 /* WhoLookMeModel.m in Sources */,
 				0088DC1621E4A55F00C52C76 /* NSString+ChineseCharactersToSpelling.m in Sources */,
 				00BB690321E38AF400ED831F /* FGUploadImageManager.m in Sources */,
 				00BB692E21E38AF400ED831F /* UIColor+YYAdd.m in Sources */,
@@ -2441,6 +2535,7 @@
 				0058BADB21F60184004C3F02 /* TextLinePositionModifier.m in Sources */,
 				0088DBF121E4A0A000C52C76 /* AppInformationsManager.m in Sources */,
 				00F3C82F21E9B785005CA742 /* JXCategoryNumberView.m in Sources */,
+				0087CF73221921AA00161CA6 /* ViewTopView.m in Sources */,
 				00F3C78921E86784005CA742 /* SCUserInfo.m in Sources */,
 				0088DB9F21E4843000C52C76 /* Ins_Request.m in Sources */,
 				0054790E21F3A30D00B74054 /* TopicListsHeaderView.m in Sources */,
@@ -2470,6 +2565,7 @@
 				0018028421FADF1E007E0656 /* ProductModel.m in Sources */,
 				00F3C7B821E9072B005CA742 /* MomentImageModel.m in Sources */,
 				00BB692021E38AF400ED831F /* YYTextKeyboardManager.m in Sources */,
+				0087CF882219AE6300161CA6 /* LiPinTableViewCell.m in Sources */,
 				00F3C79521E8C34D005CA742 /* NetDelegateManager.m in Sources */,
 				00BB693021E38AF400ED831F /* UIApplication+YYAdd.m in Sources */,
 				0087CF5C2216A48C00161CA6 /* Notice.m in Sources */,
@@ -2528,15 +2624,18 @@
 				0088DBB021E48E0900C52C76 /* Const.m in Sources */,
 				00BB693521E38AF400ED831F /* UIBarButtonItem+YYAdd.m in Sources */,
 				0088DBA521E48CE200C52C76 /* BaseTableViewCell.m in Sources */,
+				0087CF7622192FED00161CA6 /* FeedBackVC.m in Sources */,
 				00F3C83121E9B785005CA742 /* JXCategoryNumberCellModel.m in Sources */,
 				00BB694021E38AF400ED831F /* NSKeyedUnarchiver+YYAdd.m in Sources */,
 				0018027821F9BDAC007E0656 /* Help.m in Sources */,
 				00F3C81E21E9B785005CA742 /* JXCategoryIndicatorComponentView.m in Sources */,
 				00BB694B21E38AF400ED831F /* YYAsyncLayer.m in Sources */,
+				0087CF632217CBF100161CA6 /* UserAvatarCell.m in Sources */,
 				00BB692521E38AF400ED831F /* NSParagraphStyle+YYText.m in Sources */,
 				005478FF21F3773D00B74054 /* InviteFriendVC.m in Sources */,
 				00BB691821E38AF400ED831F /* YYTextView.m in Sources */,
 				00F3C75121E83CC4005CA742 /* MainTabBarController.m in Sources */,
+				0087CF7C2219304100161CA6 /* ModifyPasswordVC.m in Sources */,
 				0018028B21FADFBF007E0656 /* ProductApi.m in Sources */,
 				00F3C82521E9B785005CA742 /* JXCategoryDotCellModel.m in Sources */,
 				0088DBD921E49C6E00C52C76 /* NSData+Base64.m in Sources */,
@@ -2558,6 +2657,7 @@
 				0088DC1321E4A55F00C52C76 /* NSString+DictionaryValue.m in Sources */,
 				005478F321F3668F00B74054 /* DCIMChatListViewController.m in Sources */,
 				00F3C83221E9B785005CA742 /* JXCategoryListContainerView.m in Sources */,
+				0087CF7F2219A2A300161CA6 /* DangQianJiFenVC.m in Sources */,
 				00F3C83821E9B785005CA742 /* JXCategoryBaseView.m in Sources */,
 				0018029021FB3B41007E0656 /* ForumVC+Delegate.m in Sources */,
 				0018027B21F9E3C3007E0656 /* YYPhotoGroupView.m in Sources */,

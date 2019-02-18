@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 INS_P_ASSIGN(NSInteger,iD);
 
-INS_P_STRONG(NSArray<ServiceModel *> *,virtual_service);
+INS_P_STRONG(ServiceModel *,virtual_service);
 
 INS_P_STRONG(NSString *,expired_at);
 

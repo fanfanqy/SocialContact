@@ -1,33 +1,21 @@
 //
-//  LoverConditionVC.m
+//  GeRenZiLiaoVC.m
 //  SocialContact
 //
-//  Created by EDZ on 2019/1/19.
+//  Created by EDZ on 2019/1/17.
 //  Copyright © 2019 ha. All rights reserved.
 //
 
 #import "LoverConditionVC.h"
+#import "SCUserInfo.h"
+#import "MeListTableViewCell.h"
+#import "UserAvatarCell.h"
 
-@interface LoverConditionVC ()<UITableViewDelegate,UITableViewDataSource>
+#import "ModifyUserInfoVC.h"
 
-@property (strong, nonatomic) UIView *tableFooterView;
-
-@property (strong, nonatomic) UIButton *okBtn;
-
-@property (strong, nonatomic) UIButton *resetBtn;
+@interface LoverConditionVC()<UITableViewDelegate,UITableViewDataSource>
 
 INS_P_STRONG(InsLoadDataTablView *, tableView);
-
-@property (assign, nonatomic) NSInteger age;
-
-@property (assign, nonatomic) NSInteger gender;
-
-@property (assign, nonatomic) NSInteger height;
-
-@property (assign, nonatomic) NSInteger weight;
-
-@property (assign, nonatomic) NSInteger education;
-
 
 @end
 
@@ -35,8 +23,33 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configUI];
+    // Do any additional setup after loading the view.
+    
+    [self setUpUI];
+    
+    self.fd_interactivePopDisabled = YES;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
+    
 }
+
+- (void)done{
+//    /customer/profile/
+    WEAKSELF;
+    NSDictionary *dic = [self.userModel modelToJSONObject];
+    POSTRequest *request = [POSTRequest requestWithPath:@"/customer/profile/" parameters:dic completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            [weakSelf.view makeToast:request.error.localizedDescription];
+        }else{
+            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
+            [weakSelf.view makeToast:@"设置完成"];
+        }
+    }];
+    [InsNetwork addRequest:request];
+    
+}
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -44,56 +57,101 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     
 }
 
-- (void)configUI{
-    self.title = @"择偶标准";
+- (void)setUpUI{
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     [self.view addSubview:self.tableView];
+    
+    WEAKSELF;
+    [self.tableView setLoadNewData:^{
+        
+        [weakSelf getUserInfo];
+    }];
+    
+    [self showLoading];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self getUserInfo];
+    });
+    
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)saveUserInfo{
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"settingcell"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"settingcell"];
-        
-    }
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            
-            cell.textLabel.text = @"年龄";
-        }
-        if (indexPath.row == 1) {
-            
-            cell.textLabel.text = @"身高";
-        }
-    }else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
-            
-            cell.textLabel.text = @"工作职业";
-        }
-        if (indexPath.row == 1) {
-            
-            cell.textLabel.text = @"年龄收入";
-        }
-        if (indexPath.row == 2) {
-            
-            cell.textLabel.text = @"婚姻状况";
-        }
-        if (indexPath.row == 3) {
-            
-            cell.textLabel.text = @"有无子女";
-        }
-        if (indexPath.row == 4) {
-            
-            cell.textLabel.text = @"打算几年内结婚";
-        }
-    }
-    
-    
-    return cell;
 }
+
+- (void)getUserInfo{
+    
+    WEAKSELF;
+    GETRequest *request = [GETRequest requestWithPath:@"/customer/profile/" parameters:nil completionHandler:^(InsRequest *request) {
+        
+        [weakSelf hideLoading];
+        [weakSelf.tableView endRefresh];
+        
+        if (!request.error) {
+            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject];
+            [weakSelf.tableView reloadData];
+        }else{
+            
+        }
+    }];
+    
+    [InsNetwork addRequest:request];
+    
+}
+
+- (void)clickIndexPath:(NSIndexPath *)indexPath{
+    
+    NSString *title;
+    switch (indexPath.section) {
+        case 0:
+        {
+            
+             if (indexPath.row == 0) {
+                
+                title = @"年龄";
+            }else if (indexPath.row == 1) {
+                
+                title = @"身高";
+            }
+            
+        }
+            break;
+        case 1:
+        {
+            if (indexPath.row == 0) {
+                
+                title = @"工作职业";
+            }else if (indexPath.row == 1) {
+                
+                title = @"年收入";
+            }else if (indexPath.row == 2) {
+                
+                title = @"婚姻状况";
+            }else if (indexPath.row == 3) {
+                
+                title = @"有无子女";
+            }else if (indexPath.row == 4) {
+                
+                title = @"打算几年内结婚";
+            }
+        }
+            break;
+            
+            
+        default:
+            break;
+    }
+    
+    if (title) {
+        [self pickerTitle:title];
+    }
+}
+
 
 - (void)pickerTitle:(NSString *)title{
-    
+    WEAKSELF;
     if ([title isEqualToString:@"出生日期"]) {
         NSDate *now = [NSDate date];
         NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
@@ -108,16 +166,67 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     }else if ([title isEqualToString:@"性别"]){
         NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleGender] objectAtIndex:1];
         [CGXPickerView showStringPickerWithTitle:@"性别" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue);
-            
-        } Style:CGXStringPickerViewStyleGender];
-    }else if ([title isEqualToString:@"身高"]){
-        
-        NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylHeight] objectAtIndex:3];
-        [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
             NSLog(@"%@",selectValue); ;
             
-        } Style:CGXStringPickerViewStylHeight];
+        } Style:CGXStringPickerViewStyleGender];
+    }else if ([title isEqualToString:@"年龄"]){
+        
+        [CGXPickerView showStringPickerWithTitle:@"年龄" DataSource:@[[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge],[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge]] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            
+            NSString *ageStart = selectValue[0];
+            NSString *ageEnd = selectValue[1];
+            
+            if (![ageStart containsString:@"不限"] && ![ageEnd containsString:@"不限"]) {
+                NSInteger age1;
+                NSInteger age2;
+                age1 = [selectRow[0] integerValue] + 17;
+                age2 = [selectRow[1] integerValue] + 17;
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+                [dic setObject:@[@(age1),@(age2)] forKey:@"age_range"];
+                
+                weakSelf.userModel.condition = dic;
+                [weakSelf.tableView reloadData];
+            }else{
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+                [dic setObject:@[] forKey:@"age_range"];
+                
+                weakSelf.userModel.condition = dic;
+                [weakSelf.tableView reloadData];
+            }
+            
+            
+            
+        }];
+        
+    }else if ([title isEqualToString:@"身高"]){
+        
+        [CGXPickerView showStringPickerWithTitle:@"身高" DataSource:@[[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylHeight],[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylHeight]] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            
+            NSString *heightStart = selectValue[0];
+            NSString *heightEnd = selectValue[1];
+            
+            if (![heightStart containsString:@"未知"] && ![heightEnd containsString:@"未知"]) {
+                NSInteger height1;
+                NSInteger height2;
+                height1 = [selectRow[0] integerValue] + 149;
+                height2 = [selectRow[1] integerValue] + 149;
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+                [dic setObject:@[@(height1),@(height2)] forKey:@"height_range"];
+                
+                weakSelf.userModel.condition = dic;
+                [weakSelf.tableView reloadData];
+            }else{
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+                [dic setObject:@[] forKey:@"height_range"];
+                
+                weakSelf.userModel.condition = dic;
+                [weakSelf.tableView reloadData];
+            }
+            
+            
+            
+        }];
+        
     }else if ([title isEqualToString:@"体重"]){
         
         NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylWeight] objectAtIndex:3];
@@ -144,187 +253,244 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
         }];
     }
     else if ([title isEqualToString:@"工作职业"]){
-        [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"未知", @"事业单位", @"政府机关", @"私营企业", @"自由职业", @"其他"] DefaultSelValue:@"未知" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+        [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"不限", @"事业单位", @"政府机关", @"私营企业", @"自由职业", @"其他"] DefaultSelValue:@"未知" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
             NSLog(@"%@",selectValue);
             
+            
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+            [dic setObject:[NSNumber numberWithInteger:[selectRow integerValue]+1]  forKey:@"profession"];
+            
+            weakSelf.userModel.condition = dic;
+            [weakSelf.tableView reloadData];
+            
         }];
-    }else if ([title isEqualToString:@"收入描述"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+       
+    }else if ([title isEqualToString:@"年收入"]){
+        
+        [CGXPickerView showStringPickerWithTitle:@"年收入" DataSource:@[ @"10万以下", @"10万~20万", @"20万~50万", @"50万以上"] DefaultSelValue:@"10万以下" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
             NSLog(@"%@",selectValue);
+            
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+            [dic setObject:[NSNumber numberWithInteger:[selectRow integerValue]+1]  forKey:@"income"];
+            
+            weakSelf.userModel.condition = dic;
+            [weakSelf.tableView reloadData];
             
         }];
     }else if ([title isEqualToString:@"婚姻状况"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+        
+        [CGXPickerView showStringPickerWithTitle:@"婚姻状况" DataSource:@[@"未婚", @"离异", @"丧偶"] DefaultSelValue:@"未婚" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
             NSLog(@"%@",selectValue);
+            
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+            [dic setObject:[NSNumber numberWithInteger:[selectRow integerValue]+1]  forKey:@"marital_status"];
+            
+            weakSelf.userModel.condition = dic;
+            [weakSelf.tableView reloadData];
             
         }];
     }else if ([title isEqualToString:@"有无子女"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+        
+        [CGXPickerView showStringPickerWithTitle:@"有无子女" DataSource:@[@"无", @"有，和我在一起", @"有，不和我在一起"] DefaultSelValue:@"无" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
             NSLog(@"%@",selectValue);
+            
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+            [dic setObject:[NSNumber numberWithInteger:[selectRow integerValue]+1]  forKey:@"child_status"];
+            
+            weakSelf.userModel.condition = dic;
+            [weakSelf.tableView reloadData];
             
         }];
     }else if ([title isEqualToString:@"打算几年内结婚"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+        
+        [CGXPickerView showStringPickerWithTitle:@"打算几年内结婚" DataSource:@[@"1年内", @"1-2年内", @"2-3年内", @"3年以上"] DefaultSelValue:@"1年内" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
             NSLog(@"%@",selectValue);
+            
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
+            [dic setObject:[NSNumber numberWithInteger:[selectRow integerValue]+1]  forKey:@"years_to_marry"];
+            
+            weakSelf.userModel.condition = dic;
+            [weakSelf.tableView reloadData];
             
         }];
     }
     
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+        /*
+             condition 格式说明 字段值对用相应中文意思的key
+         
+             {
+             "age_range": [10, 20],
+             "height_range": [180, 190],
+             "profession": 1,
+             "education": 1,
+             "income": 1,
+             "marital_status": 1,
+             "child_status": 1,
+             "years_to_marry": 1,
+             }
+         */
+        NSString *leftImage;
+        NSString *title;
+        NSString *subTitle;
+        // 个人资料，择偶标准，我要认证，谁看过我，分享软件，当前积分
+        MeListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeListTableViewCellReuseID"];
+        cell.titleLBLeading.constant = -36;
+        if (indexPath.section == 0) {
+            if (indexPath.row == 0) {
+                leftImage = @"";
+                title = @"年龄";
+                NSArray *ageRange = self.userModel.condition[@"age_range"];
+                if (ageRange.count == 2) {
+                    subTitle = [NSString stringWithFormat:@"%ld岁—%ld岁",[ageRange[0] integerValue],[ageRange[1] integerValue]];
+                }else{
+                    subTitle = @"不限";
+                }
+                
+            }else if (indexPath.row == 1) {
+                leftImage = @"";
+                title = @"身高";
+                NSArray *heightRange = self.userModel.condition[@"height_range"];
+                if (heightRange.count == 2) {
+                    subTitle = [NSString stringWithFormat:@"%ldcm—%ldcm",[heightRange[0] integerValue],[heightRange[1] integerValue]];
+                }else{
+                    subTitle = @"不限";
+                }
+            }
+            
+        }else if (indexPath.section == 1) {
+            if (indexPath.row == 0) {
+                leftImage = @"";
+                title = @"工作职业";
+                NSInteger profession = [self.userModel.condition[@"profession"] integerValue];
+                if (profession == 0) {
+                    subTitle = @"不限";
+                }else{
+                    subTitle = [Help profession:profession];
+                }
+            }else if (indexPath.row == 1) {
+                leftImage = @"";
+                title = @"年收入";
+                NSInteger income = [self.userModel.condition[@"income"] integerValue];
+                if (income == 0) {
+                    subTitle = @"不限";
+                }else{
+                    subTitle = [Help income:income];
+                }
+            }else if (indexPath.row == 2) {
+                leftImage = @"";
+                title = @"婚姻状况";
+                NSInteger marital_status = [self.userModel.condition[@"marital_status"] integerValue];
+                if (marital_status == 0) {
+                    subTitle = @"不限";
+                }else{
+                    subTitle = [Help marital_status:marital_status];
+                }
+            }else if (indexPath.row == 3) {
+                leftImage = @"";
+                title = @"有无子女";
+            
+                NSInteger child_status = [self.userModel.condition[@"child_status"] integerValue];
+                if (child_status == 0) {
+                    subTitle = @"不限";
+                }else{
+                    subTitle = [Help child_status:child_status];
+                }
+                
+                
+            }else if (indexPath.row == 4) {
+                leftImage = @"";
+                title = @"打算几年内结婚";
+                NSInteger years_to_marry = [self.userModel.condition[@"years_to_marry"] integerValue];
+                if (years_to_marry == 0) {
+                    subTitle = @"不限";
+                }else{
+                    subTitle = [Help yearsToMarial:years_to_marry];
+                }
+            }
+            
+        }
+        cell.leftImgV.image = [UIImage imageNamed:leftImage];
+        cell.titleLB.text = title;
+        cell.subTitleLB.text = subTitle;
+        return cell;
+
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            
-            [self pickerTitle:@"出生日期"];
-        }
-        if (indexPath.row == 1) {
-            
-            [self pickerTitle:@"身高"];
-        }
-    }else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
-            
-            [self pickerTitle:@"工作职业"];
-        }
-        if (indexPath.row == 1) {
-            
-            [self pickerTitle:@"收入描述"];
-        }
-        if (indexPath.row == 2) {
-            
-            [self pickerTitle:@"婚姻状况"];
-            
-        }
-        if (indexPath.row == 3) {
-            
-            [self pickerTitle:@"有无子女"];
-        }
-        if (indexPath.row == 4) {
-            
-            [self pickerTitle:@"打算几年内结婚"];
-        }
-    }
+    [self clickIndexPath:indexPath];
     
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    return [UIView new];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    return [UIView new];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 2;
-    }
-    return 5;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
     return 2;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    switch (section) {
+        case 0:
+            return 2;
+            break;
+        case 1:
+            return 5;
+            break;
+        default:
+            break;
+    }
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-   
-    return 10;
-  
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    return 0.000001;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.001;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10.0;
+    
 }
 
-- (UIView *)tableFooterView{
-    if (!_tableFooterView) {
-        _tableFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 60)];
-        [_tableFooterView addSubview:self.okBtn];
-        [_tableFooterView addSubview:self.resetBtn];
-    }
-   
-    return _tableFooterView;
-}
-
-- (UIButton *)okBtn{
-    if (!_okBtn) {
-        _okBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _okBtn.top = 30;
-        _okBtn.left = 20;
-        _okBtn.width = (kScreenWidth - 80)/2.0;
-        _okBtn.height = 48;
-        _okBtn.layer.cornerRadius = 8;
-        _okBtn.layer.masksToBounds = YES;
-        _okBtn.layer.borderWidth = 1;
-        _okBtn.layer.borderColor = UIColorHex(63D190).CGColor;
-        _okBtn.centerX = self.view.centerX;
-        [_okBtn setTitle:@"确定" forState:UIControlStateNormal];
-        [_okBtn setTitleColor:UIColorHex(63D190) forState:UIControlStateNormal];
-        _okBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_okBtn addTarget:self action:@selector(okBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _okBtn;
-}
-
-- (UIButton *)resetBtn{
-    if (!_resetBtn) {
-        _resetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _resetBtn.top = 30;
-        _resetBtn.width = (kScreenWidth - 80)/2.0;
-        _resetBtn.right = kScreenWidth-20;
-        _resetBtn.height = 48;
-        _resetBtn.layer.cornerRadius = 8;
-        _resetBtn.layer.masksToBounds = YES;
-        _resetBtn.layer.borderWidth = 1;
-        _resetBtn.layer.borderColor = UIColorHex(63D190).CGColor;
-        _resetBtn.centerX = self.view.centerX;
-        [_resetBtn setTitle:@"重置" forState:UIControlStateNormal];
-        [_resetBtn setTitleColor:UIColorHex(63D190) forState:UIControlStateNormal];
-        _resetBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_resetBtn addTarget:self action:@selector(resetBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _resetBtn;
-}
-
-- (void)okBtnClick{
-
-}
-
-- (void)resetBtnClick{
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+    view.backgroundColor = BackGroundColor;
+    return view;
     
 }
 
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
-        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, kScreenWidth, kScreenHeight - StatusBarHeight - UITabBarHeight ) style:UITableViewStylePlain];
-        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - UITabBarHeight ) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15);
         _tableView.separatorColor = Line;
         _tableView.rowHeight = 55;
-        _tableView.tableFooterView = self.tableFooterView;
+        _tableView.tableFooterView = [UIView new];
+        [_tableView registerNib:[UINib nibWithNibName:@"MeListTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeListTableViewCellReuseID"];
     }
     return _tableView;
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

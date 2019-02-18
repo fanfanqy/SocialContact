@@ -11,6 +11,7 @@
 #import "RecommendUserCell.h"
 
 #import "VipVC.h"
+#import "UserHomepageVC.h"
 
 @interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -74,53 +75,6 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
-/*
-- (void)setUpUI{
-    ZLSwipeableView *swipeableView = [[ZLSwipeableView alloc] initWithFrame:CGRectZero];
-    self.swipeableView = swipeableView;
-    [self.view addSubview:self.swipeableView];
-    
-    // Required Data Source
-    self.swipeableView.dataSource = self;
-    
-    // Optional Delegate
-    self.swipeableView.delegate = self;
-    
-    self.swipeableView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    NSDictionary *metrics = @{};
-    
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"|-50-[swipeableView]-50-|"
-                               options:0
-                               metrics:metrics
-                               views:NSDictionaryOfVariableBindings(
-                                                                    swipeableView)]];
-    
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"V:|-120-[swipeableView]-100-|"
-                               options:0
-                               metrics:metrics
-                               views:NSDictionaryOfVariableBindings(
-                                                                    swipeableView)]];
-}
-
-- (UIView *)nextViewForSwipeableView:(ZLSwipeableView *)swipeableView{
-    return nil;
-}
-
-- (void)viewDidLayoutSubviews {
-    [self.swipeableView loadViewsIfNeeded];
-}
-
-- (void)swipeableView:(ZLSwipeableView *)swipeableView
-         didSwipeView:(UIView *)view
-          inDirection:(ZLSwipeableViewDirection)direction {
-    NSLog(@"did swipe in direction: %zd", direction);
-}
-
-*/
-
 - (void)setUpUI{
     
     self.view.backgroundColor = BackGroundColor;
@@ -157,6 +111,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (void)recommendUser{
 //   /api/customers/recommend/
 //    新用户推荐
+    
 }
 
 - (void)fetchData:(BOOL)refresh requestType:(MomentRequestType)momentRequestType{
@@ -237,11 +192,11 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
             }
             
             [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                MomentModel *momentModel = [MomentModel modelWithDictionary:obj];
+                SCUserInfo *model = [SCUserInfo modelWithDictionary:obj];
                 if (momentRequestType == weakSelf.momentRequestType) {
-                    [weakSelf.array addObject:momentModel];
+                    [weakSelf.array addObject:model];
                 }else{
-                    [weakSelf.recommendUserArray addObject:momentModel];
+                    [weakSelf.recommendUserArray addObject:model];
                 }
                 
             }];
@@ -269,9 +224,55 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (void)heartBeat:(NSIndexPath *)indexPath{
+    
+    NSString *service_vip_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
+    if ([NSString ins_String:service_vip_expired_at]) {
+    
+        [self showLoading];
+        WEAKSELF;
+        [Help vipIsExpired:^(BOOL expired) {
+            [weakSelf hideLoading];
+            if (expired) {
+                [self goVipVC:@"您的Vip已过期"];
+            }else{
+                // 关注成功
+                
+            }
+        } topIsExpired:nil];
+        
+    }else{
+        [self goVipVC:@"Vip 充值"];
+    }
+    
+    
+}
+
+- (void)chatClick:(NSIndexPath *)indexPath{
+    
+    NSString *service_show_index_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_show_index_expired_at;
+    if ([NSString ins_String:service_show_index_expired_at]) {
+        
+        [self showLoading];
+        WEAKSELF;
+        [Help vipIsExpired:nil topIsExpired:^(BOOL expired) {
+            [weakSelf hideLoading];
+            if (expired) {
+                [self goVipVC:@"您的Vip已过期"];
+            }else{
+                // 去聊天
+            }
+        }];
+        
+    }else{
+        [self goVipVC:@"Vip 充值"];
+    }
+}
+
+- (void)goVipVC:(NSString *)alertTitle{
+    
     SCLAlertView *alert = [[SCLAlertView alloc] init];
     alert.shouldDismissOnTapOutside = YES;
-//    alert.iconTintColor = [UIColor colorWithHexString:@"F57C00"];
+    //    alert.iconTintColor = [UIColor purpleColor];
     [alert removeTopCircle];
     //    backgroundColor, borderWidth, borderColor, textColor
     alert.buttonFormatBlock = ^NSDictionary *{
@@ -283,41 +284,19 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     
     //Using Block
     WEAKSELF;
-    [alert addButton:@"前去充值" actionBlock:^(void) {
-        VipVC *vc = [[VipVC alloc]initWithNibName:@"VipVC" bundle:nil];
+    SCLButton *button = [alert addButton:@"前去充值" actionBlock:^(void) {
+        VipVC *vc = [VipVC new];
+        vc.type = 1;
         [weakSelf.navigationController pushViewController:vc animated:YES];
     }];
     
-    [alert showNotice:self title:@"VIP 充值" subTitle:@"充值后可以嗨嗨嗨" closeButtonTitle:@"暂不" duration:0.0f]; // Notice
-    
-}
-
-- (void)chatClick:(NSIndexPath *)indexPath{
-    SCLAlertView *alert = [[SCLAlertView alloc] init];
-    alert.shouldDismissOnTapOutside = YES;
-//    alert.iconTintColor = [UIColor purpleColor];
-    [alert removeTopCircle];
-    //    backgroundColor, borderWidth, borderColor, textColor
-    alert.buttonFormatBlock = ^NSDictionary *{
-        return @{
-                 @"backgroundColor":[UIColor colorWithHexString:@"F57C00"],
-                 @"textColor":[UIColor whiteColor],
-                 };
-    };
-    
-    //Using Block
-    SCLButton *button = [alert addButton:@"前去充值" actionBlock:^(void) {
-        
-    }];
-    
     
     [alert showNotice:self title:@"VIP 充值" subTitle:@"充值后可以嗨嗨嗨" closeButtonTitle:@"暂不" duration:0.0f]; // Notice
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MomentModel *model = self.array[indexPath.row];
+    SCUserInfo *model = self.array[indexPath.row];
     MatchTableViewCell *cell = (MatchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"MatchTableViewCell"];
     [cell setModel:model];
     cell.indexPath = indexPath;
@@ -340,6 +319,11 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SCUserInfo *model = self.array[indexPath.row];
+    UserHomepageVC *vc = [UserHomepageVC new];
+    vc.userId = model.iD;
+    [self.navigationController pushViewController:vc animated:YES];
     
 }
 
@@ -461,7 +445,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     //Using Block
     WEAKSELF;
     [alert addButton:@"前去充值" actionBlock:^(void) {
-        VipVC *vc = [[VipVC alloc]initWithNibName:@"VipVC" bundle:nil];
+        VipVC *vc = [VipVC new];
         [weakSelf.navigationController pushViewController:vc animated:YES];
     }];
     
@@ -542,7 +526,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     RecommendUserCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendUserCell" forIndexPath:indexPath];
-    MomentModel *model = self.recommendUserArray[indexPath.row];
+    SCUserInfo *model = self.recommendUserArray[indexPath.row];
     cell.model = model;
     cell.indexPath = indexPath;
     return cell;

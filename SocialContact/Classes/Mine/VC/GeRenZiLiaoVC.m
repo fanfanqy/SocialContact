@@ -9,11 +9,11 @@
 #import "GeRenZiLiaoVC.h"
 #import "SCUserInfo.h"
 #import "MeListTableViewCell.h"
-#import "UserInfoTableViewCell.h"
+#import "UserAvatarCell.h"
 
 #import "ModifyUserInfoVC.h"
 
-@interface GeRenZiLiaoVC ()<UITableViewDelegate,UITableViewDataSource,UserInfoTableViewCellDelegate>
+@interface GeRenZiLiaoVC ()<UITableViewDelegate,UITableViewDataSource>
 
 INS_P_STRONG(InsLoadDataTablView *, tableView);
 
@@ -69,7 +69,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
         [weakSelf.tableView endRefresh];
         
         if (!request.error) {
-            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject];
+            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
             [weakSelf.tableView reloadData];
         }else{
             
@@ -162,148 +162,172 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 
 - (void)pickerTitle:(NSString *)title{
-    
-    if ([title isEqualToString:@"出生日期"]) {
-        NSDate *now = [NSDate date];
-        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-        fmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-        NSString *nowStr = [fmt stringFromDate:now];
         
-        [CGXPickerView showDatePickerWithTitle:@"出生日期" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01 00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
-            NSLog(@"%@",selectValue);
+        if ([title isEqualToString:@"出生日期"]) {
+            NSDate *now = [NSDate date];
+            NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+            fmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+            NSString *nowStr = [fmt stringFromDate:now];
             
-        }];
-        
-    }else if ([title isEqualToString:@"性别"]){
-        NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleGender] objectAtIndex:1];
-        [CGXPickerView showStringPickerWithTitle:@"性别" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue); ;
-           
-        } Style:CGXStringPickerViewStyleGender];
-    }else if ([title isEqualToString:@"身高"]){
-        
-        NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylHeight] objectAtIndex:3];
-        [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue); ;
+            [CGXPickerView showDatePickerWithTitle:@"出生日期" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01 00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
+                NSLog(@"%@",selectValue);
+                
+            }];
             
-        } Style:CGXStringPickerViewStylHeight];
-    }else if ([title isEqualToString:@"体重"]){
-        
-        NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylWeight] objectAtIndex:3];
-        [CGXPickerView showStringPickerWithTitle:@"体重" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue); ;
+        }else if ([title isEqualToString:@"性别"]){
+            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleGender] objectAtIndex:1];
+            [CGXPickerView showStringPickerWithTitle:@"性别" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue); ;
+                
+            } Style:CGXStringPickerViewStyleGender];
+        }else if ([title isEqualToString:@"年龄"]){
+            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge] objectAtIndex:1];
+            [CGXPickerView showStringPickerWithTitle:@"年龄" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue); ;
+                
+            } Style:CGXStringPickerViewStyleAge];
+        }else if ([title isEqualToString:@"身高"]){
             
-        } Style:CGXStringPickerViewStylWeight];
-    }else if ([title isEqualToString:@"教育"]){
-        
-        NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleEducation] objectAtIndex:1];
-        [CGXPickerView showStringPickerWithTitle:@"教育" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@--%@",selectValue,selectRow);
+            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylHeight] objectAtIndex:3];
+            [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue); ;
+                
+            } Style:CGXStringPickerViewStylHeight];
+        }else if ([title isEqualToString:@"体重"]){
             
-        } Style:CGXStringPickerViewStyleEducation];
-    }else if ([title isEqualToString:@"工作地址"]){
-        [CGXPickerView showAddressPickerWithTitle:@"请选择你的城市" DefaultSelected:@[@4, @0,@0] IsAutoSelect:YES Manager:nil ResultBlock:^(NSArray *selectAddressArr, NSArray *selectAddressRow) {
-            NSLog(@"%@-%@",selectAddressArr,selectAddressRow);
+            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylWeight] objectAtIndex:3];
+            [CGXPickerView showStringPickerWithTitle:@"体重" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue); ;
+                
+            } Style:CGXStringPickerViewStylWeight];
+        }else if ([title isEqualToString:@"教育"]){
             
-        }];
-    }else if ([title isEqualToString:@"家庭地址"]){
-        [CGXPickerView showAddressPickerWithTitle:@"请选择你的城市" DefaultSelected:@[@0,@0] IsAutoSelect:YES Manager:nil ResultBlock:^(NSArray *selectAddressArr, NSArray *selectAddressRow) {
-            NSLog(@"%@-%@",selectAddressArr,selectAddressRow);
+            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleEducation] objectAtIndex:1];
+            [CGXPickerView showStringPickerWithTitle:@"教育" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@--%@",selectValue,selectRow);
+                
+            } Style:CGXStringPickerViewStyleEducation];
+        }else if ([title isEqualToString:@"工作地址"]){
+            [CGXPickerView showAddressPickerWithTitle:@"请选择你的城市" DefaultSelected:@[@4, @0,@0] IsAutoSelect:YES Manager:nil ResultBlock:^(NSArray *selectAddressArr, NSArray *selectAddressRow) {
+                NSLog(@"%@-%@",selectAddressArr,selectAddressRow);
+                
+            }];
+        }else if ([title isEqualToString:@"家庭地址"]){
+            [CGXPickerView showAddressPickerWithTitle:@"请选择你的城市" DefaultSelected:@[@0,@0] IsAutoSelect:YES Manager:nil ResultBlock:^(NSArray *selectAddressArr, NSArray *selectAddressRow) {
+                NSLog(@"%@-%@",selectAddressArr,selectAddressRow);
+                
+            }];
+        }
+        else if ([title isEqualToString:@"工作职业"]){
+            [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"未知", @"事业单位", @"政府机关", @"私营企业", @"自由职业", @"其他"] DefaultSelValue:@"未知" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+            }];
             
-        }];
-    }
-    else if ([title isEqualToString:@"工作职业"]){
-        [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue);
+        }else if ([title isEqualToString:@"年收入"]){
             
-        }];
-    }else if ([title isEqualToString:@"收入描述"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue);
-           
-        }];
-    }else if ([title isEqualToString:@"婚姻状况"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue);
+            [CGXPickerView showStringPickerWithTitle:@"年收入" DataSource:@[ @"10万以下", @"10万~20万", @"20万~50万", @"50万以上"] DefaultSelValue:@"10万以下" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+            }];
+        }else if ([title isEqualToString:@"婚姻状况"]){
             
-        }];
-    }else if ([title isEqualToString:@"有无子女"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue);
+            [CGXPickerView showStringPickerWithTitle:@"婚姻状况" DataSource:@[@"未婚", @"离异", @"丧偶"] DefaultSelValue:@"未婚" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+            }];
+        }else if ([title isEqualToString:@"有无子女"]){
             
-        }];
-    }else if ([title isEqualToString:@"打算几年内结婚"]){
-        [CGXPickerView showStringPickerWithTitle:@"红豆" DataSource:@[@"很好的", @"干干", @"高度", @"打的", @"都怪怪的", @"博对"] DefaultSelValue:@"高度" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue);
+            [CGXPickerView showStringPickerWithTitle:@"有无子女" DataSource:@[@"无", @"有，和我在一起", @"有，不和我在一起"] DefaultSelValue:@"无" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+            }];
+        }else if ([title isEqualToString:@"打算几年内结婚"]){
             
-        }];
-    }
-    
+            [CGXPickerView showStringPickerWithTitle:@"打算几年内结婚" DataSource:@[@"1年内", @"1-2年内", @"2-3年内", @"3年以上"] DefaultSelValue:@"1年内" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+            }];
+        }
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0 && indexPath.row == 0) {
         
-        UserInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCellReuseID"];
-        
-        cell.delegate = self;
-        cell.userModel = self.userModel;
+        UserAvatarCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserAvatarCell"];
+        [cell.avatarImg sd_setImageWithURL:[NSURL URLWithString:self.userModel.avatar_url] placeholderImage:[UIImage imageNamed:@""]];
         return cell;
         
     }else{
         
         NSString *leftImage;
         NSString *title;
+        NSString *subTitle;
         // 个人资料，择偶标准，我要认证，谁看过我，分享软件，当前积分
         MeListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeListTableViewCellReuseID"];
+        cell.titleLBLeading.constant = -36;
         if (indexPath.section == 1) {
             
             if (indexPath.row == 0) {
                 leftImage = @"";
                 title = @"昵称";
+                subTitle = self.userModel.name;
             }else if (indexPath.row == 1) {
                 leftImage = @"";
                 title = @"性别";
+                subTitle = [Help gender:self.userModel.gender];
             }else if (indexPath.row == 2) {
                 leftImage = @"";
                 title = @"出生日期";
+                subTitle = self.userModel.birthday;
             }else if (indexPath.row == 3) {
                 leftImage = @"";
                 title = @"身高";
+                subTitle = [Help height:self.userModel.height];
             }
-            cell.leftImgV.image = [UIImage imageNamed:leftImage];
-            cell.titleLB.text = title;
+            
         }else if (indexPath.section == 2) {
             if (indexPath.row == 0) {
                 leftImage = @"";
                 title = @"家庭地址";
+                subTitle = self.userModel.address_home;
             }else if (indexPath.row == 1) {
                 leftImage = @"";
                 title = @"工作地址";
+                subTitle = self.userModel.address_company;
             }else if (indexPath.row == 2) {
                 leftImage = @"";
                 title = @"工作职业";
+                subTitle = [Help profession:self.userModel.profession];
             }else if (indexPath.row == 3) {
                 leftImage = @"";
                 title = @"收入描述";
+                subTitle = [Help income:self.userModel.income];
             }else if (indexPath.row == 4) {
                 leftImage = @"";
                 title = @"婚姻状况";
+                subTitle = [Help marital_status:self.userModel.marital_status];
             }else if (indexPath.row == 5) {
                 leftImage = @"";
                 title = @"有无子女";
+                subTitle = [Help child_status:self.userModel.child_status];
             }else if (indexPath.row == 6) {
                 leftImage = @"";
                 title = @"打算几年内结婚";
+                subTitle = [Help yearsToMarial:self.userModel.years_to_marry];
             }else if (indexPath.row == 7) {
                 leftImage = @"";
                 title = @"用户签名";
+                subTitle = self.userModel.intro;
             }
-            cell.leftImgV.image = [UIImage imageNamed:leftImage];
-            cell.titleLB.text = title;
+            
         }
-        
+        cell.leftImgV.image = [UIImage imageNamed:leftImage];
+        cell.titleLB.text = title;
+        cell.subTitleLB.text = subTitle;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -313,7 +337,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    [self clickIndexPath:indexPath];
+//    [self clickIndexPath:indexPath];
     
 }
 
@@ -341,7 +365,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.row == 0) {
-        return 132;
+        return 68;
     }
     return 55;
 }
@@ -358,8 +382,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
-        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, kScreenWidth, kScreenHeight - StatusBarHeight - UITabBarHeight ) style:UITableViewStylePlain];
-        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - UITabBarHeight ) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];
@@ -367,7 +390,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
         _tableView.separatorColor = Line;
         _tableView.rowHeight = 55;
         _tableView.tableFooterView = [UIView new];
-        [_tableView registerClass:[UserInfoTableViewCell class] forCellReuseIdentifier:@"UserInfoTableViewCellReuseID"];
+        [_tableView registerClass:[UserAvatarCell class] forCellReuseIdentifier:@"UserAvatarCell"];
         [_tableView registerNib:[UINib nibWithNibName:@"MeListTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeListTableViewCellReuseID"];
     }
     return _tableView;
