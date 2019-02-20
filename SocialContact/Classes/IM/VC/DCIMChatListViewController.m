@@ -31,7 +31,9 @@
 @end
 
 @implementation DCIMChatListViewController
-
+{
+    DCIMButton *noticeBtn;
+}
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -131,18 +133,49 @@
 	if ([self.conversationListTableView respondsToSelector:@selector(setSeparatorInset:)]) { [self.conversationListTableView setSeparatorInset:UIEdgeInsetsZero]; }
 	if ([self.conversationListTableView respondsToSelector:@selector(setLayoutMargins:)]) { [self.conversationListTableView setLayoutMargins:UIEdgeInsetsZero]; }
 
-    DCIMButton *noticeBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
+    noticeBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
     [noticeBtn setImage:[[UIImage imageNamed:@"ic_notice"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     noticeBtn.tintColor = MAIN_COLOR;
     
     [noticeBtn addTarget:self action:@selector(noticeBtnAction) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:noticeBtn];
 
+    [self getNoticeCount];
+    
 }
+
+// 获取未读个数
+- (void)getNoticeCount{
+    /*
+     获取未读个数
+     Request
+     LoginRequired: True
+     Method: GET
+     URL: /notices/status/
+     */
+    
+    GETRequest *request = [GETRequest requestWithPath:@"/notices/status/" parameters:nil completionHandler:^(InsRequest *request) {
+        
+        if (!request.error) {
+            NSInteger count = [request.responseObject[@"data"][@"unread_count"] integerValue];
+            
+            if (count) {
+                [noticeBtn showDLBadgeWithStyle:DLBadgeStyleNumber value:count animationType:DLBadgeAnimTypeShake];
+            }else{
+                [noticeBtn clearBadge];
+            }
+        }
+        
+    }];
+    [InsNetwork addRequest:request];
+}
+
+
 
 - (void)noticeBtnAction{
     
     ForumVC *vc = [ForumVC new];
+    vc.title = @"消息列表";
     vc.forumVCType = ForumVCTypeNoticeOrNearBy;
     vc.momentRequestType = MomentRequestTypeNotice;
     vc.momentUIType = MomentUITypeNotice;

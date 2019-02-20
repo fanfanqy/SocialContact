@@ -223,7 +223,7 @@
     NSDictionary *params = @{@"account":self.username.text,@"password":self.password.text,
                            };
     WEAKSELF;
-    POSTRequest *request = [POSTRequest requestWithPath:@"customer/login/" parameters:params?:nil completionHandler:^(InsRequest *request) {
+    POSTRequest *request = [POSTRequest requestWithPath:@"/customer/login/" parameters:params?:nil completionHandler:^(InsRequest *request) {
         
         [SVProgressHUD dismiss];
         if (!request.error) {
@@ -270,9 +270,10 @@
          */
         SCUser *user = [SCUser modelWithDictionary:responseObject[@"data"]];
         [SCUserCenter sharedCenter].currentUser = user;
+        [[SCUserCenter sharedCenter].currentUser updateToDB];
         [[AppDelegate sharedDelegate]configRootVC];
         
-        [SCUserCenter getOtherUserInformationWithUserId:[[SCUserCenter sharedCenter].currentUser.userInfo.account integerValue] completion:nil];
+        [SCUserCenter getOtherUserInformationWithUserId:[responseObject[@"data"][@"id"] integerValue] completion:nil];
         
     }
 

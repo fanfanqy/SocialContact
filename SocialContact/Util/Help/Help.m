@@ -76,6 +76,13 @@
                     completion(YES);
                 }
                 
+            }else{
+                if(completion){
+                    completion(YES);
+                }
+                if (topExpiredCompletion) {
+                    topExpiredCompletion(YES);
+                }
             }
         }
     }];

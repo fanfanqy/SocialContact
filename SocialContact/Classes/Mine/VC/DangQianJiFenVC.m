@@ -32,7 +32,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     [self setUpUI];
     
     DCIMButton *rightBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
-    [rightBtn setImage:[[UIImage imageNamed:@"ic_notice"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [rightBtn setImage:[[UIImage imageNamed:@"icon_task"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     rightBtn.tintColor = MAIN_COLOR;
     
     [rightBtn addTarget:self action:@selector(rightBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -211,6 +211,12 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     return 0.000001;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    
+    return [UIView new];
+}
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 10.0;
     
@@ -224,8 +230,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
-        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, kScreenWidth, kScreenHeight - StatusBarHeight - UITabBarHeight ) style:UITableViewStylePlain];
-        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight -  GuaTopHeight ) style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];

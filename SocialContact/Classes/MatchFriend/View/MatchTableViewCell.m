@@ -27,6 +27,10 @@
     
     self.img.layer.cornerRadius = 6.0;
     self.img.layer.masksToBounds = YES;
+    
+    self.address.layer.borderColor = [UIColor blackColor].CGColor;
+    self.address.layer.borderWidth = 1.f;
+    self.address.layer.cornerRadius = 10.f;
 }
 
 - (void)setModel:(SCUserInfo *)model{
@@ -39,10 +43,11 @@
     }
     [self.img sd_setImageWithURL:[NSURL URLWithString:avatarUrl]];
     self.nick.text = model.name;
-    self.loveDeclaration.text = model.intro;
+//    self.loveDeclaration.text = model.intro;
     self.ageGender.text = [NSString stringWithFormat:@"%@ %ld",model.gender == 1 ?@"男":@"女",model.age];
-    self.address.text = model.address_home;
-    self.otherInfo.text = [NSString stringWithFormat:@"%.0lf·%ld·%@",model.height,model.income,@"双子座"];
+    self.address.text = [NSString stringWithFormat:@" %@ ",model.address_home];
+    self.otherInfo.text = [Help height:model.height];
+//    [NSString stringWithFormat:@"%.0lf·%ld·%@",model.height,model.income,@"双子座"];
 
 }
 

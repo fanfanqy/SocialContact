@@ -29,7 +29,7 @@
 	
     //头像
     _portrait.left = kMomentContentInsetLeft;
-    _portrait.top = 0;
+    _portrait.top = 10;
     _portrait.size = CGSizeMake(kMomentPortraitWH, kMomentPortraitWH);
 
     if (_cell.layout.model.is_hidden_name) {
@@ -156,7 +156,46 @@
     _commentTable.top = 0;
     _commentTable.width = kScreenWidth;
     _commentTable.height = _layout.commentHeight;
+    
     [self.commentTable reloadData];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 45 + _cell.layout.zanUsersHeight)];
+    
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 0.3)];
+    line.backgroundColor = Line;
+    
+    YYLabel *zanUsersLabel = [[YYLabel alloc]initWithFrame:CGRectMake(kMomentContentInsetLeft, 10, kScreenWidth, _cell.layout.zanUsersHeight-8)];
+    WEAKSELF;
+    zanUsersLabel.highlightTapAction = ^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
+        if ([weakSelf.cell.delegate respondsToSelector:@selector(cell:didClickInLabel:textRange:)]) {
+            [weakSelf.cell.delegate cell:weakSelf.cell didClickInLabel:(YYLabel *)containerView textRange:range];
+        }
+    };
+    zanUsersLabel.textLayout = _cell.layout.zanUsersLayout;
+    
+    UIImageView *imgV = [[UIImageView alloc]initWithFrame:CGRectMake(kMomentContentInsetLeft, _cell.layout.zanUsersHeight + 12, 20, 20)];
+    imgV.contentMode = UIViewContentModeScaleAspectFit;
+    imgV.image = [UIImage imageNamed:@"find_comment"];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(40, _cell.layout.zanUsersHeight + 0, kScreenWidth-50, 40)];
+    label.font = [UIFont systemFontOfSize:14];
+    label.textColor = Font_color333;
+    if (self.commentArray.count == 0) {
+        label.text = @"最新评论";
+    }else {
+        label.text = [NSString stringWithFormat:@"最新评论 %ld",self.commentArray.count];
+    }
+    [view addSubview:zanUsersLabel];
+    [view addSubview:imgV];
+    [view addSubview:label];
+    [view addSubview:line];
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return _cell.layout.zanUsersHeight + 45.f;
 }
 
 #pragma mark - TableViewDelegate
@@ -203,11 +242,13 @@
         _commentTable.dataSource = self;
         _commentTable.delegate = self;
         _commentTable.scrollEnabled = NO;
-        _commentTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _commentTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _commentTable.separatorColor = Line;
         _commentTable.backgroundColor = [UIColor clearColor];
     }
     return _commentTable;
 }
+
 
 @end
 
@@ -397,7 +438,7 @@
     self.commentCount.top = self.zanBtn.top;
     
     if (layout.momentRequestType == MomentRequestTypeMyMomentDetail || layout.momentRequestType == MomentRequestTypeUserMomentDetail){
-        if (layout.commentLayoutArr.count != 0) {
+        if (layout.commentLayoutArr.count != 0 || layout.zanUsers.count != 0) {
             _commentView.hidden = NO;
             //点赞/评论
             _commentView.left = 0;
@@ -494,6 +535,12 @@
         _content = [YYLabel new];
         _content.font = [UIFont systemFontOfSize:12];
         _content.textColor = UIColorHex(D3D3D3);
+        WEAKSELF;
+        _content.highlightTapAction = ^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
+            if ([weakSelf.delegate respondsToSelector:@selector(cell:didClickInLabel:textRange:)]) {
+                [weakSelf.delegate cell:weakSelf didClickInLabel:(YYLabel *)containerView textRange:range];
+            }
+        };
     }
     return _content;
 }

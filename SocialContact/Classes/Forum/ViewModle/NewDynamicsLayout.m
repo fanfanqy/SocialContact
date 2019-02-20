@@ -68,9 +68,12 @@
 // 底部间隙
     _height += 16;
 	
-    if (self.commentLayoutArr.count > 0) {
-        _height += 20; // 最新评论
+    
+    if (self.commentLayoutArr.count > 0 || _zanUsers.count > 0) {
         [self layoutComment];
+        _commentHeight += 45; // 最新评论
+        [self layoutZanUsers];
+        
         _height += _commentHeight;
     }
     
@@ -146,6 +149,62 @@
                           };
     CGSize size = [attStr.string boundingRectWithSize:CGSizeMake(width,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
     return size.height;
+}
+
+- (void)layoutZanUsers{
+    
+    _zanUsersLayout = nil;
+    NSString *text = @"";
+    
+    NSMutableAttributedString * attString = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:[UIImage imageNamed:@"find_dianzhan"] contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(20, 20) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
+    [attString appendAttributedString:attachText];
+    
+    for (LikeModel *model in self.zanUsers) {
+        NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:model.customer.name];
+        attStr.font = [UIFont systemFontOfSize:15];
+        attStr.lineSpacing = 6;
+        attStr.color = [UIColor whiteColor];
+        attStr.alignment = NSTextAlignmentJustified;
+        
+        YYTextBorder *normalBorder = [YYTextBorder new];
+        normalBorder.insets = UIEdgeInsetsMake(-4, 0, -4, 0);
+//        normalBorder.cornerRadius = 8;
+        normalBorder.fillColor = BLUE;
+        [attStr setTextBackgroundBorder:normalBorder];
+        
+        // 高亮状态的背景
+        YYTextBorder *highlightBorder = [YYTextBorder new];
+        highlightBorder.insets = UIEdgeInsetsMake(-4, 0, -4, 0);
+//        highlightBorder.cornerRadius = 8;
+        highlightBorder.fillColor = ORANGE;
+        
+        // 高亮状态
+        YYTextHighlight *highlight = [YYTextHighlight new];
+        [highlight setBackgroundBorder:highlightBorder];
+        // 数据信息，用于稍后用户点击
+        highlight.userInfo = @{@"kLikeUserId" : [NSNumber numberWithInteger:model.customer.iD]};
+        [attStr setTextHighlight:highlight range:attStr.rangeOfAll];
+        
+        NSMutableAttributedString * konggeAttStr = [[NSMutableAttributedString alloc] initWithString:@" "];
+        [attString appendAttributedString:konggeAttStr];
+        [attString appendAttributedString:attStr];
+        [attString appendAttributedString:konggeAttStr];
+    }
+    
+    attString.font = [UIFont systemFontOfSize:15];
+    attString.lineSpacing = 6;
+    attString.color = [UIColor whiteColor];
+    attString.alignment = NSTextAlignmentJustified;
+    
+    YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(kScreenWidth - 2*kMomentContentInsetLeft , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont systemFontOfSize:15] withWidth:(kScreenWidth - 2*kMomentContentInsetLeft)]) ];//3是特殊标点或者表情会多占用的空间
+    container.truncationType = YYTextTruncationTypeEnd;
+    _zanUsersLayout = [YYTextLayout layoutWithContainer:container text:attString];
+    _zanUsersHeight = _zanUsersLayout.textBoundingSize.height;
+    _zanUsersHeight += 10;// 上部加10
+    _commentHeight += _zanUsersHeight;
+    
 }
 
 - (void)layoutComment{
@@ -260,10 +319,12 @@
     self.commentHeight = contentLayout.textBoundingRect.size.height;
     
     if (self.commentHeight > 20) {
-        self.height =  5 + kMomentPortraitWH/2.0 + self.commentHeight + 5;
+        self.height =  10 + kMomentPortraitWH/2.0 + self.commentHeight;
     }else{
-        self.height =  5 + kMomentPortraitWH + 5;
+        self.height =  10 + kMomentPortraitWH;
     }
+    // 底部间距 10
+    self.height += 10;
     
 }
 

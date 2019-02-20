@@ -16,6 +16,11 @@
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = 6;
     self.layer.masksToBounds = YES;
+    
+    self.address.layer.borderColor = [UIColor blackColor].CGColor;
+    self.address.layer.borderWidth = 1.f;
+    self.address.layer.cornerRadius = 9.f;
+    
 }
 
 - (void)setModel:(SCUserInfo *)model{
@@ -31,9 +36,10 @@
     }
     
     self.nick.text = model.name;
-    self.address.text = model.address_home;
-    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
-    self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];
+    self.address.text = [NSString stringWithFormat:@" %@ ",model.address_home];
+    
+//    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
+//    self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];
 }
 
 @end

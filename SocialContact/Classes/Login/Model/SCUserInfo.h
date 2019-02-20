@@ -183,7 +183,8 @@ INS_P_STRONG(NSString *,im_token);
 INS_P_ASSIGN(NSInteger,following_count);
 INS_P_ASSIGN(NSInteger,followers_count);
 INS_P_ASSIGN(NSInteger,blocked_count);
-INS_P_ASSIGN(BOOL,relation_status);
+//关注状态， -1：未关注， 0：屏蔽， 1：正在关注， 2：互相关注
+INS_P_ASSIGN(NSInteger,relation_status);
 INS_P_ASSIGN(BOOL,is_myself);
 INS_P_ASSIGN(BOOL,is_manager);
 INS_P_ASSIGN(BOOL,is_shop_keeper);
@@ -213,7 +214,7 @@ INS_P_ASSIGN(CGFloat, latitude); // 纬度
 
 INS_P_ASSIGN(CGFloat, longitude); // 精度
 
-INS_P_STRONG(CLPlacemark *, placemark);
+//INS_P_STRONG(CLPlacemark *, placemark);
 
 INS_P_STRONG(NSString *, myLocation);
 

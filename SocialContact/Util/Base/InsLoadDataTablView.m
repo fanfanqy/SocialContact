@@ -53,18 +53,18 @@
     MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingBlock:^{
         weakSelf.loadNewData();
     }];
-    header.height = 100;
+//    header.height = 100;
     
-    NSData *data = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"refresh" ofType:@"gif"]];
+//    NSData *data = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"refresh" ofType:@"gif"]];
 
-    NSDictionary *dict = [UIImage imagesFromGif:data];
-    NSArray *images = dict[@"images"] ?: [NSArray array];
+//    NSDictionary *dict = [UIImage imagesFromGif:data];
+//    NSArray *images = @[[UIImage imageNamed:@"refresh"],[UIImage imageNamed:@"refresh1"],[UIImage imageNamed:@"refresh2"],[UIImage imageNamed:@"refresh3"]];
 //    [header setImages:images forState:MJRefreshStateRefreshing];
-    if (images.count > 0) {
-        [header setImages:@[images.firstObject] forState:MJRefreshStatePulling];
-        [header setImages:@[images.firstObject] forState:MJRefreshStateWillRefresh];
-        [header setImages:@[images.firstObject] forState:MJRefreshStateIdle];
-    }
+//    if (images.count > 0) {
+//        [header setImages:@[images.firstObject] forState:MJRefreshStatePulling];
+//        [header setImages:@[images.firstObject] forState:MJRefreshStateWillRefresh];
+//        [header setImages:@[images.firstObject] forState:MJRefreshStateIdle];
+//    }
     
     [header setTitle:@"下拉加载" forState:MJRefreshStateIdle];
     [header setTitle:@"松开加载" forState:MJRefreshStatePulling];

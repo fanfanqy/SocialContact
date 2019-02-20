@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MomentModel.h"
+#import "LikeModel.h"
 
 #define GuaFriendCircleTopicName @"topic"
 
@@ -37,7 +38,7 @@ typedef NS_ENUM(NSInteger,MomentRequestType){
     MomentRequestTypeFollowMe = 14,// 我的粉丝
     MomentRequestTypeFollows = 15,// 我关注的
     MomentRequestTypeTop = 16,// 置顶用户
-    MomentRequestTypeNotice = 17,// 通知
+    MomentRequestTypeNotice = 17,// 通知，消息列表
     MomentRequestTypeWhoLookMe = 18, // 谁看过我
     MomentRequestTypeJiFenList = 19, // 积分列表
 };
@@ -117,7 +118,11 @@ typedef void(^ClickPhoneNumBlock)(NSString * phoneNum);
 /**
  点赞人员
  */
-@property(nonatomic,strong)YYTextLayout * zanUsers;
+@property(nonatomic,strong)YYTextLayout * zanUsersLayout;
+
+@property(nonatomic,strong)NSMutableArray * zanUsers;
+
+@property(nonatomic,assign)CGFloat zanUsersHeight;
 
 /**
  评论
@@ -126,7 +131,7 @@ typedef void(^ClickPhoneNumBlock)(NSString * phoneNum);
 
 
 /**
- <#Description#>
+ 点赞区域高度
  */
 @property(nonatomic,assign)CGFloat commentHeight;
 

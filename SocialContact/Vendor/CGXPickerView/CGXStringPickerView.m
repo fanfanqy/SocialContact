@@ -169,7 +169,7 @@
     NSInteger inter1 = [arr[0] integerValue];
     NSInteger inter2 = [arr[1] integerValue];
     NSMutableArray *heightarrr = [NSMutableArray array];
-    [heightarrr addObject:@"不限"];
+//    [heightarrr addObject:@"不限"];
     for (NSInteger i = inter1; i<inter2+1; i++) {
         [heightarrr addObject:[NSString stringWithFormat:@"%ldcm",i]];
     }
@@ -181,7 +181,7 @@
     NSInteger inter1 = [arr[0] integerValue];
     NSInteger inter2 = [arr[1] integerValue];
     NSMutableArray *ageArrr = [NSMutableArray array];
-    [ageArrr addObject:@"不限"];
+//    [ageArrr addObject:@"不限"];
     for (NSInteger i = inter1; i<inter2+1; i++) {
         [ageArrr addObject:[NSString stringWithFormat:@"%ld岁",i]];
     }
@@ -193,7 +193,7 @@
     NSInteger inter1 = [arr[0] integerValue];
     NSInteger inter2 = [arr[1] integerValue];
     NSMutableArray *weightArray = [NSMutableArray array];
-    [weightArray addObject:@"不限"];
+//    [weightArray addObject:@"不限"];
     for (NSInteger i = inter1; i<inter2+1; i++) {
         [weightArray addObject:[NSString stringWithFormat:@"%ldkg",i]];
     }

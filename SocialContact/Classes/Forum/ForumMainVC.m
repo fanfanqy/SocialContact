@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    self.fd_prefersNavigationBarHidden = YES;
     [self.view addSubview:self.categoryView];
     [self.view addSubview:self.publishBtn];
     [self setUpViewItem];
@@ -37,18 +37,6 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-//    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-//    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
-}
 
 - (JXCategoryTitleView *)categoryView{
     if (!_categoryView) {
@@ -144,12 +132,14 @@
     ForumVC *vc2  = [[ForumVC alloc]init];
     vc2.forumVCType = ForumVCTypeMoment;
     vc2.momentUIType = MomentUITypeList;
+    vc2.height = kScreenHeight-StatusBarHeight-50-UITabBarHeight;
     vc2.momentRequestType = MomentRequestTypeNewest;
     vc2.fatherVC = self;
     [_vcItem addObject:vc2];
     
     ForumVC *vc1  = [[ForumVC alloc]init];
     vc1.forumVCType = ForumVCTypeTopic;
+    vc1.height = kScreenHeight-StatusBarHeight-50-UITabBarHeight;
     vc1.fatherVC = self;
     [_vcItem addObject:vc1];
     

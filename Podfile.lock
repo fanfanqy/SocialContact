@@ -80,7 +80,6 @@ PODS:
   - SwipeView (1.3.2)
   - TOCropViewController (2.4.0)
   - TZImagePickerController (3.1.6)
-  - WRNavigationBar (1.2.0)
   - ZLSwipeableView (0.0.8)
 
 DEPENDENCIES:
@@ -113,7 +112,6 @@ DEPENDENCIES:
   - SwipeView
   - TOCropViewController
   - TZImagePickerController
-  - WRNavigationBar (~> 1.2.0)
   - ZLSwipeableView
 
 SPEC REPOS:
@@ -156,7 +154,6 @@ SPEC REPOS:
     - SwipeView
     - TOCropViewController
     - TZImagePickerController
-    - WRNavigationBar
     - ZLSwipeableView
 
 SPEC CHECKSUMS:
@@ -198,9 +195,8 @@ SPEC CHECKSUMS:
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   TOCropViewController: 368d8df3ea43b62c3dc5a61f11b9048274d240bd
   TZImagePickerController: 733aa6fd217f87c61656764f8e76b2137b6c8f47
-  WRNavigationBar: dc952230effbb646785f962587caaac06c60f229
   ZLSwipeableView: df385760ff4838935cdbcb62878ac5acd7355949
 
-PODFILE CHECKSUM: 20716b32663ef7445ef7878739f90d294167f06e
+PODFILE CHECKSUM: 83f31da98b17757f0674eac8f32fb5edab744bf3
 
 COCOAPODS: 1.5.3

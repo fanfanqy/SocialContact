@@ -66,6 +66,10 @@
     NSString * requestMethod = nil;
     if ( InsRM_POST == [self requestMethod] ) {
         requestMethod = @"POST";
+    }else if ( InsRM_PUT == [self requestMethod] ) {
+        requestMethod = @"PUT";
+    }else if ( InsRM_DELETE == [self requestMethod] ) {
+        requestMethod = @"DELETE";
     } else {
         requestMethod = @"GET";
     }

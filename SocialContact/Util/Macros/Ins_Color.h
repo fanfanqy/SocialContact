@@ -18,6 +18,7 @@
 #define RED [UIColor colorWithHexString:@"F55269"]
 #define ORANGE [UIColor colorWithHexString:@"F57C00"]
 #define BLUE [UIColor colorWithHexString:@"03A9F4"]
+#define Black [UIColor colorWithHexString:@"1F2124"]
 
 
 #define LOGO_BG    [UIColor colorWithHexString:@"3a404e"]

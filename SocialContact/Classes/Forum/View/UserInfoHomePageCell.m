@@ -83,9 +83,9 @@
         CGFloat titleW = [self labelAutoCalculateRectWith:title FontSize:14 MaxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].width + 20;
         UIButton *button = [UIButton new];
         button.tag = i;
-        button.backgroundColor = [UIColor blueColor];
+        button.backgroundColor = YD_Color999;
         [button setTitle:title forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setTitleColor:Font_color333 forState:UIControlStateNormal];
         [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
         button.titleLabel.font = [UIFont systemFontOfSize:14];
         button.layer.cornerRadius = 10;

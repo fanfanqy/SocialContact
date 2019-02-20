@@ -13,6 +13,13 @@
 #import "UserPointsModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@protocol NearByUserCellDelegate <NSObject>
+
+@optional
+
+- (void)clickAvatarImg:(NSInteger)userID;
+
+@end
 
 @interface NearByUserCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImg;
@@ -36,6 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) WhoLookMeModel *lookMeModel;
 
 @property (strong, nonatomic) UserPointsModel *userPointsModel;
+
+@property (assign, nonatomic) NSInteger userId;
+
+@property (weak, nonatomic) id<NearByUserCellDelegate> delegate;
 
 @end
 

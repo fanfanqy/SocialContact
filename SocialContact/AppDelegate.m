@@ -94,7 +94,7 @@
         self.tabBarController = tabBarController;
         [self.window setRootViewController:tabBarController];
         [self.window makeKeyAndVisible];
-        [self customizeInterfaceWithTabBarController:tabBarController];
+//        [self customizeInterfaceWithTabBarController:tabBarController];
         
         // 连接融云
         [[SCIM shared] startWithAppKey:kRongYunKey];
@@ -222,11 +222,11 @@
     
     if ([control cyl_isTabButton]) {
         //更改红标状态
-        if ([[self cyl_tabBarController].selectedViewController cyl_isShowTabBadgePoint]) {
-            [[self cyl_tabBarController].selectedViewController cyl_removeTabBadgePoint];
-        } else {
-            [[self cyl_tabBarController].selectedViewController cyl_showTabBadgePoint];
-        }
+//        if ([[self cyl_tabBarController].selectedViewController cyl_isShowTabBadgePoint]) {
+//            [[self cyl_tabBarController].selectedViewController cyl_removeTabBadgePoint];
+//        } else {
+//            [[self cyl_tabBarController].selectedViewController cyl_showTabBadgePoint];
+//        }
         
         animationView = [control cyl_tabImageView];
     }
@@ -238,11 +238,11 @@
         animationView = button.imageView;
     }
     
-    if ([self cyl_tabBarController].selectedIndex % 2 == 0) {
-        [self addScaleAnimationOnView:animationView repeatCount:1];
-    } else {
+//    if ([self cyl_tabBarController].selectedIndex % 2 == 0) {
+//        [self addScaleAnimationOnView:animationView repeatCount:1];
+//    } else {
         [self addRotateAnimationOnView:animationView];
-    }
+//    }
     
     //添加仿淘宝tabbar，第一个tab选中后有图标覆盖
     //    if ([control cyl_isTabButton]|| [control cyl_isPlusButton]) {

@@ -12,6 +12,7 @@
 #import "UserAvatarCell.h"
 
 #import "ModifyUserInfoVC.h"
+#import "CGXStringPickerView.h"
 
 @interface LoverConditionVC()<UITableViewDelegate,UITableViewDataSource>
 
@@ -25,9 +26,11 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.title = @"择偶标准";
+    
     [self setUpUI];
     
-    self.fd_interactivePopDisabled = YES;
+//    self.fd_interactivePopDisabled = YES;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
     
@@ -50,12 +53,6 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     
 }
 
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    
-}
 
 - (void)setUpUI{
     
@@ -84,20 +81,30 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 - (void)getUserInfo{
     
     WEAKSELF;
-    GETRequest *request = [GETRequest requestWithPath:@"/customer/profile/" parameters:nil completionHandler:^(InsRequest *request) {
-        
+//    GETRequest *request = [GETRequest requestWithPath:@"/customer/profile/" parameters:nil completionHandler:^(InsRequest *request) {
+//
+//        [weakSelf hideLoading];
+//        [weakSelf.tableView endRefresh];
+//
+//        if (!request.error) {
+//            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject];
+//            [weakSelf.tableView reloadData];
+//        }else{
+//
+//        }
+//    }];
+//
+//    [InsNetwork addRequest:request];
+    
+    
+    [SCUserCenter getOtherUserInformationWithUserId:[SCUserCenter sharedCenter].currentUser.userInfo.iD completion:^(id  _Nonnull responseObj, BOOL succeed, NSError * _Nonnull error) {
+       
         [weakSelf hideLoading];
         [weakSelf.tableView endRefresh];
+        weakSelf.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+        [weakSelf.tableView reloadData];
         
-        if (!request.error) {
-            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject];
-            [weakSelf.tableView reloadData];
-        }else{
-            
-        }
     }];
-    
-    [InsNetwork addRequest:request];
     
 }
 
@@ -166,36 +173,34 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     }else if ([title isEqualToString:@"性别"]){
         NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleGender] objectAtIndex:1];
         [CGXPickerView showStringPickerWithTitle:@"性别" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            NSLog(@"%@",selectValue); ;
+            NSLog(@"%@",selectValue);
             
         } Style:CGXStringPickerViewStyleGender];
     }else if ([title isEqualToString:@"年龄"]){
         
         [CGXPickerView showStringPickerWithTitle:@"年龄" DataSource:@[[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge],[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge]] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-            
+
             NSString *ageStart = selectValue[0];
             NSString *ageEnd = selectValue[1];
-            
+
             if (![ageStart containsString:@"不限"] && ![ageEnd containsString:@"不限"]) {
                 NSInteger age1;
                 NSInteger age2;
-                age1 = [selectRow[0] integerValue] + 17;
-                age2 = [selectRow[1] integerValue] + 17;
+                age1 = [selectRow[0] integerValue] + 18;
+                age2 = [selectRow[1] integerValue] + 18;
                 NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
                 [dic setObject:@[@(age1),@(age2)] forKey:@"age_range"];
-                
+
                 weakSelf.userModel.condition = dic;
                 [weakSelf.tableView reloadData];
             }else{
                 NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
                 [dic setObject:@[] forKey:@"age_range"];
-                
+
                 weakSelf.userModel.condition = dic;
                 [weakSelf.tableView reloadData];
             }
-            
-            
-            
+
         }];
         
     }else if ([title isEqualToString:@"身高"]){
@@ -208,8 +213,8 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
             if (![heightStart containsString:@"未知"] && ![heightEnd containsString:@"未知"]) {
                 NSInteger height1;
                 NSInteger height2;
-                height1 = [selectRow[0] integerValue] + 149;
-                height2 = [selectRow[1] integerValue] + 149;
+                height1 = [selectRow[0] integerValue] + 150;
+                height2 = [selectRow[1] integerValue] + 150;
                 NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
                 [dic setObject:@[@(height1),@(height2)] forKey:@"height_range"];
                 
@@ -338,7 +343,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
         NSString *subTitle;
         // 个人资料，择偶标准，我要认证，谁看过我，分享软件，当前积分
         MeListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeListTableViewCellReuseID"];
-        cell.titleLBLeading.constant = -36;
+        cell.titleLBLeading.constant = -20;
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
                 leftImage = @"";
@@ -455,9 +460,13 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     return 0.000001;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    
+    return [UIView new];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 10.0;
-    
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -470,13 +479,13 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
-        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - UITabBarHeight ) style:UITableViewStylePlain];
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - UITabBarHeight) style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15);
         _tableView.separatorColor = Line;
-        _tableView.rowHeight = 55;
+//        _tableView.rowHeight = 55;
         _tableView.tableFooterView = [UIView new];
         [_tableView registerNib:[UINib nibWithNibName:@"MeListTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeListTableViewCellReuseID"];
     }

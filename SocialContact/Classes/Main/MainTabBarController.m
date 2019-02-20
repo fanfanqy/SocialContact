@@ -86,7 +86,8 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
 }
 
 - (NSArray *)tabBarItemsAttributesForController {
-    CGFloat firstXOffset = -12/2;
+//    CGFloat firstXOffset = -12/2;
+    CGFloat firstXOffset = 0;
     NSDictionary *firstTabBarItemsAttributes = @{
                                                  CYLTabBarItemTitle : @"首页",
                                                  CYLTabBarItemImage : @"home_normal",  /* NSString and UIImage are supported*/
@@ -94,7 +95,8 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
                                                  CYLTabBarItemTitlePositionAdjustment: [NSValue valueWithUIOffset:UIOffsetMake(firstXOffset, -3.5)]
                                                  //第一位 右大，下大
                                                  };
-    CGFloat secondXOffset = (-25+2)/2;
+//    CGFloat secondXOffset = (-25+2)/2;
+    CGFloat secondXOffset = 0;
     NSDictionary *secondTabBarItemsAttributes = @{
                                                   CYLTabBarItemTitle : @"鱼塘",
                                                   CYLTabBarItemImage : @"fishpond_normal",

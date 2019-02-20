@@ -75,7 +75,7 @@ INS_P_ASSIGN(NSInteger,followers_count);
 
 INS_P_ASSIGN(NSInteger,blocked_count);
 
-INS_P_ASSIGN(BOOL,relation_status);
+INS_P_ASSIGN(NSInteger,relation_status);
 
 INS_P_ASSIGN(BOOL,is_myself);
 

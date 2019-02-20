@@ -21,6 +21,24 @@
 }
 
 /**
+ 点击了 Label 的链接
+ */
+- (void)cell:(NewDynamicsTableViewCell *)cell didClickInLabel:(YYLabel *)label textRange:(NSRange)textRange{
+    
+    NSAttributedString *text = label.textLayout.text;
+    if (textRange.location >= text.length) return;
+    YYTextHighlight *highlight = [text attribute:YYTextHighlightAttributeName atIndex:textRange.location];
+    NSDictionary *info = highlight.userInfo;
+    if (info.count == 0) return;
+    
+    if (info[@"kLikeUserId"]) {
+        NSInteger userId = [info[@"kLikeUserId"] integerValue];
+        [self goUserHomePageVC:userId];
+        return;
+    }
+}
+
+/**
  点击了话题链接
  */
 - (void)cellDidClickTopic:(TopicModel *)topicModel cell:(NewDynamicsTableViewCell *)cell{
@@ -111,7 +129,12 @@
     UserHomepageVC *vc = [UserHomepageVC new];
     vc.userId = userId;
     if (self.fatherVC) {
-        [self.fatherVC.navigationController pushViewController:vc animated:YES];
+        if (self.navigationController) {
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [self.fatherVC.navigationController pushViewController:vc animated:YES];
+        }
+        
     }else{
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -125,7 +148,7 @@
 - (void)gotoDetail:(MomentModel *)momentModel{
     
     ForumVC *vc = [ForumVC new];
-    //    vc.title = topicModel.name;
+    vc.title = @"动态详情";
     vc.forumVCType = ForumVCTypeMoment;
     vc.momentUIType = MomentUITypeDetail;
     vc.momentRequestType = MomentRequestTypeUserMomentDetail;
@@ -171,8 +194,6 @@
         
         /** 占位符文字 */
         inputView.placeholder = placeholder;
-        /** 设置最大输入字数 */
-        inputView.maxCount = 50;
         /** 输入框颜色 */
         inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
         
@@ -191,6 +212,7 @@
                 if (request.error) {
                     [weakSelf.view makeToast:request.error.localizedDescription];
                 }else{
+                    [weakSelf fetchData:YES];
                     [weakSelf.view makeToast:request.responseObject[@"msg"]];
                 }
                 

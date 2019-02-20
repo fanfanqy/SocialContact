@@ -32,7 +32,7 @@
 }
 
 - (void)mapManager:(MapManager *)manager didReverseCLLocation:(CLPlacemark *)placemark{
-    [SCUserCenter sharedCenter].currentUser.userInfo.placemark = placemark;
+//    [SCUserCenter sharedCenter].currentUser.userInfo.placemark = placemark;
     NSDictionary *addressDic = placemark.addressDictionary;
     NSString *state=[addressDic objectForKey:@"State"];
     NSString *city = placemark.locality;
@@ -79,11 +79,14 @@
     [UINavigationBar appearance].tintColor = [UIColor colorWithHexString:@"333"];
     [UINavigationBar appearance].translucent = NO;
     
+    
     [[UITableView appearance] setBackgroundColor:BackGroundColor];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName :[UIColor colorWithHexString:@"333"],
                                                            NSFontAttributeName : [UIFont boldSystemFontOfSize:18]
                                                            }];
+    
+    
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].enableAutoToolbar = false;
     [SVProgressHUD setMinimumSize:CGSizeMake(100, 100)];
