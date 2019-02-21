@@ -25,12 +25,6 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     [self configUI];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    
-}
-
 - (void)configUI{
 	self.title = @"系统设置";
     

@@ -66,7 +66,9 @@
 @property(nonatomic,strong)UIButton *commentBtn; // 评论
 @property (strong, nonatomic)YYLabel *commentCount;// 话题
 @property(nonatomic,strong)SDWeiXinPhotoContainerView *picContainerView; // 图片
+@property(nonatomic,strong) UIView *sectionView;// 灰色背景
 @property(nonatomic,strong)NewDynamicsThumbCommentView * commentView;
+
 
 @end
 

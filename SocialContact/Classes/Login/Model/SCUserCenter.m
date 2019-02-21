@@ -83,13 +83,17 @@ static SCUserCenter *CENTER = nil;
 + (void) getOtherUserInformationWithUserId:(NSInteger)userId completion: (void(^)(id responseObj, BOOL succeed, NSError *error)) complationBlock{
     
     //[SCUserCenter sharedCenter].currentUser.userInfo.account] 自己的
-    GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"customer/%ld/",userId] parameters:nil completionHandler:^(InsRequest *requset) {
+    GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"customer/%ld/",userId] parameters:nil completionHandler:^(InsRequest *request) {
         
         if (!request.error) {
-            SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:requset.responseObject[@"data"]];
+            SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
             [userInfo updateToDB];
             
-            [SCUserCenter sharedCenter].currentUser.XCSRFToken = [SCUserCenter sharedCenter].XCSRFToken;
+//          CSRToken 注意
+            if ([SCUserCenter sharedCenter].XCSRFToken && ![SCUserCenter sharedCenter].currentUser.XCSRFToken) {
+                [SCUserCenter sharedCenter].currentUser.XCSRFToken = [SCUserCenter sharedCenter].XCSRFToken;
+            }
+            
             [SCUserCenter sharedCenter].currentUser.userInfo = userInfo;
             [[SCUserCenter sharedCenter].currentUser updateToDB];
             

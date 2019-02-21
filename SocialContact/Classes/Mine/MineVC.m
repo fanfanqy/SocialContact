@@ -67,20 +67,29 @@ INS_P_STRONG(SCUserInfo *, userModel);
 - (void)getUserInfo{
 
     WEAKSELF;
-    GETRequest *request = [GETRequest requestWithPath:@"/customer/profile/" parameters:nil completionHandler:^(InsRequest *request) {
-        
+//    GETRequest *request = [GETRequest requestWithPath:@"/customer/profile/" parameters:nil completionHandler:^(InsRequest *request) {
+//
+//        [weakSelf hideLoading];
+//        [weakSelf.tableView endRefresh];
+//
+//        if (!request.error) {
+//            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
+//            [weakSelf.tableView reloadData];
+//
+//        }else{
+//
+//        }
+//    }];
+//
+//    [InsNetwork addRequest:request];
+    
+    [SCUserCenter getOtherUserInformationWithUserId:[SCUserCenter sharedCenter].currentUser.userInfo.iD completion:^(id  _Nonnull responseObj, BOOL succeed, NSError * _Nonnull error) {
         [weakSelf hideLoading];
         [weakSelf.tableView endRefresh];
+        weakSelf.userModel = [SCUserInfo modelWithDictionary:responseObj[@"data"]];
+        [weakSelf.tableView reloadData];
         
-        if (!request.error) {
-            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
-            [weakSelf.tableView reloadData];
-        }else{
-            
-        }
     }];
-    
-    [InsNetwork addRequest:request];
     
 }
 

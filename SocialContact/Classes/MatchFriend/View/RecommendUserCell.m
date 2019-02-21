@@ -16,6 +16,11 @@
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = 6;
     self.layer.masksToBounds = YES;
+    
+    self.address.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
+    self.address.layer.borderWidth = 1.f;
+    self.address.layer.cornerRadius = 9.f;
+    
 }
 
 - (void)setModel:(SCUserInfo *)model{
@@ -30,10 +35,20 @@
        self.img.image = placeholdImage;
     }
     
-    self.nick.text = model.name;
-    self.address.text = model.address_home;
-    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
-    self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];
+    if ([NSString ins_String:model.name]) {
+        self.nick.text = model.name;
+    }else{
+        self.nick.text = [NSString stringWithFormat:@" %@ ",@"未知"];
+    }
+    
+    if ([NSString ins_String:model.address_home]) {
+        self.address.text = [NSString stringWithFormat:@"  %@  ",model.address_home];
+    }else{
+        self.address.text = [NSString stringWithFormat:@"  %@  ",@"未知"];
+    }
+    
+//    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
+//    self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];
 }
 
 @end

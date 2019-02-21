@@ -94,7 +94,7 @@
         self.tabBarController = tabBarController;
         [self.window setRootViewController:tabBarController];
         [self.window makeKeyAndVisible];
-        [self customizeInterfaceWithTabBarController:tabBarController];
+//        [self customizeInterfaceWithTabBarController:tabBarController];
         
         // 连接融云
         [[SCIM shared] startWithAppKey:kRongYunKey];
@@ -189,14 +189,14 @@
         
         textAttributes = @{
                            NSFontAttributeName : [UIFont boldSystemFontOfSize:18],
-                           NSForegroundColorAttributeName : [UIColor blackColor],
+                           NSForegroundColorAttributeName : YD_ColorBlack_1F2124,
                            };
     } else {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
         backgroundImage = [UIImage imageNamed:@"navigationbar_background"];
         textAttributes = @{
                            UITextAttributeFont : [UIFont boldSystemFontOfSize:18],
-                           UITextAttributeTextColor : [UIColor blackColor],
+                           UITextAttributeTextColor : YD_ColorBlack_1F2124,
                            UITextAttributeTextShadowColor : [UIColor clearColor],
                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetZero],
                            };
@@ -219,14 +219,14 @@
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectControl:(UIControl *)control {
     UIView *animationView;
-    
+    /*
     if ([control cyl_isTabButton]) {
         //更改红标状态
-        if ([[self cyl_tabBarController].selectedViewController cyl_isShowTabBadgePoint]) {
-            [[self cyl_tabBarController].selectedViewController cyl_removeTabBadgePoint];
-        } else {
-            [[self cyl_tabBarController].selectedViewController cyl_showTabBadgePoint];
-        }
+//        if ([[self cyl_tabBarController].selectedViewController cyl_isShowTabBadgePoint]) {
+//            [[self cyl_tabBarController].selectedViewController cyl_removeTabBadgePoint];
+//        } else {
+//            [[self cyl_tabBarController].selectedViewController cyl_showTabBadgePoint];
+//        }
         
         animationView = [control cyl_tabImageView];
     }
@@ -238,17 +238,18 @@
         animationView = button.imageView;
     }
     
-    if ([self cyl_tabBarController].selectedIndex % 2 == 0) {
-        [self addScaleAnimationOnView:animationView repeatCount:1];
-    } else {
-        [self addRotateAnimationOnView:animationView];
-    }
+//    if ([self cyl_tabBarController].selectedIndex % 2 == 0) {
+//        [self addScaleAnimationOnView:animationView repeatCount:1];
+//    } else {
+//        [self addRotateAnimationOnView:animationView];
+//    }
     
     //添加仿淘宝tabbar，第一个tab选中后有图标覆盖
     //    if ([control cyl_isTabButton]|| [control cyl_isPlusButton]) {
     //        BOOL shouldSelectedCoverShow = ([self cyl_tabBarController].selectedIndex == 0);
     //        [self setSelectedCoverShow:shouldSelectedCoverShow];
     //    }
+    */
     
 }
 

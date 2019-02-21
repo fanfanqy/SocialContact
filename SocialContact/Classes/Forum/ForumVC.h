@@ -60,9 +60,17 @@ typedef NS_ENUM(NSInteger,ForumVCGoToType){
 
 @property(nonatomic,strong)MomentModel *momentModel;
 
+@property(nonatomic,assign)NSInteger momentId;
+
 @property(nonatomic,weak)UIViewController *fatherVC;
 
+- (void)clickComment:(NewDynamicsLayout *)layout;
 
+- (void)fetchData:(BOOL)refresh;
+
+- (void)fetchLikeUserData;
+
+@property(nonatomic,strong) InsLoadDataTablView *tableView;
 
 @end
 

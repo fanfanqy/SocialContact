@@ -18,7 +18,16 @@ typedef enum {
     /**
      POST
      */
-    InsRM_POST = 1
+    InsRM_POST = 1,
+    /**
+     PUT
+     */
+    InsRM_PUT = 2,
+    /**
+     DELETE
+     */
+    InsRM_DELETE = 3,
+    
 } InsMethod;
 
 @protocol InsEnviroment <NSObject>

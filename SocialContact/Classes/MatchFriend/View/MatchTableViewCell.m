@@ -27,6 +27,10 @@
     
     self.img.layer.cornerRadius = 6.0;
     self.img.layer.masksToBounds = YES;
+    
+    self.address.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
+    self.address.layer.borderWidth = 1.f;
+    self.address.layer.cornerRadius = 10.f;
 }
 
 - (void)setModel:(SCUserInfo *)model{
@@ -36,13 +40,28 @@
     NSString *avatarUrl = @"";
     if ([NSString ins_String:model.avatar_url]) {
         avatarUrl = model.avatar_url;
+        if (![avatarUrl containsString:@"http"]) {
+            avatarUrl = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,avatarUrl];
+        }
     }
     [self.img sd_setImageWithURL:[NSURL URLWithString:avatarUrl]];
-    self.nick.text = model.name;
-    self.loveDeclaration.text = model.intro;
+    
+    if ([NSString ins_String:model.name]) {
+        self.nick.text = model.name;
+    }else{
+        self.nick.text = [NSString stringWithFormat:@"%@",@"未知"];
+    }
+    
+//    self.loveDeclaration.text = model.intro;
     self.ageGender.text = [NSString stringWithFormat:@"%@ %ld",model.gender == 1 ?@"男":@"女",model.age];
-    self.address.text = model.address_home;
-    self.otherInfo.text = [NSString stringWithFormat:@"%.0lf·%ld·%@",model.height,model.income,@"双子座"];
+    if ([NSString ins_String:model.address_home]) {
+        self.address.text = [NSString stringWithFormat:@"  %@  ",model.address_home];
+    }else{
+        self.address.text = [NSString stringWithFormat:@"  %@  ",@"未知"];
+    }
+    
+    self.otherInfo.text = [Help height:model.height];
+//    [NSString stringWithFormat:@"%.0lf·%ld·%@",model.height,model.income,@"双子座"];
 
 }
 

@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VipVC : InsViewController
 
+//service_type    int    服务类型, 1: VIP服务; 2: 置顶服务
+
 /*
  * 0:置顶
  1: 会员

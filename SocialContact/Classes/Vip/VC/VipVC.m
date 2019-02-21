@@ -35,10 +35,12 @@ INS_P_ASSIGN(NSInteger, selectedIndex);
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.dataArray = [NSMutableArray array];
+    
+    self.fd_prefersNavigationBarHidden = YES;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(PayBackApp) name:@"PayBackApp" object:nil];
     
+    self.dataArray = [NSMutableArray array];
     [self.view addSubview:self.bgScrollView];
     [self.bgScrollView addSubview:self.bgImgView];
     [self.bgScrollView addSubview:self.viewTopView];
@@ -47,7 +49,7 @@ INS_P_ASSIGN(NSInteger, selectedIndex);
 
 - (UIScrollView *)bgScrollView{
     if (!_bgScrollView) {
-        _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-GuaTopHeight)];
+        _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 4*kScreenWidth);
         _bgScrollView.showsVerticalScrollIndicator = NO;
     }
@@ -95,11 +97,40 @@ INS_P_ASSIGN(NSInteger, selectedIndex);
 
 - (void)PayBackApp{
     
+    
+    /*
+    * 0:置顶
+    1: 会员
+     */
+#pragma mark TODO
+    // 1s 后查询状态
+    
+    WEAKSELF;
+    [Help vipIsExpired:^(BOOL expired) {
+        
+        if (weakSelf.type == 1) {
+            [weakSelf alert:expired];
+        }
+        
+    } topIsExpired:^(BOOL expired) {
+        
+        if (weakSelf.type == 0) {
+            [weakSelf alert:expired];
+        }
+            
+    }];
+}
+
+- (void)alert:(BOOL)expired{
+    
     SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
     
     alert.labelTitle.textColor = [UIColor redColor];
-    [alert showSuccess:[NSString stringWithFormat:@"%@充值成功",_productInfoModel.name] subTitle:_serviceModel.detail closeButtonTitle:@"确定" duration:0];
-    
+    if (expired) {
+        [alert showError:[NSString stringWithFormat:@"%@充值失败",self.productInfoModel.name] subTitle:self.serviceModel.detail closeButtonTitle:@"确定" duration:0];
+    }else{
+        [alert showSuccess:[NSString stringWithFormat:@"%@充值成功",self.productInfoModel.name] subTitle:self.serviceModel.detail closeButtonTitle:@"确定" duration:0];
+    }
 }
 
 - (void)serviceProduct{
@@ -134,9 +165,17 @@ INS_P_ASSIGN(NSInteger, selectedIndex);
                 }];
                 
                 for (ServiceModel *model in self.dataArray) {
-                    if (model.service_type == 2) {
-                        weakSelf.serviceModel = model;
+                    
+                    if (self.type == 1) {
+                        if (model.service_type == 1) {
+                            weakSelf.serviceModel = model;
+                        }
+                    }else if (self.type == 0) {
+                        if (model.service_type == 2) {
+                            weakSelf.serviceModel = model;
+                        }
                     }
+                    
                 }
                 
                 weakSelf.viewTopView.serviceModel = weakSelf.serviceModel;
@@ -172,10 +211,18 @@ URL:  /api/virtual-services/<int:pk>/buy/
      */
     ServiceModel *serviceModel;
     for (ServiceModel *model in self.dataArray) {
-        if (model.service_type == 2) {
-            serviceModel = model;
-            _serviceModel = serviceModel;
+        if (self.type == 1) {
+            if (model.service_type == 1) {
+                serviceModel = model;
+                _serviceModel = serviceModel;
+            }
+        }else if (self.type == 0) {
+            if (model.service_type == 2) {
+                serviceModel = model;
+                _serviceModel = serviceModel;
+            }
         }
+        
     }
     if (!serviceModel) {
         return;

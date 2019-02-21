@@ -30,7 +30,7 @@
         [self.partiBtn setTitle:@"  对话" forState:UIControlStateNormal];
         [self.joinBtn setTitle:@"  加关注" forState:UIControlStateNormal];
         [self.partiBtn setImage:[UIImage imageNamed:@"ic_chat_white"] forState:UIControlStateNormal];
-        [self.partiBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
+        [self.joinBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
     }
     
 }

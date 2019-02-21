@@ -9,10 +9,11 @@
 #import "ForumVC.h"
 
 #import "WBStatusComposeViewController.h"
+#import "UserHomepageVC.h"
 
 #import "TopicCell.h"
 #import "TopicListsHeaderView.h"
-#import "BottomToolView.h"
+//#import "BottomToolView.h"
 #import "NewDynamicsTableViewCell.h"
 
 #import "NearByUserCell.h"
@@ -26,17 +27,19 @@
 
 #import "XHInputView.h"
 
-@interface ForumVC ()<UITableViewDelegate,UITableViewDataSource,BottomToolViewDelegate>
+@interface ForumVC ()<UITableViewDelegate,UITableViewDataSource,NearByUserCellDelegate>
 
-@property(nonatomic,strong) InsLoadDataTablView *tableView;
+
 
 @property(nonatomic,strong) TopicListsHeaderView *topicListsHeaderView;
 
 
-@property(nonatomic,strong) BottomToolView   *bottomToolView;
+//@property(nonatomic,strong) BottomToolView   *bottomToolView;
 @property(nonatomic,strong) UIButton *participateTopicBtn;
 @property(nonatomic,strong) UIButton *joinDiscussion;
 
+@property(nonatomic,strong) UILabel *sendCommentLB;
+@property(nonatomic,strong) UIButton *sendCommentButton;
 
 
 @property(nonatomic,strong) NSMutableArray *array;
@@ -62,8 +65,22 @@
     if (_momentRequestType == MomentRequestTypeTopicList) {
         
 //        [self.view addSubview:self.bottomToolView];
+        self.fd_prefersNavigationBarHidden = YES;
         [self.view addSubview:self.participateTopicBtn];
         [self.view addSubview:self.joinDiscussion];
+    }
+    if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
+        UIView *line = [UIView new];
+        line.backgroundColor = Line;
+        if (IS_IPHONEX) {
+            line.frame = CGRectMake(kMomentContentInsetLeft, kScreenHeight-GuaTopHeight-iPhoneXVirtualHomeHeight-40, kScreenWidth-100, 0.3);
+        }else{
+            line.frame = CGRectMake(kMomentContentInsetLeft, kScreenHeight-GuaTopHeight-40, kScreenWidth-60, 0.3);
+        }
+        
+        [self.view addSubview:self.sendCommentLB];
+        [self.view addSubview:self.sendCommentButton];
+        [self.view addSubview:line];
     }
     
     self.array = [NSMutableArray array];
@@ -94,6 +111,98 @@
     
 }
 
+- (UILabel *)sendCommentLB{
+    if (!_sendCommentLB) {
+        _sendCommentLB = [UILabel new];
+        if (IS_IPHONEX) {
+            _sendCommentLB.frame = CGRectMake(kMomentContentInsetLeft, kScreenHeight-GuaTopHeight-iPhoneXVirtualHomeHeight-40, kScreenWidth-100, 40);
+        }else{
+            _sendCommentLB.frame = CGRectMake(kMomentContentInsetLeft, kScreenHeight-GuaTopHeight-40, kScreenWidth-60, 40);
+        }
+        _sendCommentLB.backgroundColor = [UIColor clearColor];
+        _sendCommentLB.text = @"请输入评论文字...";
+        _sendCommentLB.textColor = YD_Color999;
+        _sendCommentLB.font = [UIFont systemFontOfSize:15];
+        
+        _sendCommentLB.userInteractionEnabled = YES;
+        WEAKSELF;
+        [_sendCommentLB jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+            if (weakSelf.array.count > 0) {
+                NewDynamicsLayout *layout = weakSelf.array[0];
+                [weakSelf  clickComment:layout];
+            }
+        }];
+    }
+    return _sendCommentLB;
+}
+
+- (void)clickComment:(NewDynamicsLayout *)layout{
+    // /moments/<int:pk>/comment/
+    NSString *url;
+    NSString *placeholder;
+    
+    url = [NSString stringWithFormat:@"/moments/%ld/comment/",layout.model.iD];
+    placeholder = @"请输入评论文字...";
+    
+    WEAKSELF;
+    //支持InputViewStyleDefault 与 InputViewStyleLarge 两种样式
+    [XHInputView showWithStyle:InputViewStyleDefault configurationBlock:^(XHInputView *inputView) {
+        /** 占位符文字 */
+        inputView.placeholder = placeholder;
+        /** 输入框颜色 */
+        inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
+        
+        /** 更多属性设置,详见XHInputView.h文件 */
+        
+    } sendBlock:^BOOL(NSString *text) {
+        
+        
+        if(text.length){
+            NSLog(@"输入为信息为:%@",text);
+            
+            NSDictionary *para = @{@"pk":[NSNumber numberWithInteger:layout.model.iD],
+                                   @"text":text};
+            POSTRequest *request = [POSTRequest requestWithPath:url parameters:para completionHandler:^(InsRequest *request) {
+                
+                if (request.error) {
+                    [weakSelf.view makeToast:request.error.localizedDescription];
+                }else{
+                    [weakSelf.view makeToast:request.responseObject[@"msg"]];
+                    [weakSelf fetchData:YES];
+                }
+                
+            }];
+            [InsNetwork addRequest:request];
+            
+            return YES;//return YES,收起键盘
+        }else{
+            NSLog(@"显示提示框-你输入的内容为空");
+            [weakSelf.view makeToast:@"内容不能为空"];
+            return NO;//return NO,不收键盘
+        }
+    }];
+}
+
+- (UIButton *)sendCommentButton{
+    if (!_sendCommentButton) {
+        _sendCommentButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        if (IS_IPHONEX) {
+            _sendCommentButton.frame = CGRectMake(kScreenWidth-80, kScreenHeight-GuaTopHeight-35-iPhoneXVirtualHomeHeight, 60, 40);
+        }else{
+           _sendCommentButton.frame = CGRectMake(kScreenWidth-80, kScreenHeight-GuaTopHeight-35, 60, 30);
+        }
+        _sendCommentButton.backgroundColor = [UIColor clearColor];
+        _sendCommentButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_sendCommentButton setTitle:@"发送" forState:UIControlStateNormal];
+        [_sendCommentButton setTitleColor:YD_Color666 forState:UIControlStateNormal];
+        _sendCommentButton.layer.cornerRadius = 4;
+        _sendCommentButton.layer.borderColor = YD_Color666.CGColor;
+        _sendCommentButton.layer.borderWidth = .5f;
+    }
+    return _sendCommentButton;
+}
+
+
 - (void)fetchData:(BOOL)refresh{
     WEAKSELF;
     NSDictionary *param = nil;
@@ -109,10 +218,14 @@
         // 详情页利用上层传入的模型
         if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
             
-            NewDynamicsLayout *layout = [[NewDynamicsLayout alloc]initWithModel:self.momentModel momentUIType:self.momentUIType momentRequestType:self.momentRequestType];
-            [self.array addObject:layout];
-            [self.tableView reloadData];
+            [self.array removeAllObjects];
+            if (self.momentModel) {
+                NewDynamicsLayout *layout = [[NewDynamicsLayout alloc]initWithModel:self.momentModel momentUIType:self.momentUIType momentRequestType:self.momentRequestType];
+                [self.array addObject:layout];
+                [self.tableView reloadData];
+            }
             [self fetchCommentData:YES];
+            [self fetchLikeUserData];
         }
         
         /*
@@ -157,12 +270,22 @@
                 break;
                 
             case MomentRequestTypeMyMomentDetail:
-                url = [NSString stringWithFormat:@"/moments/%ld/",_momentModel.iD];
+                
+                if (self.momentModel) {
+                    url = [NSString stringWithFormat:@"/moments/%ld/",_momentModel.iD];
+                }else{
+                    url = [NSString stringWithFormat:@"/moments/%ld/",_momentId];
+                }
                 param = @{@"page": [NSNumber numberWithInteger:_page]};
                 break;
                 
             case MomentRequestTypeUserMomentDetail:
-                url = [NSString stringWithFormat:@"/moments/detail/%ld/",_momentModel.iD];
+                
+                if (self.momentModel) {
+                    url = [NSString stringWithFormat:@"/moments/detail/%ld/",_momentModel.iD];
+                }else{
+                    url = [NSString stringWithFormat:@"/moments/detail/%ld/",_momentId];
+                }
                 param = nil;
                 break;
                 
@@ -248,7 +371,7 @@
                     [weakSelf.tableView hideFooter];
                 }
             } else {
-//                [weakSelf.tableView hideFooter];
+                [weakSelf.tableView hideFooter];
             }
             
             if (refresh) {
@@ -349,7 +472,12 @@
     
     WEAKSELF;
     NSDictionary *param = nil;
-    NSString *url =  [NSString stringWithFormat:@"/moments/%ld/comment/",_momentModel.iD];
+    NSString *url ;
+    if (self.momentModel) {
+        url =  [NSString stringWithFormat:@"/moments/%ld/comment/",_momentModel.iD];
+    }else{
+        url =  [NSString stringWithFormat:@"/moments/%ld/comment/",_momentId];
+    }
     if (refresh) {
         _page = 1;
     }else{
@@ -402,18 +530,61 @@
     
 }
 
+- (void)fetchLikeUserData{
+    
+    WEAKSELF;
+    NSString *url;
+    if (self.momentModel) {
+       url =  [NSString stringWithFormat:@"/moments/%ld/likes/",_momentModel.iD];
+    }else{
+        url =  [NSString stringWithFormat:@"/moments/%ld/likes/",_momentId];
+    }
+    
+    GETRequest *request = [GETRequest requestWithPath:url parameters:nil completionHandler:^(InsRequest *request) {
+        
+        if (!request.error) {
+            
+            NSArray *resultArray = request.responseObject[@"data"][@"results"];
+            
+            if ( resultArray && resultArray.count > 0 ) {
+                NSMutableArray *likeArray = [NSMutableArray array];
+                [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    LikeModel *likeModel = [LikeModel modelWithDictionary:obj];
+                    [likeArray addObject:likeModel];
+                    
+                }];
+                
+                NewDynamicsLayout *layout = weakSelf.array[0];
+                layout.zanUsers = likeArray;
+                [layout resetLayout];
+                
+                [weakSelf.tableView reloadData];
+            }
+        }
+    }];
+    [InsNetwork addRequest:request];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_forumVCType ==  ForumVCTypeTopic || _forumVCType ==  ForumVCTypeTopicSelect) {
         TopicModel *topicModel = self.array[indexPath.row];
         TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell"];
         [cell.imgV setImageWithURL:[NSURL URLWithString:topicModel.logo_url] placeholder:nil options:YYWebImageOptionProgressive completion:nil];
-        cell.titleLB.text = topicModel.name;
+        cell.titleLB.text = [NSString stringWithFormat:@"#%@#",topicModel.name];
         cell.contentLB.text = topicModel.desc;
+        if (indexPath.row == 0) {
+            cell.titleLB.textColor = m1;
+        }else if (indexPath.row == 0) {
+            cell.titleLB.textColor = m2;
+        }else{
+            cell.titleLB.textColor = Font_color333;
+        }
         return cell;
     }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
         
         NearByUserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NearByUserCell"];
+        cell.delegate = self;
         
         if (self.momentRequestType == MomentRequestTypeNotice) {
             Notice *notice = self.array[indexPath.row];
@@ -439,6 +610,11 @@
         NewDynamicsLayout *layout = self.array[indexPath.row];
         NewDynamicsTableViewCell *cell = (NewDynamicsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"NewDynamicsTableViewCell-%ld",_momentRequestType]];
         [cell setLayout:layout];
+        if (self.momentRequestType == MomentRequestTypeTopicList) {
+            cell.backgroundColor = [UIColor colorWithHexString:@"FAFAFA"];
+        }else{
+            cell.backgroundColor = [UIColor whiteColor];
+        }
         cell.delegate = self;
         cell.indexPath = indexPath;
         return cell;
@@ -486,7 +662,7 @@
             vc.forumVCType = ForumVCTypeMoment;
             vc.momentUIType = MomentUITypeList;
             vc.momentRequestType = MomentRequestTypeTopicList;
-            
+            vc.height = kScreenHeight;
             vc.topicModel = topicModel;
             [self.fatherVC.navigationController pushViewController:vc animated:YES];
         }
@@ -495,12 +671,47 @@
         
         
          if (self.momentRequestType == MomentRequestTypeNotice) {
-            // 进入帖子主页
+            
+             // 进入帖子主页
+             Notice *model = self.array[indexPath.row];
+             // 未读的消息设置为已读
+             if (model.status == 0) {
+                 [self setReadStatus:model.iD];
+             }
+             ForumVC *vc = [ForumVC new];
+             vc.title = @"动态详情";
+             vc.forumVCType = ForumVCTypeMoment;
+             vc.momentUIType = MomentUITypeDetail;
+             vc.momentRequestType = MomentRequestTypeUserMomentDetail;
+             vc.momentId = model.object_id;
+             
+             if (self.fatherVC) {
+                 [self.fatherVC.navigationController pushViewController:vc animated:YES];
+             }else{
+                 [self.navigationController pushViewController:vc animated:YES];
+             }
             
         }else if (self.momentRequestType == MomentRequestTypeNearby) {
             // 进入用户主页
+            SCUserInfo *userInfo = self.array[indexPath.row];
+            UserHomepageVC *vc = [UserHomepageVC new];
+            vc.userId = userInfo.iD;
+            if (self.fatherVC) {
+                [self.fatherVC.navigationController pushViewController:vc animated:YES];
+            }else{
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            
         }else if (self.momentRequestType == MomentRequestTypeWhoLookMe){
+            
             WhoLookMeModel *model = self.array[indexPath.row];
+            UserHomepageVC *vc = [UserHomepageVC new];
+            vc.userId = model.customer.iD;
+            if (self.fatherVC) {
+                [self.fatherVC.navigationController pushViewController:vc animated:YES];
+            }else{
+                [self.navigationController pushViewController:vc animated:YES];
+            }
             
         }else if (self.momentRequestType == MomentRequestTypeJiFenList){
             
@@ -520,6 +731,39 @@
     }
 }
 
+- (void)clickAvatarImg:(NSInteger)userID{
+    
+    UserHomepageVC *vc = [UserHomepageVC new];
+    vc.userId = userID;
+    if (self.fatherVC) {
+        [self.fatherVC.navigationController pushViewController:vc animated:YES];
+    }else{
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+}
+
+/**
+ 设置为已读
+ */
+- (void)setReadStatus:(NSInteger)iD{
+    
+//    /notices/<int:pk>/
+    PUTRequest *request = [PUTRequest requestWithPath:[NSString stringWithFormat:@"/notices/%ld"] parameters:nil completionHandler:^(InsRequest *request) {
+        
+        if (!request.error) {
+            
+            
+            
+        }else{
+            
+        }
+        
+    }];
+    [InsNetwork addRequest:request];
+    
+}
+
 - (TopicListsHeaderView *)topicListsHeaderView{
     if (!_topicListsHeaderView) {
         _topicListsHeaderView = [[NSBundle mainBundle]loadNibNamed:@"TopicListsHeaderView" owner:nil options:nil][0];
@@ -534,6 +778,7 @@
 // 立即参与
 -(void)partiClick{
     WBStatusComposeViewController *vc = [WBStatusComposeViewController new];
+    vc.topicModel = self.topicModel;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -566,30 +811,31 @@
 }
 
 
-- (BottomToolView *)bottomToolView {
-    
-    if (!_bottomToolView) {
-        _bottomToolView = [[NSBundle mainBundle]loadNibNamed:@"BottomToolView" owner:nil options:nil][0];
-        CGFloat top = kScreenHeight - GuaTopHeight;
-        _bottomToolView.frame = CGRectMake(0, top , kScreenWidth, 50);
-        _bottomToolView.delegate = self;
-    }
-    return _bottomToolView;
-}
+//- (BottomToolView *)bottomToolView {
+//    
+//    if (!_bottomToolView) {
+//        _bottomToolView = [[NSBundle mainBundle]loadNibNamed:@"BottomToolView" owner:nil options:nil][0];
+//        CGFloat top = kScreenHeight - GuaTopHeight;
+//        _bottomToolView.frame = CGRectMake(0, top , kScreenWidth, 50);
+//        _bottomToolView.delegate = self;
+//    }
+//    return _bottomToolView;
+//}
 
 - (UIButton *)participateTopicBtn{
     if (!_participateTopicBtn) {
         _participateTopicBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        CGFloat top = kScreenHeight - GuaTopHeight - 50;
+        CGFloat top = kScreenHeight - 50;
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
-        _participateTopicBtn.frame = CGRectMake(0, top, 100, 44);
-        _participateTopicBtn.centerX = kScreenWidth/2.0 - 50 - 10;
+        _participateTopicBtn.frame = CGRectMake(0, top, 0.4*kScreenWidth-10, 44);
+        _participateTopicBtn.centerX = 0.1*kScreenWidth+(0.2*kScreenWidth-5);
         _participateTopicBtn.layer.cornerRadius = 22.f;
         _participateTopicBtn.layer.masksToBounds = YES;
         [_participateTopicBtn setTitle:@"立即参与" forState:UIControlStateNormal];
+        _participateTopicBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_participateTopicBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
         [_participateTopicBtn addTarget:self action:@selector(partiClick) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -601,15 +847,16 @@
     if (!_joinDiscussion) {
         _joinDiscussion = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        CGFloat top = kScreenHeight - GuaTopHeight-50;
+        CGFloat top = kScreenHeight -50;
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
-        _joinDiscussion.frame = CGRectMake(0, top, 100, 44);
-        _joinDiscussion.centerX = kScreenWidth/2.0 + 50 + 10;
+        _joinDiscussion.frame = CGRectMake(0, top, 0.4*kScreenWidth-10, 44);
+        _joinDiscussion.centerX = kScreenWidth - 0.1*kScreenWidth - (0.2*kScreenWidth-5);
         _joinDiscussion.layer.cornerRadius = 22.f;
         _joinDiscussion.layer.masksToBounds = YES;
         [_joinDiscussion setTitle:@"加入讨论" forState:UIControlStateNormal];
+        _joinDiscussion.titleLabel.font = [UIFont systemFontOfSize:14];
         [_joinDiscussion setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
         [_joinDiscussion addTarget:self action:@selector(joinClick) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -620,19 +867,34 @@
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
         CGRect rect;
-        if (_forumVCType == ForumVCTypeTopic || _forumVCType == ForumVCTypeTopicSelect || _forumVCType == ForumVCTypeMoment) {
-            
-            rect = CGRectMake(0, 0, self.view.width, kScreenHeight-StatusBarHeight-50-UITabBarHeight);
+        
+        if (_height) {
+            rect = CGRectMake(0, 0, self.view.width, _height);
         }else{
             rect = CGRectMake(0, 0, self.view.width, kScreenHeight-GuaTopHeight);
         }
         
         _tableView = [[InsLoadDataTablView alloc] initWithFrame:rect style:UITableViewStylePlain];
+        _tableView.showsVerticalScrollIndicator = NO;
+        
+        if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
+            _tableView.height -= 40;
+        }
+        
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _tableView.separatorColor = Line;
+        if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
+            
+            _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            
+        }if (self.momentRequestType == MomentRequestTypeNewest || self.momentRequestType == MomentRequestTypeTopicList) {
+            _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            
+        }else{
+            _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+            _tableView.separatorColor = Line;
+        }
         [_tableView setSeparatorInset:UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15)];
         _tableView.tableFooterView = [UIView new];
 //        if (IS_IPHONEX) {
@@ -648,7 +910,8 @@
             if (_momentRequestType == MomentRequestTypeTopicList) {
                 _tableView.tableHeaderView = self.topicListsHeaderView;
 //                // 50 高度
-//                [_tableView setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
+                [_tableView setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
+                _tableView.backgroundColor = [UIColor colorWithHexString:@"FAFAFA"];
             }
             [_tableView registerClass:[NewDynamicsTableViewCell class] forCellReuseIdentifier:[NSString stringWithFormat:@"NewDynamicsTableViewCell-%ld",_momentRequestType]];
         }

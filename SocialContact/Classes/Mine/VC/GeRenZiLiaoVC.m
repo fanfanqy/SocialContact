@@ -30,11 +30,6 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    
-}
 
 - (void)setUpUI{
     
@@ -267,7 +262,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
         NSString *subTitle;
         // 个人资料，择偶标准，我要认证，谁看过我，分享软件，当前积分
         MeListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeListTableViewCellReuseID"];
-        cell.titleLBLeading.constant = -36;
+        cell.titleLBLeading.constant = -20;
         if (indexPath.section == 1) {
             
             if (indexPath.row == 0) {
@@ -375,6 +370,15 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     return 10.0;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (section == 0 || section == 1) {
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+        view.backgroundColor = BackGroundColor;
+        return view;
+    }
+    return [UIView new];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     return 0.000001;
@@ -382,7 +386,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
-        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - UITabBarHeight ) style:UITableViewStylePlain];
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - GuaTopHeight ) style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];

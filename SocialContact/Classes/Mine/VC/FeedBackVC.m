@@ -92,7 +92,7 @@ static const CGFloat buttonHeight = 30;
     self.submit.titleLabel.font = [UIFont systemFontOfSize:16];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.submit];
     [self.submit setTitle:NSLocalizedString(@"submit", nil) forState:UIControlStateNormal];
-    [self.submit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.submit setTitleColor:YD_ColorBlack_1F2124 forState:UIControlStateNormal];
     [self.submit addTarget:self action:@selector(submitAction:) forControlEvents:UIControlEventTouchUpInside];
     
 }

@@ -59,11 +59,14 @@
 #import "NSObject+YDModel.h"
 #import "FLAnimatedImage.h"
 #import <AlipaySDK/AlipaySDK.h>
+//#import "WRNavigationBar.h"
 
 #import "Ins_Network.h"
 #import "MapManager.h"
 #import "GETRequest.h"
 #import "POSTRequest.h"
+#import "PUTRequest.h"
+#import "DELETERequest.h"
 #import "FGUploadImageManager.h"
 #import "Ins_NodataView.h"
 #import "InsLoadDataTablView.h"
@@ -79,6 +82,7 @@
 #import "NSString+Ins_Verify.h"
 #import "NSString+RemoveEmoji.h"
 #import "UIImage+animatedGIF.h"
+#import "UIView+DLExtension.h"
 #import "Help.h"
 
 

@@ -96,8 +96,8 @@
   
   self.view.backgroundColor = [UIColor whiteColor];
 
-  UINavigationBar *bar = self.navigationController.navigationBar;
-  [bar setShadowImage:[UIImage new]];
+//  UINavigationBar *bar = self.navigationController.navigationBar;
+//  [bar setShadowImage:[UIImage new]];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back_icon"] style:UIBarButtonItemStyleDone target:self action:@selector(leftBarButtonItemClick)];
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     

@@ -186,6 +186,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"漂流瓶";
+    self.fd_prefersNavigationBarHidden = YES;
     [self initilzer];
 }
 

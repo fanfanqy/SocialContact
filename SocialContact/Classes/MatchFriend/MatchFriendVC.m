@@ -12,6 +12,8 @@
 
 #import "VipVC.h"
 #import "UserHomepageVC.h"
+#import "LoverConditionVC.h"
+#import "DCIMChatViewController.h"
 
 @interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -57,21 +59,19 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    
+    self.fd_prefersNavigationBarHidden = YES;
     [self setUpUI];
 }
 
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
@@ -235,8 +235,8 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
             if (expired) {
                 [self goVipVC:@"您的Vip已过期"];
             }else{
-                // 关注成功
-                
+                // 心动成功
+                [weakSelf.view makeToast:@"心动成功"];
             }
         } topIsExpired:nil];
         
@@ -249,19 +249,24 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (void)chatClick:(NSIndexPath *)indexPath{
     
-    NSString *service_show_index_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_show_index_expired_at;
-    if ([NSString ins_String:service_show_index_expired_at]) {
+    NSString *service_vip_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
+    if ([NSString ins_String:service_vip_expired_at]) {
         
         [self showLoading];
         WEAKSELF;
-        [Help vipIsExpired:nil topIsExpired:^(BOOL expired) {
+        [Help vipIsExpired:^(BOOL expired) {
             [weakSelf hideLoading];
             if (expired) {
                 [self goVipVC:@"您的Vip已过期"];
             }else{
+                SCUserInfo *userInfo = weakSelf.array[indexPath.row];
                 // 去聊天
+                DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",userInfo.userId]];
+                vc.title = userInfo.name;
+                [weakSelf.navigationController pushViewController:vc animated:YES];
             }
-        }];
+        } topIsExpired:nil];
+   
         
     }else{
         [self goVipVC:@"Vip 充值"];
@@ -277,7 +282,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     //    backgroundColor, borderWidth, borderColor, textColor
     alert.buttonFormatBlock = ^NSDictionary *{
         return @{
-                 @"backgroundColor":[UIColor colorWithHexString:@"F57C00"],
+                 @"backgroundColor":ORANGE,
                  @"textColor":[UIColor whiteColor],
                  };
     };
@@ -314,7 +319,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 187+kScreenWidth-20+20;
+    return 187+(kScreenWidth-20)/1.6+20;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -395,7 +400,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 //        [_userAmount setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         
         [_userAmount setTitle:@"1000" forState:UIControlStateNormal];
-        [_userAmount setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_userAmount setTitleColor:ORANGE forState:UIControlStateNormal];
         [_userAmount addTarget:self action:@selector(userAmountClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _userAmount;
@@ -405,7 +410,8 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     if (!_unknowUserImg) {
         _unknowUserImg = [UIImageView new];
         _unknowUserImg.contentMode = UIViewContentModeScaleAspectFit;
-        _unknowUserImg.image = [UIImage imageNamed:@"ic_register"];
+        _unknowUserImg.image = [[UIImage imageNamed:@"ic_register"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _unknowUserImg.tintColor = ORANGE;
         _unknowUserImg.frame = CGRectMake(kScreenWidth - 60 - 50 -20-20, 10+StatusBarHeight, 20, 32);
     }
     return _unknowUserImg;
@@ -417,7 +423,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (void)conditionSelectClick{
-    
+    LoverConditionVC *vc = [LoverConditionVC new];
+    vc.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)userAmountClick{
@@ -437,7 +445,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     //    backgroundColor, borderWidth, borderColor, textColor
     alert.buttonFormatBlock = ^NSDictionary *{
         return @{
-                 @"backgroundColor":[UIColor colorWithHexString:@"F57C00"],
+                 @"backgroundColor":ORANGE,
                  @"textColor":[UIColor whiteColor],
                  };
     };
@@ -491,9 +499,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _todayRecommend = [UIButton buttonWithType:UIButtonTypeCustom];
         _todayRecommend.frame = CGRectMake(10, 0, 65, 40);
         [_todayRecommend setTitle:@"今日推荐" forState:UIControlStateNormal];
-        _todayRecommend.titleLabel.font = [UIFont systemFontOfSize:15];
+        _todayRecommend.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
 //        [_todayRecommend sizeToFit];
-        [_todayRecommend setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_todayRecommend setTitleColor:ORANGE forState:UIControlStateNormal];
         [_todayRecommend addTarget:self action:@selector(todayRecommendClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _todayRecommend;
@@ -504,9 +512,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _wantToTop = [UIButton buttonWithType:UIButtonTypeCustom];
         _wantToTop.frame = CGRectMake(kScreenWidth - 75, 0, 65, 40);
         [_wantToTop setTitle:@"我要置顶" forState:UIControlStateNormal];
-        _wantToTop.titleLabel.font = [UIFont systemFontOfSize:15];
+        _wantToTop.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
 //        [_wantToTop sizeToFit];
-        [_wantToTop setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_wantToTop setTitleColor:ORANGE forState:UIControlStateNormal];
         [_wantToTop addTarget:self action:@selector(wantToTopClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _wantToTop;

@@ -35,12 +35,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 INS_P_ASSIGN(NSInteger, iD);
 INS_P_ASSIGN(NSInteger, action_type);
+//对象id， 当前统一为动态id
 INS_P_ASSIGN(NSInteger, object_id);
 INS_P_ASSIGN(NSInteger, result_id);
 INS_P_STRONG(SCUserInfo *, from_customer);
 
 INS_P_STRONG(NSString *, create_at);
 INS_P_STRONG(NSString *, text);
+// 0:未读，1：已读
 INS_P_ASSIGN(NSInteger, status);
 
 

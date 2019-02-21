@@ -10,7 +10,7 @@
 #import "NewDynamicsTableViewCell.h"
 #import "XHInputView.h"
 #import "UserHomepageVC.h"
-
+#import "ForumVC+Delegate.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ForumVC (Delegate)<NewDynamicsCellDelegate>

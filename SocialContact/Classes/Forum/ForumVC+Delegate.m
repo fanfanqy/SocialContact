@@ -21,10 +21,32 @@
 }
 
 /**
+ 点击了 Label 的链接
+ */
+- (void)cell:(NewDynamicsTableViewCell *)cell didClickInLabel:(YYLabel *)label textRange:(NSRange)textRange{
+    
+    NSAttributedString *text = label.textLayout.text;
+    if (textRange.location >= text.length) return;
+    YYTextHighlight *highlight = [text attribute:YYTextHighlightAttributeName atIndex:textRange.location];
+    NSDictionary *info = highlight.userInfo;
+    if (info.count == 0) return;
+    
+    if (info[@"kLikeUserId"]) {
+        NSInteger userId = [info[@"kLikeUserId"] integerValue];
+        [self goUserHomePageVC:userId];
+        return;
+    }
+}
+
+/**
  点击了话题链接
  */
 - (void)cellDidClickTopic:(TopicModel *)topicModel cell:(NewDynamicsTableViewCell *)cell{
    
+    if ([topicModel isEqual:self.topicModel]) {
+        return;
+    }
+    
     ForumVC *vc = [ForumVC new];
     vc.title = topicModel.name;
     vc.forumVCType = ForumVCTypeMoment;
@@ -45,10 +67,12 @@
  */
 - (void)cellDidClickLike:(NewDynamicsTableViewCell *)cell{
     
-    
-    
     if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
-        [self zan:YES momentModel:cell.layout.model cell:cell];
+        if (cell.layout.model.isZan) {
+            [self zan:YES momentModel:cell.layout.model cell:cell];
+        }else{
+            [self zan:NO momentModel:cell.layout.model cell:cell];
+        }
     }else{
         [self gotoDetail:cell.layout.model];
     }
@@ -111,7 +135,12 @@
     UserHomepageVC *vc = [UserHomepageVC new];
     vc.userId = userId;
     if (self.fatherVC) {
-        [self.fatherVC.navigationController pushViewController:vc animated:YES];
+        if (self.navigationController) {
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [self.fatherVC.navigationController pushViewController:vc animated:YES];
+        }
+        
     }else{
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -125,7 +154,7 @@
 - (void)gotoDetail:(MomentModel *)momentModel{
     
     ForumVC *vc = [ForumVC new];
-    //    vc.title = topicModel.name;
+    vc.title = @"动态详情";
     vc.forumVCType = ForumVCTypeMoment;
     vc.momentUIType = MomentUITypeDetail;
     vc.momentRequestType = MomentRequestTypeUserMomentDetail;
@@ -171,8 +200,6 @@
         
         /** 占位符文字 */
         inputView.placeholder = placeholder;
-        /** 设置最大输入字数 */
-        inputView.maxCount = 50;
         /** 输入框颜色 */
         inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
         
@@ -191,6 +218,7 @@
                 if (request.error) {
                     [weakSelf.view makeToast:request.error.localizedDescription];
                 }else{
+                    [weakSelf fetchData:YES];
                     [weakSelf.view makeToast:request.responseObject[@"msg"]];
                 }
                 
@@ -213,18 +241,40 @@
 //
     NSDictionary *para = @{@"pk":[NSNumber numberWithInteger:momentModel.iD]
                            };
+    
     WEAKSELF;
-    POSTRequest *request = [POSTRequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
+    
+    if (!zan) {
+        // 点赞
+        POSTRequest *request = [POSTRequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
+            
+            if (request.error) {
+                [weakSelf.view makeToast:request.error.localizedDescription];
+            }else{
+                [weakSelf fetchLikeUserData];
+                [weakSelf.view makeToast:request.responseObject[@"msg"]];
+                [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan_selected"] forState:UIControlStateNormal];
+            }
+            
+        }];
+        [InsNetwork addRequest:request];
+    }else{
+        // 取消点赞
+        DELETERequest *request = [DELETERequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
+            
+            if (request.error) {
+                [weakSelf.view makeToast:request.error.localizedDescription];
+            }else{
+                [weakSelf fetchLikeUserData];
+                [weakSelf.view makeToast:request.responseObject[@"msg"]];
+                [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan"] forState:UIControlStateNormal];
+            }
+            
+        }];
+        [InsNetwork addRequest:request];
         
-        if (request.error) {
-            [weakSelf.view makeToast:request.error.localizedDescription];
-        }else{
-            [weakSelf.view makeToast:request.responseObject[@"msg"]];
-            [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan_selected"] forState:UIControlStateNormal];
-        }
-        
-    }];
-    [InsNetwork addRequest:request];
+    }
+    
 }
 
 
