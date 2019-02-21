@@ -9,6 +9,8 @@
 #import "UserHomepageVC.h"
 
 #import "ForumVC.h"
+#import "VipVC.h"
+#import "DCIMChatViewController.h"
 
 #import "UserInfoHomePageCell.h"
 #import "VipStatusCell.h"
