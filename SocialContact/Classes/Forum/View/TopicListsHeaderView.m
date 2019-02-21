@@ -18,7 +18,7 @@
     
     [self.img sd_setImageWithURL:[NSURL URLWithString:topicModel.logo_url?:@""]];
     
-    self.title.text = topicModel.name;
+    self.title.text = [NSString stringWithFormat:@"#%@#",topicModel.name];
     
     self.des.text = topicModel.desc;
 }

@@ -95,7 +95,7 @@ NSString *const kRongYunKey = @"mgb7ka1nmdwtg";
 
 NSString *const kQINIU_TokenKey = @"";
 
-NSString *const kQINIU_HOSTKey = @"http://pkwzlsa8z.bkt.clouddn.com/";
+NSString *const kQINIU_HOSTKey = @"http://lhxq.top/";
 
 // 色值
 

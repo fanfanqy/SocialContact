@@ -101,6 +101,7 @@
         }else{
             if (weakSelf.userInfo) {
                 DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",weakSelf.userInfo.userId]];
+                vc.title = weakSelf.userInfo.name;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
         }
@@ -240,11 +241,10 @@
     [self.view addSubview:self.tableView];
     self.tableView.tableHeaderView = self.cycleScrollView;
     // 自己才显示
-    if ([SCUserCenter sharedCenter].currentUser.userInfo.iD == self.userInfo.iD) {
+    if ([SCUserCenter sharedCenter].currentUser.userInfo.iD != self.userInfo.iD) {
         [self.view addSubview:self.chatBtn];
         [self.view addSubview:self.guanZhuBtn];
     }
-    
     
     [self.cycleScrollView addSubview:self.backBtn];
     [self.cycleScrollView addSubview:self.moreBtn];

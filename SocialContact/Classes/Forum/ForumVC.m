@@ -65,6 +65,7 @@
     if (_momentRequestType == MomentRequestTypeTopicList) {
         
 //        [self.view addSubview:self.bottomToolView];
+        self.fd_prefersNavigationBarHidden = YES;
         [self.view addSubview:self.participateTopicBtn];
         [self.view addSubview:self.joinDiscussion];
     }
@@ -370,7 +371,7 @@
                     [weakSelf.tableView hideFooter];
                 }
             } else {
-//                [weakSelf.tableView hideFooter];
+                [weakSelf.tableView hideFooter];
             }
             
             if (refresh) {
@@ -570,8 +571,15 @@
         TopicModel *topicModel = self.array[indexPath.row];
         TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell"];
         [cell.imgV setImageWithURL:[NSURL URLWithString:topicModel.logo_url] placeholder:nil options:YYWebImageOptionProgressive completion:nil];
-        cell.titleLB.text = topicModel.name;
+        cell.titleLB.text = [NSString stringWithFormat:@"#%@#",topicModel.name];
         cell.contentLB.text = topicModel.desc;
+        if (indexPath.row == 0) {
+            cell.titleLB.textColor = m1;
+        }else if (indexPath.row == 0) {
+            cell.titleLB.textColor = m2;
+        }else{
+            cell.titleLB.textColor = Font_color333;
+        }
         return cell;
     }else if (self.forumVCType == ForumVCTypeNoticeOrNearBy) {
         
@@ -602,6 +610,11 @@
         NewDynamicsLayout *layout = self.array[indexPath.row];
         NewDynamicsTableViewCell *cell = (NewDynamicsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"NewDynamicsTableViewCell-%ld",_momentRequestType]];
         [cell setLayout:layout];
+        if (self.momentRequestType == MomentRequestTypeTopicList) {
+            cell.backgroundColor = [UIColor colorWithHexString:@"FAFAFA"];
+        }else{
+            cell.backgroundColor = [UIColor whiteColor];
+        }
         cell.delegate = self;
         cell.indexPath = indexPath;
         return cell;
@@ -649,7 +662,7 @@
             vc.forumVCType = ForumVCTypeMoment;
             vc.momentUIType = MomentUITypeList;
             vc.momentRequestType = MomentRequestTypeTopicList;
-            vc.height = kScreenHeight-StatusBarHeight-50-UITabBarHeight;
+            vc.height = kScreenHeight;
             vc.topicModel = topicModel;
             [self.fatherVC.navigationController pushViewController:vc animated:YES];
         }
@@ -765,6 +778,7 @@
 // 立即参与
 -(void)partiClick{
     WBStatusComposeViewController *vc = [WBStatusComposeViewController new];
+    vc.topicModel = self.topicModel;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -812,7 +826,7 @@
     if (!_participateTopicBtn) {
         _participateTopicBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        CGFloat top = kScreenHeight - GuaTopHeight - 50;
+        CGFloat top = kScreenHeight - 50;
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
@@ -833,7 +847,7 @@
     if (!_joinDiscussion) {
         _joinDiscussion = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        CGFloat top = kScreenHeight - GuaTopHeight-50;
+        CGFloat top = kScreenHeight -50;
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
@@ -861,6 +875,7 @@
         }
         
         _tableView = [[InsLoadDataTablView alloc] initWithFrame:rect style:UITableViewStylePlain];
+        _tableView.showsVerticalScrollIndicator = NO;
         
         if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
             _tableView.height -= 40;
@@ -871,6 +886,9 @@
         _tableView.backgroundColor = [UIColor whiteColor];
         if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
             
+            _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            
+        }if (self.momentRequestType == MomentRequestTypeNewest || self.momentRequestType == MomentRequestTypeTopicList) {
             _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
             
         }else{
@@ -892,7 +910,8 @@
             if (_momentRequestType == MomentRequestTypeTopicList) {
                 _tableView.tableHeaderView = self.topicListsHeaderView;
 //                // 50 高度
-//                [_tableView setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
+                [_tableView setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
+                _tableView.backgroundColor = [UIColor colorWithHexString:@"FAFAFA"];
             }
             [_tableView registerClass:[NewDynamicsTableViewCell class] forCellReuseIdentifier:[NSString stringWithFormat:@"NewDynamicsTableViewCell-%ld",_momentRequestType]];
         }

@@ -13,15 +13,15 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    self.vip.layer.borderColor = [UIColor blackColor].CGColor;
+    self.vip.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
     self.vip.layer.borderWidth = 1.f;
     self.vip.layer.cornerRadius = 30;
     
-    self.exchangeWechat.layer.borderColor = [UIColor blackColor].CGColor;
+    self.exchangeWechat.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
     self.exchangeWechat.layer.borderWidth = 1.f;
     self.exchangeWechat.layer.cornerRadius = 30;
     
-    self.yueTa.layer.borderColor = [UIColor blackColor].CGColor;
+    self.yueTa.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
     self.yueTa.layer.borderWidth = 1.f;
     self.yueTa.layer.cornerRadius = 30;
 }

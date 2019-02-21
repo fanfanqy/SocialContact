@@ -21,6 +21,8 @@
 
 @property(nonatomic,strong) UIButton *publishBtn;
 
+@property(nonatomic,strong) UIView *topBarView;
+
 @end
 
 @implementation ForumMainVC
@@ -29,6 +31,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.fd_prefersNavigationBarHidden = YES;
+    [self.view addSubview:self.topBarView];
     [self.view addSubview:self.categoryView];
     [self.view addSubview:self.publishBtn];
     [self setUpViewItem];
@@ -37,6 +40,26 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
+}
+
+
+- (UIView *)topBarView{
+    if (!_topBarView) {
+        _topBarView = [UIView new];
+        _topBarView.backgroundColor = YD_ColorBlack_1F2124;
+        _topBarView.frame = CGRectMake(0, 0, self.view.width, StatusBarHeight+55);
+    }
+    return _topBarView;
+}
 
 - (JXCategoryTitleView *)categoryView{
     if (!_categoryView) {
@@ -49,15 +72,21 @@
         //2、添加并配置指示器
         //lineView
         JXCategoryIndicatorLineView *lineView = [[JXCategoryIndicatorLineView alloc] init];
-        lineView.indicatorLineViewColor = [UIColor redColor];
-        lineView.indicatorLineWidth = JXCategoryViewAutomaticDimension;
+        lineView.indicatorLineViewColor = m1;
+        lineView.indicatorLineWidth = 10;
+        lineView.indicatorLineViewHeight = 4;
         //backgroundView
 //        JXCategoryIndicatorBackgroundView *backgroundView = [[JXCategoryIndicatorBackgroundView alloc] init];
 //        backgroundView.backgroundViewColor = [UIColor redColor];
 //        backgroundView.backgroundViewWidth = JXCategoryViewAutomaticDimension;
         self.categoryView.indicators = @[lineView];
-       
-   
+        
+        self.categoryView.titleColor = m2;
+        self.categoryView.titleSelectedColor = m1;
+        
+        self.categoryView.titleSelectedFont = [UIFont systemFontOfSize:25];
+        self.categoryView.titleFont = [UIFont systemFontOfSize:17];
+        
     }
     return _categoryView;
 }

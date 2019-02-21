@@ -46,7 +46,8 @@ INS_P_ASSIGN(NSInteger,action_type);
 
 INS_P_ASSIGN(NSInteger,status);
 
-
+// 是否点赞
+INS_P_ASSIGN(BOOL,isZan);
 
 // 用户 技能接口数据解析
 INS_P_STRONG(NSString *, name);

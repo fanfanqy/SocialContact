@@ -212,12 +212,12 @@ URL:  /api/virtual-services/<int:pk>/buy/
     ServiceModel *serviceModel;
     for (ServiceModel *model in self.dataArray) {
         if (self.type == 1) {
-            if (model.service_type == 2) {
+            if (model.service_type == 1) {
                 serviceModel = model;
                 _serviceModel = serviceModel;
             }
         }else if (self.type == 0) {
-            if (model.service_type == 1) {
+            if (model.service_type == 2) {
                 serviceModel = model;
                 _serviceModel = serviceModel;
             }

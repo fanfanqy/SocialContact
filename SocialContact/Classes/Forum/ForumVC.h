@@ -68,6 +68,8 @@ typedef NS_ENUM(NSInteger,ForumVCGoToType){
 
 - (void)fetchData:(BOOL)refresh;
 
+- (void)fetchLikeUserData;
+
 @property(nonatomic,strong) InsLoadDataTablView *tableView;
 
 @end

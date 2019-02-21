@@ -43,6 +43,10 @@
  */
 - (void)cellDidClickTopic:(TopicModel *)topicModel cell:(NewDynamicsTableViewCell *)cell{
    
+    if ([topicModel isEqual:self.topicModel]) {
+        return;
+    }
+    
     ForumVC *vc = [ForumVC new];
     vc.title = topicModel.name;
     vc.forumVCType = ForumVCTypeMoment;
@@ -63,10 +67,12 @@
  */
 - (void)cellDidClickLike:(NewDynamicsTableViewCell *)cell{
     
-    
-    
     if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
-        [self zan:YES momentModel:cell.layout.model cell:cell];
+        if (cell.layout.model.isZan) {
+            [self zan:YES momentModel:cell.layout.model cell:cell];
+        }else{
+            [self zan:NO momentModel:cell.layout.model cell:cell];
+        }
     }else{
         [self gotoDetail:cell.layout.model];
     }
@@ -235,18 +241,40 @@
 //
     NSDictionary *para = @{@"pk":[NSNumber numberWithInteger:momentModel.iD]
                            };
+    
     WEAKSELF;
-    POSTRequest *request = [POSTRequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
+    
+    if (!zan) {
+        // 点赞
+        POSTRequest *request = [POSTRequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
+            
+            if (request.error) {
+                [weakSelf.view makeToast:request.error.localizedDescription];
+            }else{
+                [weakSelf fetchLikeUserData];
+                [weakSelf.view makeToast:request.responseObject[@"msg"]];
+                [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan_selected"] forState:UIControlStateNormal];
+            }
+            
+        }];
+        [InsNetwork addRequest:request];
+    }else{
+        // 取消点赞
+        DELETERequest *request = [DELETERequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
+            
+            if (request.error) {
+                [weakSelf.view makeToast:request.error.localizedDescription];
+            }else{
+                [weakSelf fetchLikeUserData];
+                [weakSelf.view makeToast:request.responseObject[@"msg"]];
+                [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan"] forState:UIControlStateNormal];
+            }
+            
+        }];
+        [InsNetwork addRequest:request];
         
-        if (request.error) {
-            [weakSelf.view makeToast:request.error.localizedDescription];
-        }else{
-            [weakSelf.view makeToast:request.responseObject[@"msg"]];
-            [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan_selected"] forState:UIControlStateNormal];
-        }
-        
-    }];
-    [InsNetwork addRequest:request];
+    }
+    
 }
 
 

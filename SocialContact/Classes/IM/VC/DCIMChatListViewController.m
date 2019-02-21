@@ -194,6 +194,7 @@
 
 - (void)nearbyUserCLick{
     ForumVC *vc = [ForumVC new];
+    vc.title = @"附近的人";
     vc.forumVCType = ForumVCTypeNoticeOrNearBy;
     vc.momentRequestType = MomentRequestTypeNearby;
     vc.momentUIType = MomentUITypeNearby;

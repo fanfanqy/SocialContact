@@ -39,7 +39,12 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 - (void)done{
 //    /customer/profile/
     WEAKSELF;
-    NSDictionary *dic = [self.userModel modelToJSONObject];
+    
+//    NSDictionary *dic = [self.userModel modelToJSONObject];
+    NSDictionary *dic = @{
+                          @"condition":self.userModel.condition,
+                          };
+    
     POSTRequest *request = [POSTRequest requestWithPath:@"/customer/profile/" parameters:dic completionHandler:^(InsRequest *request) {
         
         if (request.error) {
@@ -190,7 +195,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
                 age2 = [selectRow[1] integerValue] + 18;
                 NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.userModel.condition];
                 [dic setObject:@[@(age1),@(age2)] forKey:@"age_range"];
-
+                
                 weakSelf.userModel.condition = dic;
                 [weakSelf.tableView reloadData];
             }else{

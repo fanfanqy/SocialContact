@@ -24,7 +24,9 @@
     self.avatarImg.layer.cornerRadius = 30;
     self.avatarImg.layer.masksToBounds = YES;
     
-    
+    self.address.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
+    self.address.layer.borderWidth = 1.f;
+    self.address.layer.cornerRadius = 10.f;
 }
 
 - (void)setNotice:(Notice *)notice{
@@ -32,7 +34,13 @@
     
     self.userId = notice.from_customer.iD;
     
-    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:notice.from_customer.avatar_url]];
+//    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:notice.from_customer.avatar_url]];
+    if ([NSString ins_String:notice.from_customer.avatar_url]) {
+        [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:notice.from_customer.avatar_url]];
+    }else{
+        self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
+    }
+    
     self.nickName.text = notice.from_customer.name;
     
     NSDate *date = [NSDate dateWithISOFormatString:notice.create_at];
@@ -41,6 +49,7 @@
     
     self.personalSignature.text = notice.text;
     
+    self.address.layer.borderWidth = 0.f;
     self.address.text = @"";
     self.distance.text = @"";
 }
@@ -50,7 +59,13 @@
     
     self.userId = userInfo.iD;
     
-    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:userInfo.avatar_url]];
+//    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:userInfo.avatar_url]];
+    if ([NSString ins_String:userInfo.avatar_url]) {
+        [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:userInfo.avatar_url]];
+    }else{
+        self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
+    }
+    
     self.nickName.text = userInfo.name;
     
     NSDate *date = [NSDate dateWithISOFormatString:userInfo.last_request_at];
@@ -59,8 +74,17 @@
     
     self.personalSignature.text = userInfo.intro;
     
-    self.address.text = userInfo.address_home;
-    self.distance.text = @"__";
+    
+    if ([NSString ins_String:userInfo.address_home]) {
+        self.address.layer.borderWidth = 1.f;
+        self.address.text =  [NSString stringWithFormat:@"  %@  ",userInfo.address_home];
+        [self.address sizeToFit];
+    }else{
+        self.address.layer.borderWidth = 0.f;
+        self.address.text =  nil;
+    }
+    
+    self.distance.text = @"_";
     
 }
 
@@ -70,7 +94,12 @@
     
     self.userId = lookMeModel.customer.iD;
     
-    [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:lookMeModel.customer.avatar_url]];
+    if ([NSString ins_String:lookMeModel.customer.avatar_url]) {
+        [self.avatarImg sd_setImageWithURL:[NSURL URLWithString:lookMeModel.customer.avatar_url]];
+    }else{
+        self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
+    }
+    
     
     self.nickName.text = lookMeModel.customer.name;
     
@@ -80,8 +109,16 @@
     
     self.personalSignature.text = lookMeModel.customer.intro;
     
-    self.address.text = lookMeModel.customer.address_home;
-    self.distance.text = @"__";
+    if ([NSString ins_String:lookMeModel.customer.address_home]) {
+        self.address.layer.borderWidth = 1.f;
+        self.address.text =  [NSString stringWithFormat:@"  %@  ",lookMeModel.customer.address_home];
+        [self.address sizeToFit];
+    }else{
+        self.address.layer.borderWidth = 0.f;
+        self.address.text =  nil;
+    }
+    
+    self.distance.text = @"_";
 }
 
 - (void)setUserPointsModel:(UserPointsModel *)userPointsModel{
@@ -98,6 +135,7 @@
     
     self.personalSignature.text = @"";
     
+    self.address.layer.borderWidth = 0.f;
     self.address.text = @"";
     
     NSDate *date = [NSDate dateWithISOFormatString:userPointsModel.create_at];

@@ -160,6 +160,8 @@
     [self.commentTable reloadData];
 }
 
+
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 45 + _cell.layout.zanUsersHeight)];
     
@@ -288,6 +290,8 @@
     
     [self.contentView addSubview:self.commentView];
     
+    [self.contentView addSubview:self.sectionView];
+    
     self.portrait.left = kMomentContentInsetLeft;
     self.portrait.top = kMomentContentInsetTop;
     self.portrait.width = kMomentPortraitWH;
@@ -299,13 +303,13 @@
     self.time.height = kMomentPortraitWH/2.0;
     
     self.name.top = kMomentContentInsetTop;
-    self.name.left = kMomentContentInsetLeft + kMomentPortraitWH + kMomentAvatarRightNickLeft;
-    self.name.width = kScreenWidth-kMomentContentInsetRight-kMomentPortraitWH - kMomentAvatarRightNickLeft;
+    self.name.left = kMomentContentInsetLeft + kMomentPortraitWH + kMomentAvatarRightNickLeft/2.0;
+    self.name.width = kScreenWidth-kMomentContentInsetRight-kMomentPortraitWH - kMomentAvatarRightNickLeft/2.0;
     self.name.height = kMomentPortraitWH/2.0;
     
     self.address.top = self.name.bottom;
     self.address.left = self.name.left;
-    self.address.width = kScreenWidth-kMomentContentInsetRight-40 - (100 + kMomentContentInsetRight);
+    self.address.width = 50;
     self.address.height = kMomentPortraitWH/2.0;
     
     self.content.top = self.portrait.bottom + kMomentAvatarBottomContentTop;
@@ -339,6 +343,9 @@
     self.commentBtn.height = 20;
     self.commentBtn.right = self.commentCount.left - 5;
 
+    self.sectionView.left = 0;
+    self.sectionView.width = kScreenWidth;
+    self.sectionView.height = 5;
     
 
 
@@ -378,15 +385,43 @@
         self.content.textLayout = layout.contentLayout;
         
     }else {
-        [self.portrait sd_setImageWithURL:[NSURL URLWithString:model.customer.avatar_url?:@""]];
-        self.name.text = model.customer.name?:@"";
-        self.address.text = model.customer.address_home?:@"";
+        
+        if (model.is_hidden_name) {
+            self.portrait.image = [UIImage imageNamed:@"icon_default_person"];
+        }else{
+            if ([NSString ins_String:model.customer.avatar_url]) {
+                [self.portrait sd_setImageWithURL:[NSURL URLWithString:model.customer.avatar_url?:@""]];
+            }else{
+                self.portrait.image = [UIImage imageNamed:@"icon_default_person"];
+            }
+        }
+        
+        NSMutableAttributedString * attString = [[NSMutableAttributedString alloc] initWithString:model.customer.name?:@""];
+        attString.font = [UIFont systemFontOfSize:15];
+        UIImage *image;
+        if (model.customer.gender == 1) {
+            image = [UIImage imageNamed:@"ic_male"];
+        }else{
+            image = [UIImage imageNamed:@"ic_women"];
+        }
+        if (image) {
+            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(15, 15) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
+            [attString appendAttributedString:attachText];
+        }
+        self.name.attributedText = attString;
+        
+        if ([NSString ins_String:model.customer.address_home]) {
+            self.address.text = [NSString stringWithFormat:@"  %@  ",model.customer.address_home?:@""];
+        }else{
+            self.address.text = @"";
+        }
+        
+        
         self.time.text = layout.formatedTimeString?:@"";
         self.content.textLayout = layout.contentLayout;
     }
     
     self.content.height = layout.contentHeight;
-    
     
     if (layout.momentRequestType == MomentRequestTypeSkill) {
         self.picContainerView.hidden = YES;
@@ -415,7 +450,7 @@
         
         self.topics.hidden = NO;
         TopicModel *topicModel = model.topic[0];
-        self.topics.text = topicModel.name;
+        self.topics.text = [NSString stringWithFormat:@"#%@#",topicModel.name];
     }else{
         self.topics.hidden = YES;
     }
@@ -450,6 +485,20 @@
         }else{
             _commentView.hidden = YES;
         }
+    }
+    
+    if (layout.model.isZan) {
+        [self.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan_selected"] forState:UIControlStateNormal];
+    }else{
+        [self.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan"] forState:UIControlStateNormal];
+    }
+    
+    
+    if (layout.momentRequestType == MomentRequestTypeNewest || layout.momentRequestType == MomentRequestTypeTopicList) {
+        self.sectionView.hidden = NO;
+        self.sectionView.top = self.zanBtn.bottom+16;// 16：底部间隙
+    }else{
+        self.sectionView.hidden = YES;
     }
 }
 
@@ -503,9 +552,10 @@
     if (!_name) {
         _name = [YYLabel new];
 		_name.textVerticalAlignment = YYTextVerticalAlignmentTop;
-		UIFont *font = [UIFont systemFontOfSize:16];
+		UIFont *font = [UIFont systemFontOfSize:15];
 		_name.font = font;
-		_name.textColor = UIColorHex(0D0E15);
+        _name.textColor = YD_ColorBlack_1F2124;
+        
     }
     return _name;
 }
@@ -513,9 +563,13 @@
 - (YYLabel *)address{
 	if (!_address) {
 		_address = [YYLabel new];
-		_address.textVerticalAlignment = YYTextVerticalAlignmentBottom;
+//        _address.textAlignment = NSTextAlignmentCenter;
 		_address.font = [UIFont systemFontOfSize:12];
-		_address.textColor = UIColorHex(D3D3D3);
+        _address.textColor = YD_Color666;
+//        _address.layer.borderColor = YD_Color666.CGColor;
+//        _address.layer.borderWidth = 1.f;
+//        _address.layer.cornerRadius = 6.f;
+        
 	}
 	return _address;
 }
@@ -525,7 +579,7 @@
         _time = [YYLabel new];
         _time.textAlignment = NSTextAlignmentRight;
         _time.font = [UIFont systemFontOfSize:12];
-        _time.textColor = UIColorHex(D3D3D3);
+        _time.textColor = YD_Color666;
     }
     return _time;
 }
@@ -534,7 +588,7 @@
     if (!_content) {
         _content = [YYLabel new];
         _content.font = [UIFont systemFontOfSize:12];
-        _content.textColor = UIColorHex(D3D3D3);
+        _content.textColor = YD_Color666;
         WEAKSELF;
         _content.highlightTapAction = ^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
             if ([weakSelf.delegate respondsToSelector:@selector(cell:didClickInLabel:textRange:)]) {
@@ -549,7 +603,7 @@
     if (!_topics) {
         _topics = [YYLabel new];
         _topics.font = [UIFont systemFontOfSize:12];
-        _topics.textColor = UIColorHex(D3D3D3);
+        _topics.textColor = ORANGE;
         _topics.hidden = YES;
         _topics.userInteractionEnabled = YES;
         WEAKSELF;
@@ -582,7 +636,7 @@
         _zanCount = [YYLabel new];
         _zanCount.textAlignment = NSTextAlignmentLeft;
         _zanCount.font = [UIFont systemFontOfSize:12];
-        _zanCount.textColor = UIColorHex(D3D3D3);
+        _zanCount.textColor = YD_ColorBlack_1F2124;
         WEAKSELF;
         [_zanCount jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
             [weakSelf zanBtnClick];
@@ -611,13 +665,21 @@
         _commentCount = [YYLabel new];
         _commentCount.textAlignment = NSTextAlignmentLeft;
         _commentCount.font = [UIFont systemFontOfSize:12];
-        _commentCount.textColor = UIColorHex(D3D3D3);
+        _commentCount.textColor = YD_ColorBlack_1F2124;
         WEAKSELF;
         [_commentCount jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
             [weakSelf commentBtnClick];
         }];
     }
     return _commentCount;
+}
+
+- (UIView *)sectionView{
+    if (!_sectionView) {
+        _sectionView = [UIView new];
+        _sectionView.backgroundColor = BackGroundColor;
+    }
+    return _sectionView;
 }
 
 

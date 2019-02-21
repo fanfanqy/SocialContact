@@ -23,9 +23,9 @@
     
     UIImage *genderImage;// 未知
     if (userInfo.gender == 0) {
-        genderImage = [UIImage imageNamed:@"ic_women"];
+        genderImage = [UIImage imageNamed:@""];
     }else if (userInfo.gender == 1) {
-        genderImage = [UIImage imageNamed:@"ic_women"];
+        genderImage = [UIImage imageNamed:@"ic_male"];
     }else if (userInfo.gender == 2) {
         genderImage = [UIImage imageNamed:@"ic_women"];
     }

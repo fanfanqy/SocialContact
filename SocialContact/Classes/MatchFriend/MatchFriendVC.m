@@ -13,6 +13,7 @@
 #import "VipVC.h"
 #import "UserHomepageVC.h"
 #import "LoverConditionVC.h"
+#import "DCIMChatViewController.h"
 
 @interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -234,8 +235,8 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
             if (expired) {
                 [self goVipVC:@"您的Vip已过期"];
             }else{
-                // 关注成功
-                
+                // 心动成功
+                [weakSelf.view makeToast:@"心动成功"];
             }
         } topIsExpired:nil];
         
@@ -248,19 +249,24 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (void)chatClick:(NSIndexPath *)indexPath{
     
-    NSString *service_show_index_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_show_index_expired_at;
-    if ([NSString ins_String:service_show_index_expired_at]) {
+    NSString *service_vip_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
+    if ([NSString ins_String:service_vip_expired_at]) {
         
         [self showLoading];
         WEAKSELF;
-        [Help vipIsExpired:nil topIsExpired:^(BOOL expired) {
+        [Help vipIsExpired:^(BOOL expired) {
             [weakSelf hideLoading];
             if (expired) {
                 [self goVipVC:@"您的Vip已过期"];
             }else{
+                SCUserInfo *userInfo = weakSelf.array[indexPath.row];
                 // 去聊天
+                DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",userInfo.userId]];
+                vc.title = userInfo.name;
+                [weakSelf.navigationController pushViewController:vc animated:YES];
             }
-        }];
+        } topIsExpired:nil];
+   
         
     }else{
         [self goVipVC:@"Vip 充值"];
@@ -276,7 +282,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     //    backgroundColor, borderWidth, borderColor, textColor
     alert.buttonFormatBlock = ^NSDictionary *{
         return @{
-                 @"backgroundColor":[UIColor colorWithHexString:@"F57C00"],
+                 @"backgroundColor":ORANGE,
                  @"textColor":[UIColor whiteColor],
                  };
     };
@@ -313,7 +319,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 187+kScreenWidth-20+20;
+    return 187+(kScreenWidth-20)/1.6+20;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -439,7 +445,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     //    backgroundColor, borderWidth, borderColor, textColor
     alert.buttonFormatBlock = ^NSDictionary *{
         return @{
-                 @"backgroundColor":[UIColor colorWithHexString:@"F57C00"],
+                 @"backgroundColor":ORANGE,
                  @"textColor":[UIColor whiteColor],
                  };
     };

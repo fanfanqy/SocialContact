@@ -108,7 +108,7 @@
 		[_publishButton setTitle:@"发表" forState:UIControlStateNormal];
 		[_publishButton setTitleColor:UIColorHex(FFFFFF) forState:UIControlStateNormal];
 		[_publishButton setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateDisabled];
-		[_publishButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(63D190)] forState:UIControlStateNormal];
+		[_publishButton setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
 		[_publishButton addTarget:self action:@selector(_publishBtnClick) forControlEvents:UIControlEventTouchUpInside];
 	}
 	return _publishButton;
@@ -125,6 +125,7 @@
     _textView.alwaysBounceVertical = YES;
     _textView.allowsCopyAttributedString = NO;
     _textView.font = [UIFont systemFontOfSize:16];
+    _textView.textColor = YD_ColorBlack_1F2124;
     _textView.delegate = self;
     _textView.inputAccessoryView = [UIView new];
 	
@@ -143,7 +144,7 @@
         atr.font = [UIFont systemFontOfSize:16];
         _textView.placeholderAttributedText = atr;
     }
-	
+    _textView.tintColor = ORANGE;
 //    if (_autoTopicName) {
 //        _textView.text = _autoTopicName;
 //    }
@@ -161,9 +162,11 @@
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_toolbar];
 	
-	
-    _toolbarTopicButton = [self _toolbarButtonWithImage:@"ic_topic" highlight:nil];
-	
+    if (_topicModel) {
+        [self topicSelected:_topicModel];
+    }else {
+        _toolbarTopicButton = [self _toolbarButtonWithImage:@"ic_topic" highlight:nil];
+    }
 	_anonymButton = [self _toolbarButtonWithImage:@"anonymous_1" highlight:nil];
 	
 	
@@ -171,10 +174,11 @@
     
     _toolbarTopicButton.centerX = padding + _toolbarTopicButton.width/2;
 	_anonymButton.centerX = kScreenWidth - padding - _anonymButton.width/2;
-	
+    [_anonymButton setImageEdgeInsets:UIEdgeInsetsMake(7, 5, 7, 5)];
+    
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 80, kToolbarHeight)];
     label.text = @"是否匿名";
-    label.textColor = [UIColor colorWithHexString:@"333333"];
+    label.textColor = BLUE;
     label.font = [UIFont systemFontOfSize:15];
     label.centerX = _anonymButton.left - 25;
     [_toolbar addSubview:label];
@@ -321,7 +325,7 @@
     
     /*
         text    string    True        动态正文
-        images    string    False    ["http://a.jpg", "http://b.jpg"]    图片列表
+        images    string    lse    ["http://a.jpg", "http://b.jpg"]    图片列表
         latitude    float    False        经度
         longitude    float    False        纬度
         address    str    False        地址
@@ -472,6 +476,7 @@
 
     if (button == _toolbarTopicButton) {
         ForumVC *vc = [ForumVC new];
+        vc.title = @"选择话题";
         vc.forumVCType = ForumVCTypeTopicSelect;
         vc.delegate = self;
         [self.navigationController pushViewController:vc animated:YES];
@@ -491,8 +496,8 @@
 
 - (void)topicSelected:(TopicModel *)topicModel{
     _topicModel = topicModel;
-    [_toolbarTopicButton setTitleColor:Font_color333 forState:UIControlStateNormal];
-    [_toolbarTopicButton setTitle:_topicModel.name forState:UIControlStateNormal];
+    [_toolbarTopicButton setTitleColor:BLUE forState:UIControlStateNormal];
+    [_toolbarTopicButton setTitle:[NSString stringWithFormat:@"#%@#",_topicModel.name] forState:UIControlStateNormal];
     [_toolbarTopicButton setImage:nil forState:UIControlStateNormal];
     [_toolbarTopicButton sizeToFit];
 }
@@ -551,9 +556,9 @@
 										  // 3. 设置是否可以选择视频/图片/原图
 	imagePickerVc.allowPickingVideo = NO;
 	imagePickerVc.allowPickingImage = YES;
-	imagePickerVc.allowPickingOriginalPhoto = NO;
+	imagePickerVc.allowPickingOriginalPhoto = YES;
 	imagePickerVc.allowPickingGif = NO;
-	imagePickerVc.allowPickingMultipleVideo = YES;//可以多选视频/gif图片
+	imagePickerVc.allowPickingMultipleVideo = NO;//可以多选视频/gif图片
 		// 4. 照片排列按修改时间升序
 	imagePickerVc.sortAscendingByModificationDate = NO;
 	imagePickerVc.showSelectBtn = YES;
