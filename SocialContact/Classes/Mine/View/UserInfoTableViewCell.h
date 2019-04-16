@@ -18,6 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setupBtnClick;
 
+- (void)myGuanZhuClicked;
+
+- (void)myFenSiClicked;
+
 @end
 
 @interface UserInfoTableViewCell : UITableViewCell
@@ -32,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong)UIImageView       *genderImg;
 
+@property(nonatomic,strong)TTTAttributedLabel           *introduce;
+
 // 关注
 @property(nonatomic,strong)UILabel           *follow;
 
@@ -41,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)UIButton       *rightArrowImg;
 
 @property(nonatomic,strong)UIButton          *setupBtn;
+
+@property (strong, nonatomic) UIImageView *huiYuan;
 
 @property(nonatomic,strong)SCUserInfo          *userModel;
 

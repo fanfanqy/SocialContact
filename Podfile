@@ -38,5 +38,12 @@ pod 'AAPullToRefresh'
 #pod 'JXCategoryView'
 pod 'FLAnimatedImage'
 pod 'AlipaySDK-iOS'
+pod 'WechatOpenSDK'
 #pod 'WRNavigationBar','~>1.2.0’
+pod 'HHRefreshManager', '~> 1.1.1'
+pod 'STPopup'
+pod 'AXWebViewController'
+pod 'KSPhotoBrowser'
+pod 'YYKit'
+pod 'TTTAttributedLabel'
 end

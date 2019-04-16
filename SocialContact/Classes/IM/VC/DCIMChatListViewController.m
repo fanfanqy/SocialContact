@@ -10,7 +10,7 @@
 
 #import "ForumVC.h"
 
-#import "BottleVC.h"
+#import "XHBottleViewController.h"
 
 #import "DCIMChatViewController.h"
 
@@ -18,7 +18,12 @@
 
 #import "IMHeaderView.h"
 
+#import "InviteFriendVC.h"
+
 #import "ChartListTableViewCell.h"
+
+#import "MiaiVC.h"
+
 
 
 @interface DCIMChatListViewController () <RCMessageCellDelegate,RCConversationCellDelegate,IMHeaderViewDelegate>
@@ -28,12 +33,26 @@
 
 @property (strong, nonatomic) IMHeaderView *conversationListTableViewHeaderView;
 
+@property(nonatomic,strong) UIView *topBarView;
+
+
+
 @end
 
 @implementation DCIMChatListViewController
 {
     DCIMButton *noticeBtn;
 }
+
+- (UIView *)topBarView{
+    if (!_topBarView) {
+        _topBarView = [UIView new];
+        _topBarView.backgroundColor = Font_color333;
+        _topBarView.frame = CGRectMake(0, 0, self.view.width, GuaTopHeight);
+    }
+    return _topBarView;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -43,6 +62,25 @@
         [[SCIM shared] startWithAppKey:kRongYunKey];
     }
 }
+
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [self getNoticeCount];
+    
+    CYLTabBarController *tabBarViewController = (CYLTabBarController *)[AppDelegate sharedDelegate].window.rootViewController;
+    if ( [RCIMClient sharedRCIMClient].getTotalUnreadCount != 0 ) {
+        tabBarViewController.tabBar.items[2].badgeValue = [[NSString alloc] initWithFormat:@"%d", [RCIMClient sharedRCIMClient].getTotalUnreadCount];
+    } else {
+        tabBarViewController.tabBar.items[2].badgeValue = nil;
+    }
+    
+    
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
+    
+}
+
 #pragma mark - 
 
 // 重写选中每行的方法
@@ -112,6 +150,10 @@
 
 	[self setTitle:@"聊天"];
     
+    self.cellBackgroundColor = [UIColor whiteColor];
+    
+    self.fd_prefersNavigationBarHidden = YES;
+    
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 11.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -121,7 +163,7 @@
 	[UIColor colorWithHexString:@"efeff4"];
     self.conversationListTableView.backgroundColor = [UIColor whiteColor];
 	self.conversationListTableView.tableFooterView = [UIView new];
-	[self.conversationListTableView setTableHeaderView:self.conversationListTableViewHeaderView];
+	
     [self.conversationListTableView registerClass:[ChartListTableViewCell class] forCellReuseIdentifier:@"ChartListTableViewCell"];
 	self.definesPresentationContext = YES;
 
@@ -133,16 +175,37 @@
 	if ([self.conversationListTableView respondsToSelector:@selector(setSeparatorInset:)]) { [self.conversationListTableView setSeparatorInset:UIEdgeInsetsZero]; }
 	if ([self.conversationListTableView respondsToSelector:@selector(setLayoutMargins:)]) { [self.conversationListTableView setLayoutMargins:UIEdgeInsetsZero]; }
 
-    noticeBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
-    [noticeBtn setImage:[[UIImage imageNamed:@"ic_notice"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    noticeBtn.tintColor = MAIN_COLOR;
+    noticeBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, StatusBarHeight+(GuaTopHeight-StatusBarHeight-22)/2.0, 22, 22)];
+    [noticeBtn setImage:[UIImage imageNamed:@"ic_notice"] forState:UIControlStateNormal];
+//    [noticeBtn setImage:[[UIImage imageNamed:@"ic_notice"]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+//    noticeBtn.tintColor = [UIColor whiteColor];
     
     [noticeBtn addTarget:self action:@selector(noticeBtnAction) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:noticeBtn];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:noticeBtn];
 
-    [self getNoticeCount];
+    
+    
+    [self.view addSubview:self.topBarView];
+    
+    noticeBtn.left = self.view.width - 40;
+    [self.topBarView addSubview:noticeBtn];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(200, StatusBarHeight, 100, GuaTopHeight-StatusBarHeight)];
+    label.centerX = self.view.width/2.0;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = @"聊天";
+    label.textColor = m2;
+    label.font = [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold];
+    [self.topBarView addSubview:label];
+    
+    self.conversationListTableView.top = GuaTopHeight;
+    self.conversationListTableView.height = kScreenHeight - GuaTopHeight-UITabBarHeight;
+    [self.conversationListTableView setTableHeaderView:self.conversationListTableViewHeaderView];
+    
+    
     
 }
+
 
 // 获取未读个数
 - (void)getNoticeCount{
@@ -202,17 +265,23 @@
 }
 
 - (void)driftingBottleCLick{
-    BottleVC *vc = [BottleVC new];
+
+    XHBottleViewController *vc = [XHBottleViewController new];
     [self.navigationController pushViewController:vc animated:YES];
     
 }
 
 - (void)loveSkillCLick{
     
+    MiaiVC *vc = [MiaiVC new];
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 - (void)inviteFriendCLick{
-    
+    InviteFriendVC *vc = [InviteFriendVC new];
+    vc.title = @"邀请好友";
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -223,7 +292,7 @@
 - (UIView *)emptyView {
     if (!_emptyView) {
         _emptyView = [Ins_NodataView ins_nodataViewWithIcon:[UIImage imageNamed:@"liaotianxinxi_icon"] detail:@"暂无聊天信息，快去聊天吧"];
-        _emptyView.frame = CGRectMake(-(kScreenWidth - 180)*0.5, 100, kScreenWidth, 200);
+        _emptyView.frame = CGRectMake(-(kScreenWidth - 180)*0.5, 100+GuaTopHeight, kScreenWidth, 200);
         _emptyView.backgroundColor = [UIColor whiteColor];
     }
     return _emptyView;

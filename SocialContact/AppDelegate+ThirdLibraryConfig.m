@@ -16,7 +16,7 @@
     
     [self applyTheme];
     
-    [self mapManager];
+    [self mapManagerConfig];
 }
 
 - (void)mapManagerConfig{
@@ -82,8 +82,8 @@
     
     [[UITableView appearance] setBackgroundColor:BackGroundColor];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName :[UIColor colorWithHexString:@"333"],
-                                                           NSFontAttributeName : [UIFont boldSystemFontOfSize:18]
+                                                           NSForegroundColorAttributeName :[UIColor colorWithHexString:@"1f2124"],
+                                                           NSFontAttributeName : [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold]
                                                            }];
     
     

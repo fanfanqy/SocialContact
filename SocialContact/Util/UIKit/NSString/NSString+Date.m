@@ -106,4 +106,66 @@
     return [NSString stringWithFormat:@"%d",(int)(currentDateStamp / aYeay) + 1];
 }
 
+- (NSDate *)sc_dateWithUTCString{
+    static NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        [formatter setTimeZone:timeZone];
+    });
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"]; //输入格式
+    NSDate *date = [formatter dateFromString:self];
+    //有2种Format，在测试接口中
+    if (date) {
+        return date;
+        
+    }else{
+        //输入格式
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+        NSDate *date1 = [formatter dateFromString:self];
+        if (date1) {
+            return date1;
+        }else{
+            
+            [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSSS"];
+            NSDate *date2 = [formatter dateFromString:self];
+            return date2;
+        }
+    }
+    return nil;
+}
+
+- (NSString *)sc_timeAgoWithUTCString{
+    static NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        [formatter setTimeZone:timeZone];
+    });
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"]; //输入格式
+    NSDate *date = [formatter dateFromString:self];
+    //有2种Format，在测试接口中
+    if (date) {
+        //NSLog(@"date:%@",date);
+        return [date timeAgo];
+       
+    }else{
+        //输入格式
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+        NSDate *date1 = [formatter dateFromString:self];
+        if (date1) {
+           return [date1 timeAgo];
+        }else{
+            
+            [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSSS"];
+            NSDate *date2 = [formatter dateFromString:self];
+            return [date2 timeAgo];
+        }
+    }
+    return self;
+}
 @end

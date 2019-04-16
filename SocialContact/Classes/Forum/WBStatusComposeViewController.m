@@ -41,11 +41,15 @@
 @property (strong, nonatomic) NSMutableArray *selectedAssets;// asset
 @property (strong, nonatomic) NSMutableArray *pics;// url 类型
 
+@property (strong, nonatomic) NSMutableArray *picsWidth;// url 类型
+@property (strong, nonatomic) NSMutableArray *picsHeight;// url 类型
+
 // 话题
 @property (nonatomic,strong)TopicModel *selectedTopicModel;
 
 // 匿名
 @property (assign, nonatomic) BOOL anonym;
+@property (nonatomic,strong) UILabel *isAnoymLabel;
 
 @end
 
@@ -82,11 +86,11 @@
 }
 
 - (void)_initNavBar {
-	self.title = @"发帖";
+	self.title = @"分享动态";
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(_cancel)];
-    [button setTitleTextAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
+    [button setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Heiti SC" size:16],
                                      NSForegroundColorAttributeName : UIColorHex(0D0E15)} forState:UIControlStateNormal];
-	[button setTitleTextAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
+	[button setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Heiti SC" size:16],
 									 NSForegroundColorAttributeName : UIColorHex(0D0E15)} forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = button;
 	
@@ -104,8 +108,8 @@
 		_publishButton.frame = CGRectMake(0, 0, 54, 24);
 		_publishButton.layer.cornerRadius = 4.0;
 		_publishButton.layer.masksToBounds = YES;
-		_publishButton.titleLabel.font = [UIFont systemFontOfSize:14];
-		[_publishButton setTitle:@"发表" forState:UIControlStateNormal];
+		_publishButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:14];
+		[_publishButton setTitle:@"分享" forState:UIControlStateNormal];
 		[_publishButton setTitleColor:UIColorHex(FFFFFF) forState:UIControlStateNormal];
 		[_publishButton setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateDisabled];
 		[_publishButton setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
@@ -124,8 +128,8 @@
     _textView.showsVerticalScrollIndicator = NO;
     _textView.alwaysBounceVertical = YES;
     _textView.allowsCopyAttributedString = NO;
-    _textView.font = [UIFont systemFontOfSize:16];
-    _textView.textColor = YD_ColorBlack_1F2124;
+    _textView.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    _textView.textColor = Font_color333;
     _textView.delegate = self;
     _textView.inputAccessoryView = [UIView new];
 	
@@ -141,7 +145,7 @@
     if (placeholderPlainText) {
         NSMutableAttributedString *atr = [[NSMutableAttributedString alloc] initWithString:placeholderPlainText];
         atr.color = UIColorHex(c4c4c4);
-        atr.font = [UIFont systemFontOfSize:16];
+        atr.font = [UIFont fontWithName:@"Heiti SC" size:16];
         _textView.placeholderAttributedText = atr;
     }
     _textView.tintColor = ORANGE;
@@ -162,12 +166,16 @@
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_toolbar];
 	
+    _toolbarTopicButton = [self _toolbarButtonWithImage:@"ic_topic" highlight:nil];
+    _toolbarTopicButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
     if (_topicModel) {
         [self topicSelected:_topicModel];
-    }else {
-        _toolbarTopicButton = [self _toolbarButtonWithImage:@"ic_topic" highlight:nil];
+    }else{
+        _toolbarTopicButton.titleLabel.text = @" 选择话题 ";
     }
 	_anonymButton = [self _toolbarButtonWithImage:@"anonymous_1" highlight:nil];
+    _anonymButton.width = 24;
+    _anonymButton.height = 28;
 	
 	
     CGFloat padding = 16;
@@ -177,10 +185,11 @@
     [_anonymButton setImageEdgeInsets:UIEdgeInsetsMake(7, 5, 7, 5)];
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 80, kToolbarHeight)];
-    label.text = @"是否匿名";
+    label.text = @"公开";
     label.textColor = BLUE;
-    label.font = [UIFont systemFontOfSize:15];
+    label.font = [UIFont fontWithName:@"Heiti SC" size:16];
     label.centerX = _anonymButton.left - 25;
+    _isAnoymLabel = label;
     [_toolbar addSubview:label];
     
     
@@ -235,6 +244,20 @@
 		_pics = [NSMutableArray array];
 	}
 	return _pics;
+}
+
+- (NSMutableArray *)picsWidth{
+    if (!_picsWidth) {
+        _picsWidth = [NSMutableArray array];
+    }
+    return _picsWidth;
+}
+
+- (NSMutableArray *)picsHeight{
+    if (!_picsHeight) {
+        _picsHeight = [NSMutableArray array];
+    }
+    return _picsHeight;
 }
 
 - (ZDropScrollView *)dropScrollView{
@@ -307,7 +330,7 @@
 - (BOOL)checkInputIsValid{
 	NSString *text = _textView.text;
 	if (![NSString ins_String:text]) {
-		[self.view makeToast:@"不支持空内容的发表哟"];
+		[self.view makeToast:@"不支持空内容的分享哟"];
 		return NO;
 	}
 	text = [text stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -317,6 +340,21 @@
 	}
 	
 	return YES;
+}
+
+
+- (NSString*)dictionaryToJson:(NSDictionary *)dic
+{
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
+- (NSString*)arrayToJson:(NSMutableArray *)arr
+{
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:&parseError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
 - (void)uploadFriendCircle{
@@ -342,7 +380,21 @@
     }
     
     if (self.pics.count > 0) {
-        [mutableDic setObject:self.pics forKey:@"images"];
+
+        NSMutableArray *arr = [NSMutableArray array];
+        for (NSInteger i=0; i<self.pics.count; i++) {
+            NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+            [dic setObject:self.pics[i] forKey:@"url"];
+            [dic setObject:self.picsWidth[i] forKey:@"w"];
+            [dic setObject:self.picsHeight[i] forKey:@"h"];
+            [dic setObject:@"1080" forKey:@"w"];
+            [dic setObject:@"1920" forKey:@"h"];
+            [arr addObject:dic];
+        }
+        
+        
+        [mutableDic setObject:[self arrayToJson:arr] forKey:@"images"];
+//        [mutableDic setObject:self.pics forKey:@"images"];
     }
     
     if ([SCUserCenter sharedCenter].currentUser.userInfo.latitude != 0) {
@@ -359,12 +411,8 @@
     [mutableDic setObject:@(1) forKey:@"function_type"];
     
     if (_topicModel) {
-//        [mutableDic setObject:@[[NSNumber numberWithInteger:_topicModel.iD]] forKey:@"topic"];
-        [mutableDic setObject:_topicModel.name forKey:@"topic"];
+        [mutableDic setObject:_topicModel.name forKey:@"topics"];
     }
-    
-//    NSDictionary *params = @{@"account":self.phoneTF.text?:@"",@"password":_vcPWTF.text?:@"",@"code":self.vcTF.text?:@""
-//                             };
     
     WEAKSELF;
     POSTRequest *request = [POSTRequest requestWithPath:@"/moments/" parameters:mutableDic?:nil completionHandler:^(InsRequest *request) {
@@ -373,12 +421,15 @@
         
         if (!request.error) {
             
-            [SVProgressHUD showImage:AlertSuccessImage status:@"发表成功"];
+            [SVProgressHUD showImage:AlertSuccessImage status:@"分享成功"];
             [SVProgressHUD dismissWithDelay:2];
             [weakSelf.navigationController popViewControllerAnimated:YES];
+            
+            [[NSNotificationCenter defaultCenter]postNotificationName:kPublishSuccess object:request.responseObject];
+            
         }else {
             
-            [SVProgressHUD showImage:AlertErrorImage status:request.responseObject[kRequestMessageKey]];
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
             [SVProgressHUD dismissWithDelay:2];
             
         }
@@ -389,6 +440,7 @@
 - (void)uploadImages{
 	
     [self.pics removeAllObjects];
+
     
 	if (_selectedAssets.count == 0) {
         
@@ -401,6 +453,7 @@
             
             // 占位字符
             [self.pics addObject:@""];
+         
             
             // key
 			NSString *objectKey;
@@ -410,7 +463,7 @@
                 objectKey = [NSString stringWithFormat:@"%f%d.gif",[[NSDate date] timeIntervalSince1970]*1000,arc4random()%INT_MAX];
 			}
 			if (mediaType == TZAssetModelMediaTypePhoto) {
-                objectKey = [NSString stringWithFormat:@"%f%d.png",[[NSDate date] timeIntervalSince1970]*1000,arc4random()%INT_MAX];
+                objectKey = [NSString stringWithFormat:@"%ld/forum/%f/%d.png",[SCUserCenter sharedCenter].currentUser.userInfo.iD,[[NSDate date] timeIntervalSince1970],arc4random()%INT_MAX];
 			}
             [imageNameArray addObject:objectKey];
             
@@ -432,6 +485,7 @@
                 data = [gifEncoder encode];
             }else{
                 data = [Help compressImage:image];
+            
             }
             
             [dataArray addObject:data];
@@ -444,7 +498,7 @@
         WEAKSELF
         [[SCUploadManager manager] uploadDataToQiNiuWithUrl:@"/token/" fail:^(NSError * _Nonnull error) {
             
-          
+           [weakSelf.view hideToastActivity];
             
         } succeed:^(NSString * _Nonnull token) {
             
@@ -487,8 +541,11 @@
 		
 		if (_anonym) {
 			[_anonymButton setImage:[UIImage imageNamed:@"anonymous"] forState:UIControlStateNormal];
+            _isAnoymLabel.text = @"匿名";
 		}else{
 			[_anonymButton setImage:[UIImage imageNamed:@"anonymous_1"] forState:UIControlStateNormal];
+            _isAnoymLabel.text = @"公开";
+            
 		}
 		
 	}
@@ -533,13 +590,13 @@
 	TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:4 delegate:self pushPhotoPickerVc:YES];
 	imagePickerVc.statusBarStyle = UIStatusBarStyleDefault;
 	imagePickerVc.naviBgColor = [UIColor whiteColor];
-	imagePickerVc.naviTitleFont = [UIFont systemFontOfSize:16];
-	imagePickerVc.naviTitleColor = UIColorHex(0D0E15);
-	imagePickerVc.oKButtonTitleColorNormal = UIColorHex(62D694);
-	imagePickerVc.oKButtonTitleColorDisabled = kGuaCellHightColor;
-	imagePickerVc.barItemTextColor = UIColorHex(0D0E15);
-	imagePickerVc.barItemTextFont = [UIFont systemFontOfSize:16];
-	imagePickerVc.iconThemeColor = UIColorHex(62D694);
+    imagePickerVc.naviTitleFont = [UIFont fontWithName:@"Heiti SC" size:16];
+    imagePickerVc.naviTitleColor = Font_color333;
+    imagePickerVc.oKButtonTitleColorNormal = ORANGE;
+    imagePickerVc.oKButtonTitleColorDisabled = kGuaCellHightColor;
+    imagePickerVc.barItemTextColor = Font_color333;
+    imagePickerVc.barItemTextFont = [UIFont fontWithName:@"Heiti SC" size:15];
+    imagePickerVc.iconThemeColor = ORANGE;
 	imagePickerVc.showSelectedIndex = YES;
 	imagePickerVc.showPhotoCannotSelectLayer = YES;
 	
@@ -579,6 +636,15 @@
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto {
 	self.imageDatas = [NSMutableArray arrayWithArray:photos];
+    
+    [self.picsWidth removeAllObjects];
+    [self.picsHeight removeAllObjects];
+    
+    for (UIImage *image in self.imageDatas) {
+        [self.picsWidth addObject:[NSString stringWithFormat:@"%.0f",image.size.width]];
+        [self.picsHeight addObject:[NSString stringWithFormat:@"%.0f",image.size.height]];
+    }
+    
 	self.selectedAssets = [NSMutableArray arrayWithArray:assets];
 	
 	_dropScrollView.o_imageDatas = self.imageDatas;

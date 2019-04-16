@@ -33,7 +33,7 @@
     
     if (info[@"kLikeUserId"]) {
         NSInteger userId = [info[@"kLikeUserId"] integerValue];
-        [self goUserHomePageVC:userId];
+        [self goUserHomePageVC:userId name:nil];
         return;
     }
 }
@@ -110,7 +110,7 @@
 - (void)cellDidClickCommenterPortait:(NewDynamicsTableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
  
     CommentLayout *layout = cell.layout.commentLayoutArr[indexPath.row];
-    [self goUserHomePageVC:layout.model.from_customer.userId];
+    [self goUserHomePageVC:layout.model.from_customer.user_id name:layout.model.from_customer.name];
 }
 
 /**
@@ -119,7 +119,7 @@
 - (void)cellDidLongPressCommenterPortait:(NewDynamicsTableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
     
     CommentLayout *layout = cell.layout.commentLayoutArr[indexPath.row];
-    [self goUserHomePageVC:layout.model.from_customer.userId];
+    [self goUserHomePageVC:layout.model.from_customer.user_id name:layout.model.from_customer.name];
 }
 
 
@@ -128,12 +128,13 @@
  */
 - (void)cell:(NewDynamicsTableViewCell *)cell didClickUser:(SCUserInfo *)user{
     
-    [self goUserHomePageVC:user.iD];
+    [self goUserHomePageVC:user.iD name:user.name];
 }
 
-- (void)goUserHomePageVC:(NSInteger)userId{
+- (void)goUserHomePageVC:(NSInteger)userId name:(NSString *)name{
     UserHomepageVC *vc = [UserHomepageVC new];
     vc.userId = userId;
+    vc.name = name;
     if (self.fatherVC) {
         if (self.navigationController) {
             [self.navigationController pushViewController:vc animated:YES];
@@ -216,7 +217,8 @@
             POSTRequest *request = [POSTRequest requestWithPath:url parameters:para completionHandler:^(InsRequest *request) {
                
                 if (request.error) {
-                    [weakSelf.view makeToast:request.error.localizedDescription];
+                    [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+                    [SVProgressHUD dismissWithDelay:1.5];
                 }else{
                     [weakSelf fetchData:YES];
                     [weakSelf.view makeToast:request.responseObject[@"msg"]];
@@ -249,9 +251,10 @@
         POSTRequest *request = [POSTRequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
             
             if (request.error) {
-                [weakSelf.view makeToast:request.error.localizedDescription];
+                [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+                [SVProgressHUD dismissWithDelay:1.5];
             }else{
-                [weakSelf fetchLikeUserData];
+                [weakSelf fetchData:YES];
                 [weakSelf.view makeToast:request.responseObject[@"msg"]];
                 [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan_selected"] forState:UIControlStateNormal];
             }
@@ -263,9 +266,10 @@
         DELETERequest *request = [DELETERequest requestWithPath:[NSString stringWithFormat:@"/moments/%ld/likes/",momentModel.iD] parameters:para completionHandler:^(InsRequest *request) {
             
             if (request.error) {
-                [weakSelf.view makeToast:request.error.localizedDescription];
+                [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+                [SVProgressHUD dismissWithDelay:1.5];
             }else{
-                [weakSelf fetchLikeUserData];
+                [weakSelf fetchData:YES];
                 [weakSelf.view makeToast:request.responseObject[@"msg"]];
                 [cell.zanBtn setImage:[UIImage imageNamed:@"find_dianzhan"] forState:UIControlStateNormal];
             }

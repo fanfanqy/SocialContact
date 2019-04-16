@@ -10,18 +10,22 @@
 #import "SCUserInfo.h"
 
 typedef NS_ENUM(NSInteger,ModifyType){
-    ModifyTypeNickName,
-    ModifyTypeSelfIntroduce,
+    ModifyTypeNickName, // 昵称
+    ModifyTypeSelfIntroduce, // 个人介绍
+    ModifyTypeWeChat, // 个人微信修改
 };
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ 个人信息修改
+ */
 @interface ModifyUserInfoVC : InsViewController
 
 
 @property (assign, nonatomic) ModifyType modifyType;
 
-@property (strong, nonatomic) SCUserInfo *userInfo;
+@property (strong, nonatomic) SCUserInfo *model;
 
 @end
 

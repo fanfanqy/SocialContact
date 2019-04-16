@@ -21,8 +21,8 @@ INS_P_STRONG(NSString *, text); // "text": "this is a title 2222333ww",
 INS_P_STRONG(NSArray<MomentImageModel *> *,images);// list相册 或 用户主页相册
 INS_P_STRONG(NSString *,latitude);
 INS_P_STRONG(NSString *, longitude);
-INS_P_STRONG(NSString *,create_at);
-INS_P_STRONG(NSString *,update_at);
+INS_P_STRONG(NSString *,create_at);// 发表的时间
+INS_P_STRONG(NSString *,update_at);// 点赞，评论会导致此字段更新
 INS_P_STRONG(SCUserInfo *,customer);
 
 INS_P_ASSIGN(NSInteger,comment_total);

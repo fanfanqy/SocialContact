@@ -22,30 +22,35 @@
     self = [super init];
     if (self) {
         _kPickerViewH = 200;
-        _kTopViewH = 50;
-        _pickerTitleSize  =15;
-        _pickerTitleColor = [UIColor blackColor];
+        _kTopViewH = 55;
+        _pickerTitleSize  =16;
+        _pickerTitleColor = Black;
         _lineViewColor =CGXPickerRGBColor(225, 225, 225, 1);
         
-        _titleLabelColor = CGXPickerRGBColor(252, 96, 134, 1);
-        _titleSize = 16;
+        _titleLabelColor = Black;
+//        CGXPickerRGBColor(252, 96, 134, 1);
+        _titleSize = 18;
         _titleLabelBGColor = [UIColor whiteColor];
         
         _rightBtnTitle = @"确定";
-        _rightBtnBGColor =  CGXPickerRGBColor(252, 96, 134, 1);
+        _rightBtnBGColor = ORANGE;
+//        CGXPickerRGBColor(252, 96, 134, 1);
         _rightBtnTitleSize = 16;
         _rightBtnTitleColor = [UIColor whiteColor];
         
-        _rightBtnborderColor = CGXPickerRGBColor(252, 96, 134, 1);
+        _rightBtnborderColor = ORANGE;
+//        CGXPickerRGBColor(252, 96, 134, 1);
         _rightBtnCornerRadius = 6;
         _rightBtnBorderWidth = 1;
         
         _leftBtnTitle = @"取消";
-        _leftBtnBGColor =  CGXPickerRGBColor(252, 96, 134, 1);
+        _leftBtnBGColor = ORANGE;
+//        CGXPickerRGBColor(252, 96, 134, 1);
         _leftBtnTitleSize = 16;
         _leftBtnTitleColor = [UIColor whiteColor];
         
-        _leftBtnborderColor = CGXPickerRGBColor(252, 96, 134, 1);
+        _leftBtnborderColor = ORANGE;
+//        CGXPickerRGBColor(252, 96, 134, 1);
         _leftBtnCornerRadius = 6;
         _leftBtnBorderWidth = 1;
         

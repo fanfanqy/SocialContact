@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*
 # profession
 PROFESSION_CHOICE = (
-                     (0, '未知'),
+                     (0, '--'),
                      (1, '事业单位'),
                      (2, '政府机关'),
                      (3, '私营企业'),
@@ -23,7 +23,7 @@ PROFESSION_CHOICE = (
 
 # education
 EDUCATION_CHOICE = (
-                    (0, '未知'),
+                    (0, '--'),
                     (1, '初中'),
                     (2, '高中'),
                     (3, '中专'),
@@ -36,7 +36,7 @@ EDUCATION_CHOICE = (
 
 # income
 INCOME_CHOICE = (
-                 (0, '未知'),
+                 (0, '--'),
                  (1, '10万以下'),
                  (2, '10万~20万'),
                  (3, '20万~50万'),
@@ -45,7 +45,7 @@ INCOME_CHOICE = (
 
 # marital_status
 MARITAL_STATUS_CHOICE = (
-                         (0, '未知'),
+                         (0, '--'),
                          (1, '未婚'),
                          (2, '离异'),
                          (3, '丧偶'),
@@ -53,7 +53,7 @@ MARITAL_STATUS_CHOICE = (
 
 # child_status
 CHILD_STATUS_CHOICE = (
-                       (0, '未知'),
+                       (0, '--'),
                        (1, '无'),
                        (2, '有，和我在一起'),
                        (3, '有，不和我在一起'),
@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger,PROFESSION_CHOICE){
 
 typedef NS_ENUM(NSInteger,EDUCATION_CHOICE){
     /*
-    (0, '未知'),
+    (0, '--'),
     (1, '初中'),
     (2, '高中'),
     (3, '中专'),
@@ -95,7 +95,7 @@ typedef NS_ENUM(NSInteger,EDUCATION_CHOICE){
 
 typedef NS_ENUM(NSInteger,INCOME_CHOICE){
     /*
-     (0, '未知'),
+     (0, '--'),
      (1, '10万以下'),
      (2, '10万~20万'),
      (3, '20万~50万'),
@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger,CHILD_STATUS_CHOICE){
  birthday    str        生日
  height    float        身高
  profession    int        职业
- education    int        学历
+ education    int        学历d
  income    int        收入
  marital_status    int        婚姻状况
  child_status    int        有无小孩
@@ -169,9 +169,10 @@ typedef NS_ENUM(NSInteger,CHILD_STATUS_CHOICE){
  */
 
 INS_P_ASSIGN(NSInteger, iD);
-INS_P_ASSIGN(NSInteger, userId);
+INS_P_ASSIGN(NSInteger, user_id);
 INS_P_STRONG(NSString *, name);
 INS_P_ASSIGN(NSInteger, age);
+// 1男，2女
 INS_P_ASSIGN(NSInteger, gender);
 INS_P_STRONG(NSString *, avatar_url);
 INS_P_STRONG(NSString *, account);
@@ -197,17 +198,20 @@ INS_P_STRONG(NSString *,birthday); //   str        生日
 INS_P_ASSIGN(CGFloat ,height); //   float        身高
 INS_P_ASSIGN(NSInteger, profession );//   int        职业
 INS_P_ASSIGN(NSInteger,education ); //  int        学历
-INS_P_ASSIGN(NSInteger,income );  // int        收入
+INS_P_ASSIGN(NSInteger,income);  // int        收入
 INS_P_ASSIGN(NSInteger,marital_status);  //  int        婚姻状况
 INS_P_ASSIGN(NSInteger,child_status); //   int        有无小孩
 INS_P_ASSIGN(NSInteger,years_to_marry);  //  int        几年内结婚
 INS_P_ASSIGN(NSInteger,score);   // int        自评分数 0~10
 INS_P_STRONG(NSDictionary *,condition);   // dict        择偶标准
-INS_P_ASSIGN(NSArray *,images);   //  list        相册
+INS_P_STRONG(NSArray *,images);   //  list        相册
 INS_P_STRONG(NSString *,service_vip_expired_at);
 INS_P_STRONG(NSString *,service_show_index_expired_at);
 INS_P_STRONG(NSString *,invitecode);
-
+INS_P_ASSIGN(NSInteger,online_card_count); // 线上红娘服务卡数量
+INS_P_ASSIGN(NSInteger,offline_card_count);// 线下红娘服务卡数量
+// 距离
+INS_P_STRONG(NSString *,distance);
 
 // 自定
 INS_P_ASSIGN(CGFloat, latitude); // 纬度
@@ -217,6 +221,12 @@ INS_P_ASSIGN(CGFloat, longitude); // 精度
 //INS_P_STRONG(CLPlacemark *, placemark);
 
 INS_P_STRONG(NSString *, myLocation);
+
+// 是否是打招呼
+INS_P_ASSIGN(BOOL,isSelectedSayHi);
+
+// 是否上线开关标识
+INS_P_ASSIGN(BOOL,isOnlineSwitch);
 
 @end
 

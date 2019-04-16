@@ -22,42 +22,58 @@
     self.bgView.layer.shadowOffset = CGSizeMake(0, 6);
     self.bgView.layer.shadowRadius = 6.0;
     // Corner Radius
-    self.bgView.layer.cornerRadius = 6.0;
+    self.bgView.layer.cornerRadius = 8.0;
     self.bgView.exclusiveTouch = YES;
     
-    self.img.layer.cornerRadius = 6.0;
+    self.img.layer.cornerRadius = 8.0;
     self.img.layer.masksToBounds = YES;
     
-    self.address.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
-    self.address.layer.borderWidth = 1.f;
+    self.address.layer.borderColor = Font_color333.CGColor;
+    self.address.layer.borderWidth = .5;
     self.address.layer.cornerRadius = 10.f;
+    
+    self.heartBeatBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    self.chatBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    
+    self.address.font = [UIFont fontWithName:@"Heiti SC" size:13];
+    self.loveDeclaration.font = [UIFont fontWithName:@"Heiti SC" size:13];
+    self.otherInfo.font = [UIFont fontWithName:@"Heiti SC" size:13];
+    
+    self.nick.font = [[UIFont fontWithName:@"Heiti SC" size:17] fontWithBold];
 }
 
 - (void)setModel:(SCUserInfo *)model{
     
     _model = model;
 
-    NSString *avatarUrl = @"";
-    if ([NSString ins_String:model.avatar_url]) {
-        avatarUrl = model.avatar_url;
-        if (![avatarUrl containsString:@"http"]) {
-            avatarUrl = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,avatarUrl];
-        }
-    }
-    [self.img sd_setImageWithURL:[NSURL URLWithString:avatarUrl]];
+    
+    [self.img sc_setImgWithUrl: model.avatar_url placeholderImg:@""];
+    
     
     if ([NSString ins_String:model.name]) {
         self.nick.text = model.name;
     }else{
-        self.nick.text = [NSString stringWithFormat:@"%@",@"未知"];
+        self.nick.text = [NSString stringWithFormat:@"%@",@"--"];
     }
     
-//    self.loveDeclaration.text = model.intro;
+    self.loveDeclaration.text = model.intro;
     self.ageGender.text = [NSString stringWithFormat:@"%@ %ld",model.gender == 1 ?@"男":@"女",model.age];
     if ([NSString ins_String:model.address_home]) {
         self.address.text = [NSString stringWithFormat:@"  %@  ",model.address_home];
     }else{
-        self.address.text = [NSString stringWithFormat:@"  %@  ",@"未知"];
+        self.address.text = [NSString stringWithFormat:@"  %@  ",@"--"];
+    }
+    
+    if (model.service_vip_expired_at) {
+        NSDate *date = [model.service_vip_expired_at sc_dateWithUTCString];
+        NSTimeInterval interval = [date timeIntervalSinceNow];
+        if (interval <= 0) {
+            self.vipImg.hidden = YES;
+        }else{
+            self.vipImg.hidden = NO;
+        }
+    }else{
+        self.vipImg.hidden = YES;
     }
     
     self.otherInfo.text = [Help height:model.height];

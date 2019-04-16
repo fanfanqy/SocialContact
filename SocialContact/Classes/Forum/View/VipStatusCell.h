@@ -23,11 +23,15 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface VipStatusCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *vipDayCount;
 @property (weak, nonatomic) IBOutlet UIButton *vip;
 @property (weak, nonatomic) IBOutlet UIButton *exchangeWechat;
 @property (weak, nonatomic) IBOutlet UIButton *yueTa;
 
 
+@property (weak, nonatomic) IBOutlet UILabel *vipTitle;
+@property (weak, nonatomic) IBOutlet UILabel *exchangeWechatTitle;
+@property (weak, nonatomic) IBOutlet UILabel *yueTitle;
 
 @property (nonatomic,weak) id<VipStatusCellDelegate> delegate;
 

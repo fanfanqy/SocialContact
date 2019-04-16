@@ -33,7 +33,7 @@ INS_P_STRONG(NSString *, XCSRFToken);
 
  @param complationBlock <#complationBlock description#>
  */
-+ (void) getOtherUserInformationWithUserId:(NSInteger)userId completion: (void(^)(id responseObj,BOOL succeed, NSError *error)) complationBlock;
++ (void)getSelfInformationAndUpdateDBWithUserId:(NSInteger)userId completion: (void(^)(id responseObj,BOOL succeed, NSError *error)) complationBlock;
 
 //获取某用户基本信息
 //

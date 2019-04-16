@@ -13,21 +13,68 @@
 
 #import "ModifyUserInfoVC.h"
 
-@interface GeRenZiLiaoVC ()<UITableViewDelegate,UITableViewDataSource>
+#import "SCUploadManager.h"
+
+#import "HorizontalScrollCell.h"
+
+@interface GeRenZiLiaoVC ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,TOCropViewControllerDelegate,UINavigationControllerDelegate,HorizontalScrollCellDeleagte>
 
 INS_P_STRONG(InsLoadDataTablView *, tableView);
 
+INS_P_STRONG(NSString *, avatarUrl);
+
+INS_P_ASSIGN(BOOL,isModifyAvatar);
+
+
 @end
 
+
+
 @implementation GeRenZiLiaoVC
+
+- (void)viewWillAppear:(BOOL)animated{
+ 
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    if (!self.title) {
+        self.title = @"个人资料";
+    }
+    
+    self.fd_interactivePopDisabled = YES;
     
     [self setUpUI];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(done)];
+}
+
+- (void)done{
     
+    if (![NSString ins_String:self.userModel.name]) {
+        [self.view makeToast:@"请输入昵称"];
+        return;
+    }
+    
+    [self modifyUserinfo];
+    
+}
+
+- (void)leftBarButtonItemClick{
+    
+    
+    
+    if (self.vcType == 1) {
+        [self.view makeToast:@"请先完善个人信息，点击右上角完成退出" duration:2 position:CSToastPositionCenter];
+    }else{
+        
+        [self modifyUserinfo];
+        
+    }
 }
 
 
@@ -38,12 +85,10 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     [self.view addSubview:self.tableView];
     
     WEAKSELF;
-    [self.tableView setLoadNewData:^{
-        
-        [weakSelf getUserInfo];
-    }];
-    
-    [self showLoading];
+//    [self.tableView setLoadNewData:^{
+//        
+//        [weakSelf getUserInfo];
+//    }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self getUserInfo];
@@ -51,12 +96,68 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     
 }
 
-- (void)saveUserInfo{
+- (void)modifyUserinfo{
     
+    NSData *jsonData =  [self.userModel modelToJSONData];
+    
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+
+    
+    NSData *jsonDataImages = [NSJSONSerialization dataWithJSONObject:self.userModel.images options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *imagesJsonStr = [[NSString alloc] initWithData:jsonDataImages encoding:NSUTF8StringEncoding];
+    [dic setValue:imagesJsonStr forKey:@"images"];
+    
+    
+    [self showLoading];
+    WEAKSELF;
+    POSTRequest *request = [POSTRequest requestWithPath:@"/customer/profile/" parameters:dic completionHandler:^(InsRequest *request) {
+        
+        [weakSelf hideLoading];
+        
+        
+        if (request.error) {
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
+        }else{
+            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
+            
+            // 1.
+            [SCUserCenter sharedCenter].currentUser.userInfo = weakSelf.userModel;
+            [[SCUserCenter sharedCenter].currentUser updateToDB];
+            
+            // 2.
+            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",[SCUserCenter sharedCenter].currentUser.user_id] name:[SCUserCenter sharedCenter].currentUser.name portrait:weakSelf.userModel.avatar_url] ;
+            [rcUserInfo updateToDB];
+            [RCIM sharedRCIM].currentUserInfo = rcUserInfo;
+            [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];
+            
+            
+            
+            [weakSelf.tableView reloadData];
+            
+            [weakSelf.view makeToast:@"个人信息设置完成"];
+            
+            if (weakSelf.vcType == 1) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[AppDelegate sharedDelegate] configRootVC];
+                });
+            }
+        }
+        
+        if (weakSelf.vcType == 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            });
+        }
+        
+        
+    }];
+    [InsNetwork addRequest:request];
 }
 
 - (void)getUserInfo{
     
+    [self showLoading];
     WEAKSELF;
     GETRequest *request = [GETRequest requestWithPath:@"/customer/profile/" parameters:nil completionHandler:^(InsRequest *request) {
         
@@ -67,11 +168,144 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
             weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
             [weakSelf.tableView reloadData];
         }else{
-            
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
         }
     }];
     
     [InsNetwork addRequest:request];
+    
+}
+
+#pragma mark 头像上传
+- (void)modifyAvatar{
+    
+    [self pushImagePickerController];
+    
+}
+
+- (void)pushImagePickerController {
+    
+    if (@available(iOS 11, *)) {
+        UIScrollView.appearance.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+    }
+    UIImagePickerController *standardPicker = [[UIImagePickerController alloc] init];
+    standardPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    standardPicker.allowsEditing = NO;
+    standardPicker.delegate = self;
+    [self presentViewController:standardPicker animated:YES completion:nil];
+    
+}
+
+
+#pragma mark - Image Picker Delegate -
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:TOCropViewCroppingStyleDefault image:image];
+    cropController.delegate = self;
+    if (_isModifyAvatar) {
+        cropController.title = @"头像裁剪";
+        cropController.aspectRatioPreset = TOCropViewControllerAspectRatioPresetSquare;
+        cropController.aspectRatioLockEnabled = YES;
+        cropController.resetAspectRatioEnabled = NO;
+    }else{
+        cropController.title = @"相册图片裁剪";
+        cropController.aspectRatioPreset = TOCropViewControllerAspectRatioPresetOriginal;
+    }
+    
+    cropController.toolbarPosition = TOCropViewControllerToolbarPositionTop;
+    cropController.doneButtonTitle = @"完成";
+    cropController.cancelButtonTitle = @"取消";
+    [picker pushViewController:cropController animated:YES];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)cropViewController:(TOCropViewController *)cropViewController didCropToImage:(UIImage *)image withRect:(CGRect)cropRect angle:(NSInteger)angle
+{
+    [cropViewController dismissViewControllerAnimated:YES completion:nil];
+    [self uploadImage:image];
+    
+}
+
+#pragma mark HorizontalScrollCellDeleagte
+- (void)horizontalCellContentsView:(UICollectionView *)horizontalCellContentsView didSelectItemAtContentIndexPath:(NSIndexPath *)contentIndexPath inTableViewIndexPath:(NSIndexPath *)tableViewIndexPath{
+    
+    if (contentIndexPath.item == self.userModel.images.count) {
+        // 添加图片
+        _isModifyAvatar = NO;
+        [self modifyAvatar];
+    }
+    
+    
+}
+
+#pragma mark - Action handling
+
+- (void)uploadImage:(UIImage *)image{
+  
+    NSMutableArray *dataArray = [NSMutableArray array];
+    NSMutableArray *imageNameArray = [NSMutableArray array];
+    
+    NSString *objectKey = [NSString stringWithFormat:@"%ld/avatar/%f/%d.png",[SCUserCenter sharedCenter].currentUser.userInfo.iD,[[NSDate date] timeIntervalSince1970],arc4random()%INT_MAX];
+    [imageNameArray addObject:objectKey];
+    
+    NSData *data = [Help compressImage:image];
+    [dataArray addObject:data];
+    
+    
+    [self.view makeToastActivity:CSToastPositionCenter];
+    WEAKSELF;
+    [[SCUploadManager manager] uploadDataToQiNiuWithUrl:@"/token/" fail:^(NSError * _Nonnull error) {
+        
+        [weakSelf.view hideToastActivity];
+        
+    } succeed:^(NSString * _Nonnull token) {
+        
+        FGUploadImageManager *uploadImageManager = [FGUploadImageManager new];
+        [uploadImageManager upLoadImageWithImageArray:dataArray token:token onceCompletion:^(NSUInteger index, BOOL isSuccess, NSString *urlStr) {
+            
+            if (isSuccess) {
+                if (weakSelf.isModifyAvatar) {
+                    weakSelf.avatarUrl = urlStr;
+                    weakSelf.userModel.avatar_url = weakSelf.avatarUrl;
+                }else{
+                    NSMutableArray *array = [NSMutableArray arrayWithArray:weakSelf.userModel.images];
+                    [array addObject:urlStr];
+                    weakSelf.userModel.images = array;
+                }
+            }
+            
+        } objectNameArray:imageNameArray completion:^(BOOL isSuccess) {
+            
+            [weakSelf.view hideToastActivity];
+            if (isSuccess) {
+                
+                if (weakSelf.isModifyAvatar) {
+                    weakSelf.userModel.avatar_url = weakSelf.avatarUrl;
+                    [weakSelf.view makeToast:@"头像上传成功" duration:1 position:CSToastPositionCenter];
+                }else{
+                    [weakSelf.view makeToast:@"上传成功" duration:1 position:CSToastPositionCenter];
+                    [weakSelf.tableView reloadData];
+                }
+                
+                
+                [weakSelf.tableView reloadData];
+            }else{
+                if (weakSelf.isModifyAvatar) {
+                    [weakSelf.view makeToast:@"头像上传失败" duration:1 position:CSToastPositionCenter];
+                }else{
+                    [weakSelf.view makeToast:@"上传失败" duration:1 position:CSToastPositionCenter];
+                }
+            }
+        }];
+    }];
     
 }
 
@@ -81,7 +315,14 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
     switch (indexPath.section) {
         case 0:
         {
-            
+            if (indexPath.row == 0) {
+                _isModifyAvatar = YES;
+                [self modifyAvatar];
+            }else if (indexPath.row == 1) {
+                // 添加图片
+                _isModifyAvatar = NO;
+                [self modifyAvatar];
+            }
         }
             break;
         case 1:
@@ -89,18 +330,32 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
  
             if (indexPath.row == 0) {
                 
-//                title = @"昵称";
                 ModifyUserInfoVC *vc = [ModifyUserInfoVC new];
                 vc.modifyType = ModifyTypeNickName;
+                vc.model = self.userModel;
                 [self.navigationController pushViewController:vc animated:YES];
                 
             }else if (indexPath.row == 1) {
                 
-                title = @"性别";
+                ModifyUserInfoVC *vc = [ModifyUserInfoVC new];
+                vc.modifyType = ModifyTypeSelfIntroduce;
+                vc.model = self.userModel;
+                [self.navigationController pushViewController:vc animated:YES];
+                
             }else if (indexPath.row == 2) {
                 
-                title = @"出生日期";
+                ModifyUserInfoVC *vc = [ModifyUserInfoVC new];
+                vc.modifyType = ModifyTypeWeChat;
+                vc.model = self.userModel;
+                [self.navigationController pushViewController:vc animated:YES];
+                
             }else if (indexPath.row == 3) {
+                
+                title = @"性别";
+            }else if (indexPath.row == 4) {
+                
+                title = @"出生日期";
+            }else if (indexPath.row == 5) {
                 
                 title = @"身高";
             }
@@ -132,13 +387,6 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
             }else if (indexPath.row == 6) {
                 
                 title = @"打算几年内结婚";
-            }else if (indexPath.row == 7) {
-                
-//                title = @"用户签名";
-                ModifyUserInfoVC *vc = [ModifyUserInfoVC new];
-                vc.modifyType = ModifyTypeSelfIntroduce;
-                [self.navigationController pushViewController:vc animated:YES];
-                
             }
             
             
@@ -157,90 +405,113 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 
 - (void)pickerTitle:(NSString *)title{
-        
+    WEAKSELF;
         if ([title isEqualToString:@"出生日期"]) {
             NSDate *now = [NSDate date];
             NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-            fmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+            fmt.dateFormat = @"yyyy-MM-DDThh:mm:ss";
             NSString *nowStr = [fmt stringFromDate:now];
             
-            [CGXPickerView showDatePickerWithTitle:@"出生日期" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01 00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
+            [CGXPickerView showDatePickerWithTitle:@"出生日期" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01T00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
                 NSLog(@"%@",selectValue);
-                
+//                weakSelf.userModel.birthday = selectValue;
+                weakSelf.userModel.birthday = [NSString stringWithFormat:@"%@T20:00:00",selectValue];
+                [weakSelf.tableView reloadData];
             }];
             
         }else if ([title isEqualToString:@"性别"]){
-            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleGender] objectAtIndex:1];
-            [CGXPickerView showStringPickerWithTitle:@"性别" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-                NSLog(@"%@",selectValue); ;
+           
+            
+            [CGXPickerView showStringPickerWithTitle:@"性别" DataSource:@[@"男",@"女"] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
                 
-            } Style:CGXStringPickerViewStyleGender];
+                weakSelf.userModel.gender = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
+            }];
+            
+            
+            
+            
         }else if ([title isEqualToString:@"年龄"]){
             NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge] objectAtIndex:1];
             [CGXPickerView showStringPickerWithTitle:@"年龄" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-                NSLog(@"%@",selectValue); ;
+                NSLog(@"%@",selectValue);
                 
             } Style:CGXStringPickerViewStyleAge];
         }else if ([title isEqualToString:@"身高"]){
             
-            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylHeight] objectAtIndex:3];
-            [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-                NSLog(@"%@",selectValue); ;
+            [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.height = [selectRow integerValue]+150;
+                [weakSelf.tableView reloadData];
                 
             } Style:CGXStringPickerViewStylHeight];
-        }else if ([title isEqualToString:@"体重"]){
-            
-            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStylWeight] objectAtIndex:3];
-            [CGXPickerView showStringPickerWithTitle:@"体重" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-                NSLog(@"%@",selectValue); ;
-                
-            } Style:CGXStringPickerViewStylWeight];
-        }else if ([title isEqualToString:@"教育"]){
-            
-            NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleEducation] objectAtIndex:1];
-            [CGXPickerView showStringPickerWithTitle:@"教育" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
-                NSLog(@"%@--%@",selectValue,selectRow);
-                
-            } Style:CGXStringPickerViewStyleEducation];
         }else if ([title isEqualToString:@"工作地址"]){
-            [CGXPickerView showAddressPickerWithTitle:@"请选择你的城市" DefaultSelected:@[@4, @0,@0] IsAutoSelect:YES Manager:nil ResultBlock:^(NSArray *selectAddressArr, NSArray *selectAddressRow) {
-                NSLog(@"%@-%@",selectAddressArr,selectAddressRow);
+
+            [CGXPickerView showStringPickerWithTitle:@"工作地址" DataSource:@[@"邯郸市辖区",@"邯山区",@"丛台区",@"复兴区",@"高开区",@"峰峰矿区",@"肥乡区",@"永年区",@"临漳县",@"成安县",@"大名县",@"涉县",@"磁县",@"邱县",@"鸡泽县",@"广平县",@"馆陶县",@"魏县",@"曲周县",@"武安市"] DefaultSelValue:@"邯郸市辖区" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
                 
+                weakSelf.userModel.address_company = selectValue;
+                [weakSelf.tableView reloadData];
             }];
+            
+            
         }else if ([title isEqualToString:@"家庭地址"]){
-            [CGXPickerView showAddressPickerWithTitle:@"请选择你的城市" DefaultSelected:@[@0,@0] IsAutoSelect:YES Manager:nil ResultBlock:^(NSArray *selectAddressArr, NSArray *selectAddressRow) {
-                NSLog(@"%@-%@",selectAddressArr,selectAddressRow);
+            
+            
+            [CGXPickerView showStringPickerWithTitle:@"家庭地址" DataSource:@[@"邯郸市辖区",@"邯山区",@"丛台区",@"复兴区",@"高开区",@"峰峰矿区",@"肥乡区",@"永年区",@"临漳县",@"成安县",@"大名县",@"涉县",@"磁县",@"邱县",@"鸡泽县",@"广平县",@"馆陶县",@"魏县",@"曲周县",@"武安市"] DefaultSelValue:@"邯郸市辖区" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
                 
+                weakSelf.userModel.address_home = selectValue;
+                [weakSelf.tableView reloadData];
             }];
+            
+            
         }
         else if ([title isEqualToString:@"工作职业"]){
-            [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"未知", @"事业单位", @"政府机关", @"私营企业", @"自由职业", @"其他"] DefaultSelValue:@"未知" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"学生", @"一般私有企业", @"个体户私有业主", @"事业单位", @"公务员", @"医疗机构",@"暂时无业"] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.profession = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
                 
             }];
             
-        }else if ([title isEqualToString:@"年收入"]){
+        }else if ([title isEqualToString:@"收入描述"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"年收入" DataSource:@[ @"10万以下", @"10万~20万", @"20万~50万", @"50万以上"] DefaultSelValue:@"10万以下" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"月收入" DataSource:@[@"5000以下", @"5000-1万", @"1万-2万", @"2万以上"] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.income = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
                 
             }];
         }else if ([title isEqualToString:@"婚姻状况"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"婚姻状况" DataSource:@[@"未婚", @"离异", @"丧偶"] DefaultSelValue:@"未婚" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"婚姻状况" DataSource:@[@"未婚", @"离异", @"丧偶"] DefaultSelValue:@"未婚" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.marital_status = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
                 
             }];
         }else if ([title isEqualToString:@"有无子女"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"有无子女" DataSource:@[@"无", @"有，和我在一起", @"有，不和我在一起"] DefaultSelValue:@"无" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"有无子女" DataSource:@[@"无", @"有，和我在一起", @"有，不和我在一起"] DefaultSelValue:@"无" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.child_status = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
                 
             }];
         }else if ([title isEqualToString:@"打算几年内结婚"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"打算几年内结婚" DataSource:@[@"1年内", @"1-2年内", @"2-3年内", @"3年以上"] DefaultSelValue:@"1年内" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"打算几年内结婚" DataSource:@[@"1年内", @"1-2年内", @"2-3年内", @"3年以上"] DefaultSelValue:@"1年内" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.years_to_marry = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
                 
             }];
         }
@@ -249,11 +520,21 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0 && indexPath.row == 0) {
+    if (indexPath.section == 0 ) {
+        if (indexPath.row == 0) {
+            UserAvatarCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserAvatarCell"];
+            [cell.avatarImg sc_setImgWithUrl:self.userModel.avatar_url placeholderImg:@""];
+            return cell;
+        }else{
+            
+            HorizontalScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HorizontalScrollCell"];
+            cell.delegate = self;
+            NSMutableArray *array = [NSMutableArray arrayWithArray:self.userModel.images];
+            [array addObject:@"bg_add_imgshow"];
+            cell.dataSource = array;
+            return cell;
+        }
         
-        UserAvatarCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserAvatarCell"];
-        [cell.avatarImg sd_setImageWithURL:[NSURL URLWithString:self.userModel.avatar_url] placeholderImage:[UIImage imageNamed:@""]];
-        return cell;
         
     }else{
         
@@ -271,13 +552,29 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
                 subTitle = self.userModel.name;
             }else if (indexPath.row == 1) {
                 leftImage = @"";
-                title = @"性别";
-                subTitle = [Help gender:self.userModel.gender];
+                title = @"用户签名";
+                subTitle = self.userModel.intro?:@"";
             }else if (indexPath.row == 2) {
                 leftImage = @"";
-                title = @"出生日期";
-                subTitle = self.userModel.birthday;
+                title = @"微信";
+                subTitle = self.userModel.wechat_id?:@"";
             }else if (indexPath.row == 3) {
+                leftImage = @"";
+                title = @"性别";
+                subTitle = [Help gender:self.userModel.gender];
+            }else if (indexPath.row == 4) {
+                leftImage = @"";
+                title = @"出生日期";
+                
+                NSDate *date = [NSDate dateWithString:self.userModel.birthday format:@"yyyy-MM-dd'T'HH:mm:ss"];
+                if (date) {
+                    subTitle = [date stringWithFormat:@"yyyy-MM-dd"];
+                }else{
+                    subTitle = self.userModel.birthday;
+                }
+                
+                
+            }else if (indexPath.row == 5) {
                 leftImage = @"";
                 title = @"身高";
                 subTitle = [Help height:self.userModel.height];
@@ -312,11 +609,8 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
                 leftImage = @"";
                 title = @"打算几年内结婚";
                 subTitle = [Help yearsToMarial:self.userModel.years_to_marry];
-            }else if (indexPath.row == 7) {
-                leftImage = @"";
-                title = @"用户签名";
-                subTitle = self.userModel.intro;
             }
+            
             
         }
         cell.leftImgV.image = [UIImage imageNamed:leftImage];
@@ -332,7 +626,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-//    [self clickIndexPath:indexPath];
+    [self clickIndexPath:indexPath];
     
 }
 
@@ -344,13 +638,13 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return 1;
+            return 2;
             break;
         case 1:
-            return 4;
+            return 6;
             break;
         case 2:
-            return 8;
+            return 7;
             break;
         default:
             break;
@@ -359,8 +653,13 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        return 68;
+    if (indexPath.section == 0 ) {
+        if (indexPath.row == 0) {
+            return 68;
+        }else{
+//            return ([UIScreen mainScreen].bounds.size.width-3.0)/4.0+40;
+           return (kScreenWidth-20-6.0)/4.0 + 40;
+        }
     }
     return 55;
 }
@@ -380,8 +679,12 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    
+
     return 0.000001;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return [UIView new];
 }
 
 - (InsLoadDataTablView *)tableView {
@@ -394,8 +697,9 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
         _tableView.separatorColor = Line;
         _tableView.rowHeight = 55;
         _tableView.tableFooterView = [UIView new];
-        [_tableView registerClass:[UserAvatarCell class] forCellReuseIdentifier:@"UserAvatarCell"];
+         [_tableView registerNib:[UINib nibWithNibName:@"UserAvatarCell" bundle:nil] forCellReuseIdentifier:@"UserAvatarCell"];
         [_tableView registerNib:[UINib nibWithNibName:@"MeListTableViewCell" bundle:nil] forCellReuseIdentifier:@"MeListTableViewCellReuseID"];
+        [_tableView registerClass:[HorizontalScrollCell class] forCellReuseIdentifier:@"HorizontalScrollCell"];
     }
     return _tableView;
 }

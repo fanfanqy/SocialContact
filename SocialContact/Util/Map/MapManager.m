@@ -39,14 +39,14 @@
         [_delegate mapManager:self didUpdateAndGetLastCLLocation:location];
 		
 		CLGeocoder *geocoder = [[CLGeocoder alloc]init];
-		@weakify(self);
+		WEAKSELF;
 		[geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
 			if (error) {
 				NSLog(@"位置反编码失败error%@",error);
 			}else{
 				CLPlacemark *placemark=[placemarks firstObject];
 				if ([_delegate respondsToSelector:@selector(mapManager:didReverseCLLocation:)]) {
-					[_delegate mapManager:self didReverseCLLocation:placemark];
+					[_delegate mapManager:weakSelf didReverseCLLocation:placemark];
 				}
 			}
 		}];

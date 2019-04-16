@@ -13,6 +13,10 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    self.nick.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
+    self.selfIntroduce.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    self.introduce.font = [UIFont fontWithName:@"Heiti SC" size:15];
 }
 
 - (void)setUserInfo:(SCUserInfo *)userInfo{
@@ -21,7 +25,7 @@
     
     self.nick.text = userInfo.name;
     
-    UIImage *genderImage;// 未知
+    UIImage *genderImage;// --
     if (userInfo.gender == 0) {
         genderImage = [UIImage imageNamed:@""];
     }else if (userInfo.gender == 1) {
@@ -31,16 +35,35 @@
     }
     self.gender.image = genderImage;
     
+    if (userInfo.service_vip_expired_at) {
+        NSDate *date = [self.userInfo.service_vip_expired_at sc_dateWithUTCString];
+//        [NSDate dateWithString:self.userInfo.service_vip_expired_at format:@"yyyy-MM-dd'T'HH:mm:ss"];
+        NSTimeInterval interval = [date timeIntervalSinceNow];
+        if (interval <= 0) {
+            self.huiYuan.hidden = YES;
+        }else{
+            self.huiYuan.hidden = NO;
+        }
+    }else{
+        self.huiYuan.hidden = YES;
+    }
+    
     if (userInfo) {
         [self creatUI:userInfo];
     }
     
     if ([NSString ins_String:userInfo.intro]) {
-        self.introduce.text = userInfo.intro;
+//        self.introduce.text = userInfo.intro;
+        self.selfIntroduce.text = userInfo.intro;
     }else{
-        self.introduce.text = @"暂无个人介绍";
+//        self.introduce.text = @"暂无个人介绍";
+        self.selfIntroduce.text = @"暂无个人介绍";
     }
-    
+    if ([NSString ins_String:userInfo.address_home]) {
+        self.introduce.text = userInfo.address_home;
+    }else{
+        self.introduce.text = @"未填写家乡地址";
+    }
 
 }
 
@@ -62,15 +85,14 @@
     NSString *years_to_marry = [Help yearsToMarial:_userInfo.years_to_marry];
     
     NSMutableArray *array = [NSMutableArray array];
-    [array addObject:height];
-    [array addObject:age];
-    [array addObject:address_home];
+    [array addObject:[NSString stringWithFormat:@"身高：%@",height]];
+    [array addObject:[NSString stringWithFormat:@"年龄：%@",age]];
+    [array addObject:[NSString stringWithFormat:@"家乡：%@",address_home]];
     [array addObject:[NSString stringWithFormat:@"职业：%@",profession]];
     [array addObject:[NSString stringWithFormat:@"收入：%@",income]];
-    [array addObject:[NSString stringWithFormat:@"婚姻状态：%@",marital_status]];
+    [array addObject:[NSString stringWithFormat:@"婚姻：%@",marital_status]];
     [array addObject:[NSString stringWithFormat:@"子女：%@",child_status]];
-    [array addObject:[NSString stringWithFormat:@"结婚：%@",years_to_marry]];
- 
+    [array addObject:[NSString stringWithFormat:@"几年结婚：%@",years_to_marry]];
     
     UIButton *listButton;
     
@@ -80,15 +102,16 @@
         
         NSString *title = array[i];
         
-        CGFloat titleW = [self labelAutoCalculateRectWith:title FontSize:14 MaxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].width + 20;
+        CGFloat titleW = [self labelAutoCalculateRectWith:title FontSize:14 MaxSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].width + 24;
         UIButton *button = [UIButton new];
         button.tag = i;
-        button.backgroundColor = YD_Color999;
+        
+        button.backgroundColor = [UIColor colorWithHexString:@"f2f2f2"];
         [button setTitle:title forState:UIControlStateNormal];
-        [button setTitleColor:Font_color333 forState:UIControlStateNormal];
+        [button setTitleColor:Black forState:UIControlStateNormal];
         [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
-        button.titleLabel.font = [UIFont systemFontOfSize:14];
-        button.layer.cornerRadius = 10;
+        button.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        button.layer.cornerRadius = 14;
         button.layer.masksToBounds = YES;
         [self.tagView addSubview:button];
         [button mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -109,7 +132,7 @@
                 make.left.mas_equalTo(10);
                 buttonRight = 30 + titleW;
             }
-            make.size.mas_equalTo(CGSizeMake(titleW, 20));
+            make.size.mas_equalTo(CGSizeMake(titleW, 28));
             
             
         }];
@@ -125,7 +148,7 @@
 - (CGSize)labelAutoCalculateRectWith:(NSString *)text FontSize:(CGFloat)fontSize MaxSize:(CGSize)maxSize {
     NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc]init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    NSDictionary * attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:fontSize], NSParagraphStyleAttributeName:paragraphStyle.copy};
+    NSDictionary * attributes = @{NSFontAttributeName:[UIFont fontWithName:@"Heiti SC" size:fontSize], NSParagraphStyleAttributeName:paragraphStyle.copy};
     CGSize labelSize = [text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine attributes:attributes context:nil].size;
     labelSize.height = ceil(labelSize.height);
     labelSize.width = ceil(labelSize.width);

@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHRefreshManager.h"
 
 @interface InsLoadDataTablView : UITableView
 

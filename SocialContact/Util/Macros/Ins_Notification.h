@@ -9,5 +9,15 @@
 #ifndef Ins_Notification_h
 #define Ins_Notification_h
 
+#define kPublishSuccess @"PublishSuccess"
+
+#define kEnterBackgroundDate @"EnterBackgroundDate"
+
+#define kChatCount @"ChatCount"
+
+#define kChatedUser  @"ChatedUser"
+
+// 一键打招呼 次数
+#define kSayHiCount @"SayHiCount"
 
 #endif /* Ins_Notification_h */

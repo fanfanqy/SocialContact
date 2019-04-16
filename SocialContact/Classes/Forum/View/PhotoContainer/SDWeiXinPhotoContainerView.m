@@ -29,7 +29,7 @@
 
 #import "SDWeiXinPhotoContainerView.h"
 #import "YYPhotoGroupView.h"
-#import "YYControl.h"
+//#import "YYControl.h"
 
 #define EvenNumberPadding 15
 #define UnevenNumberPadding 7
@@ -123,20 +123,45 @@
 
 - (void)tapImageView:(UITapGestureRecognizer *)tap
 {
+//    UIView *fromView = nil;
+//    NSMutableArray * items = [NSMutableArray array];
+//    for (int i = 0; i < _picsArray.count; i++) {
+//        UIView * imgView = _imageViewsArray[i];
+//        YYPhotoGroupItem * item = [YYPhotoGroupItem new];
+//        item.thumbView = imgView;
+//        item.largeImageURL = [NSURL URLWithString:_picsArray[i]];
+//        [items addObject:item];
+//        if (i == tap.view.tag) {
+//            fromView = imgView;
+//        }
+//    }
+//    YYPhotoGroupView *v = [[YYPhotoGroupView alloc] initWithGroupItems:items];
+//    [v presentFromImageView:fromView toContainer:self.window animated:YES completion:nil];
+//
     UIView *fromView = nil;
-    NSMutableArray * items = [NSMutableArray array];
+    NSMutableArray *items = @[].mutableCopy;
+    
     for (int i = 0; i < _picsArray.count; i++) {
-        UIView * imgView = _imageViewsArray[i];
-        YYPhotoGroupItem * item = [YYPhotoGroupItem new];
-        item.thumbView = imgView;
-        item.largeImageURL = [NSURL URLWithString:_picsArray[i]];
+        // Get the large image url
+        NSString *url = _picsArray[i];
+        if (![url containsString:@"http"]) {
+            url = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,url];
+        }
+        UIImageView * imgView = _imageViewsArray[i];
+        KSPhotoItem *item = [KSPhotoItem itemWithSourceView:imgView imageUrl:[NSURL URLWithString:url]];
         [items addObject:item];
+        
         if (i == tap.view.tag) {
             fromView = imgView;
         }
     }
-    YYPhotoGroupView *v = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-    [v presentFromImageView:fromView toContainer:self.window animated:YES completion:nil];
+    
+    if (items.count > 0) {
+        KSPhotoBrowser *browser = [KSPhotoBrowser browserWithPhotoItems:items selectedIndex:fromView.tag];
+        browser.backgroundStyle = KSPhotoBrowserBackgroundStyleBlurPhoto;
+        browser.loadingStyle = KSPhotoBrowserImageLoadingStyleDeterminate;
+        [browser showFromViewController:[AppDelegate sharedDelegate].window.rootViewController];
+    }
 }
 
 - (CGFloat)itemWidthForPicPathArray:(NSArray *)array

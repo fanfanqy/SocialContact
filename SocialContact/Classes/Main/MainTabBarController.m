@@ -25,9 +25,7 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
 
 //View Controllers
 #import "MatchFriendVC.h"
-//#import "ForumVC.h"
 #import "ForumMainVC.h"
-#import "IMVC.h"
 #import "DCIMChatListViewController.h"
 
 #import "MineVC.h"
@@ -98,14 +96,14 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
 //    CGFloat secondXOffset = (-25+2)/2;
     CGFloat secondXOffset = 0;
     NSDictionary *secondTabBarItemsAttributes = @{
-                                                  CYLTabBarItemTitle : @"鱼塘",
+                                                  CYLTabBarItemTitle : @"动态",
                                                   CYLTabBarItemImage : @"fishpond_normal",
                                                   CYLTabBarItemSelectedImage : @"fishpond_highlight",
                                                   CYLTabBarItemTitlePositionAdjustment: [NSValue valueWithUIOffset:UIOffsetMake(secondXOffset, -3.5)]
                                                   };
     
     NSDictionary *thirdTabBarItemsAttributes = @{
-                                                 CYLTabBarItemTitle : @"消息",
+                                                 CYLTabBarItemTitle : @"聊天",
                                                  CYLTabBarItemImage : @"message_normal",
                                                  CYLTabBarItemSelectedImage : @"message_highlight",
                                                  CYLTabBarItemTitlePositionAdjustment: [NSValue valueWithUIOffset:UIOffsetMake(-secondXOffset, -3.5)]
@@ -123,6 +121,8 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
                                        fourthTabBarItemsAttributes
                                        ];
     return tabBarItemsAttributes;
+    
+
 }
 
 - (void)viewDidLoad {
@@ -130,6 +130,7 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
     [[UIApplication sharedApplication] setApplicationSupportsShakeToEdit:YES];
     [self becomeFirstResponder];
 }
+
 
 /**
  *  更多TabBar自定义设置：比如：tabBarItem 的选中和不选中文字和背景图片属性、tabbar 背景图片属性等等

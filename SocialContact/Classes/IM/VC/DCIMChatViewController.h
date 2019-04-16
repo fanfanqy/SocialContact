@@ -12,6 +12,9 @@
 
 @property ( nonatomic ) BOOL needPopRoot;
     /** 是否置顶 */
-@property (strong, nonatomic) RCConversationModel *conversationModel;
-    
+//@property (strong, nonatomic) RCConversationModel *conversationModel;
+
+// 主动聊天的
+@property (assign, nonatomic) BOOL isActiveChat;
+
 @end

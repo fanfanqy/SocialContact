@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 INS_P_STRONG(SCUserInfo *, userModel);
 
+/*
+ 0:个人资料
+ 1：完善个人信息
+ */
+INS_P_ASSIGN(NSInteger, vcType);
+
 @end
 
 NS_ASSUME_NONNULL_END

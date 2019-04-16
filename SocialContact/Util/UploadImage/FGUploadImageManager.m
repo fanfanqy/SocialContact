@@ -44,10 +44,10 @@ const static NSInteger kMaxUploadCount = 3;
 - (void)upLoadImageWithImageArray:(NSArray *)imageArray token:(NSString *)token onceCompletion:(void(^)(NSUInteger index,BOOL isSuccess,NSString *urlStr))onceCompletion objectNameArray:(NSMutableArray *)objectNameArray completion:(Completion)completion
 {
     
-//    @weakify(self);
+//    WEAKSELF;
 //
 //
-//        @normalize(self);
+//        
     
     [self cleanData];
     //初始化数据

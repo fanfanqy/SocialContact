@@ -11,6 +11,13 @@
 
 @implementation Help
 
++ (BOOL)canPerformLoadRequest:(id)responseObject{
+    if ([NSString ins_String:responseObject[@"data"][@"next"]]) {
+        return YES;
+    }
+    return NO;
+}
+
 //在最大压缩条件下,文件小于 maxFileSize
 + (NSData *)compressImage:(UIImage *)image{
     NSInteger maxFileSize = 60;
@@ -26,7 +33,7 @@
     return imageData;
 }
 
-+ (void)vipIsExpired:(VipIsExpired)completion topIsExpired:(VipIsExpired)topExpiredCompletion{
++ (void)vipIsExpired:(VipIsExpired)completion topIsExpired:(VipIsExpired)topExpiredCompletion {
 //    /api/virtual-services/mine/
     
     GETRequest *request = [GETRequest requestWithPath:@"/api/virtual-services/mine/" parameters:nil completionHandler:^(InsRequest *request) {
@@ -102,7 +109,7 @@
 }
 
 + (NSString *)height:(CGFloat)height{
-    NSString *str = @"未知";
+    NSString *str = @"165cm";
     if (height<1) {
         return str;
     }else{
@@ -112,7 +119,7 @@
 }
 
 + (NSString *)age:(NSInteger)age{
-    NSString *str = @"未知";
+    NSString *str = @"-";
     if (age<1) {
         return str;
     }else{
@@ -122,25 +129,32 @@
 }
 
 + (NSString *)profession:(NSInteger)professionType{
-    NSString *str = @"不限";
+    
+    NSString *str = @"";
     switch (professionType) {
         case 0:
             str = @"未知";
             break;
         case 1:
-            str = @"事业单位";
+            str = @"学生";
             break;
         case 2:
-            str = @"政府机关";
+            str = @"一般私有企业";
             break;
         case 3:
-            str = @"私营企业";
+            str = @"个体户私有业主";
             break;
         case 4:
-            str = @"自由职业";
+            str = @"事业单位";
             break;
         case 5:
-            str = @"其他";
+            str = @"公务员";
+            break;
+        case 6:
+            str = @"医疗机构";
+            break;
+        case 7:
+            str = @"暂时无业";
             break;
         default:
             break;
@@ -150,7 +164,7 @@
 
 // 教育
 + (NSString *)education:(NSInteger)educationType{
-    NSString *str = @"不限";
+    NSString *str = @"";
     switch (educationType) {
         case 0:
             str = @"未知";
@@ -187,28 +201,28 @@
 
 // 收入
 + (NSString *)income:(NSInteger)incomeType{
-//    (0, '未知'),
+//    (0, '--'),
 //    (1, '10万以下'),
 //    (2, '10万~20万'),
 //    (3, '20万~50万'),
 //    (4, '50万以上'),
 //    )
-    NSString *str = @"不限";
+    NSString *str = @"";
     switch (incomeType) {
         case 0:
             str = @"未知";
             break;
         case 1:
-            str = @"10万以下";
+            str = @"5000以下/月";
             break;
         case 2:
-            str = @"10万~20万";
+            str = @"5000-10000/月";
             break;
         case 3:
-            str = @"20万~50万";
+            str = @"10000-15000/月";
             break;
         case 4:
-            str = @"50万以上";
+            str = @"15000以上/月";
             break;
         default:
             break;
@@ -220,12 +234,12 @@
 + (NSString *)marital_status:(NSInteger)marital_statusType{
     
 //    MARITAL_STATUS_CHOICE = (
-//                             (0, '未知'),
+//                             (0, '--'),
 //                             (1, '未婚'),
 //                             (2, '离异'),
 //                             (3, '丧偶'),
 //                             )
-    NSString *str = @"不限";
+    NSString *str = @"";
     switch (marital_statusType) {
         case 0:
             str = @"未知";
@@ -249,18 +263,18 @@
 // 小孩状态
 + (NSString *)child_status:(NSInteger)child_statusType{
 //    CHILD_STATUS_CHOICE = (
-//                           (0, '未知'),
+//                           (0, '--'),
 //                           (1, '无'),
 //                           (2, '有，和我在一起'),
 //                           (3, '有，不和我在一起'),
 //                           )
-    NSString *str=@"不限";
+    NSString *str=@"";
     switch (child_statusType) {
         case 0:
             str = @"未知";
             break;
         case 1:
-            str = @"无";
+            str = @"无子女";
             break;
         case 2:
             str = @"有，和我在一起";
@@ -277,22 +291,22 @@
 
 + (NSString *)yearsToMarial:(NSInteger)yearsToMarialType{
     
-    NSString *str = @"不限";
+    NSString *str = @"";
     switch (yearsToMarialType) {
         case 0:
             str = @"未知";
             break;
         case 1:
-            str = @"1年内";
+            str = @"1年内结婚";
             break;
         case 2:
-            str = @"1-2年内";
+            str = @"1-2年内结婚";
             break;
         case 3:
-            str = @"2-3年内";
+            str = @"2-3年内结婚";
             break;
         case 4:
-            str = @"3年以上";
+            str = @"3年以上结婚";
             break;
         default:
             break;

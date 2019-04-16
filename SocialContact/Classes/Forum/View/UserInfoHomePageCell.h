@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *gender;
 @property (weak, nonatomic) IBOutlet UIView *tagView;
 @property (weak, nonatomic) IBOutlet UILabel *introduce;
+@property (weak, nonatomic) IBOutlet UIImageView *huiYuan;
+@property (weak, nonatomic) IBOutlet UILabel *selfIntroduce;
 
 @property (nonatomic,strong) SCUserInfo *userInfo;
 

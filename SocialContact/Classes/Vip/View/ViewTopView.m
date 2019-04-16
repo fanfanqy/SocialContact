@@ -8,7 +8,7 @@
 
 #import "ViewTopView.h"
 
-static  CGFloat borderWidth = 2.f;
+static  CGFloat borderWidth = 1.5f;
 
 static  CGFloat btnCornerRadius = 8.f;
 
@@ -30,6 +30,14 @@ static  CGFloat btnCornerRadius = 8.f;
 - (void)setServiceModel:(ServiceModel *)serviceModel{
     _serviceModel = serviceModel;
     
+    self.title1.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    self.price1.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    self.title2.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    self.price2.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    self.title3.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    self.price3.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    
+    
     for (NSInteger i=0; i<serviceModel.pricelist.count; i++) {
         ProductInfoModel *model = serviceModel.pricelist[i];
         if (i == 0) {
@@ -44,10 +52,10 @@ static  CGFloat btnCornerRadius = 8.f;
         }
     }
     
-    self.desLB.text = @"";
+//    self.desLB.text = @"";
     
     [self.dredgeBtn setBackgroundImage:[UIImage imageWithColor:RED] forState:UIControlStateNormal];
-    self.dredgeBtn.layer.cornerRadius = kScreenWidth/20-1;
+    self.dredgeBtn.layer.cornerRadius = 22.5;
     self.dredgeBtn.layer.masksToBounds = YES;
     
 
@@ -89,7 +97,7 @@ static  CGFloat btnCornerRadius = 8.f;
     
     self.bgView.layer.cornerRadius = btnCornerRadius;
     self.bgView.layer.borderColor = RED.CGColor;
-    self.bgView.layer.borderWidth = 4.f;
+    self.bgView.layer.borderWidth = 3.f;
 }
 
 - (IBAction)btn1Click:(id)sender {

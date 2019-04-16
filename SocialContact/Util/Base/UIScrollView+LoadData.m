@@ -53,6 +53,7 @@ static const void *loadMoreDataKey = &loadMoreDataKey;
     [header setTitle:@"松开加载" forState:MJRefreshStatePulling];
     [header setTitle:@"将要加载" forState:MJRefreshStateWillRefresh];
     [header setTitle:@"正在加载..." forState:MJRefreshStateRefreshing];
+    
 //    header.stateLabel.hidden = YES;
     header.lastUpdatedTimeLabel.hidden = YES;
     [header.gifView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -75,11 +76,11 @@ static const void *loadMoreDataKey = &loadMoreDataKey;
     
     objc_setAssociatedObject(self, loadMoreDataKey, loadMoreData, OBJC_ASSOCIATION_COPY_NONATOMIC);
 
-    
     __weak typeof(self)weakSelf = self;
     MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         weakSelf.loadMoreData();
     }];
+    [footer setTitle:@"--end--" forState:MJRefreshStateNoMoreData];
     self.mj_footer = footer;
 }
 
@@ -92,8 +93,9 @@ static const void *loadMoreDataKey = &loadMoreDataKey;
 }
 
 - (void)endRefreshNoMoreData {
-    [self.mj_footer endRefreshing];
-    self.mj_footer.state = MJRefreshStateNoMoreData;
+//    [self.mj_footer endRefreshing];
+//    self.mj_footer.state = MJRefreshStateNoMoreData;
+    [self.mj_footer endRefreshingWithNoMoreData];
 }
 
 - (void)endRefresh {

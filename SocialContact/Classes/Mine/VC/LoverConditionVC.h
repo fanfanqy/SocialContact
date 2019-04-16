@@ -8,6 +8,13 @@
 
 #import "Ins_ViewController.h"
 
+@protocol LoverConditionVCDelegate <NSObject>
+
+@optional
+
+- (void)selectCondition:(NSDictionary *)conditionDic;
+
+@end
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -16,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LoverConditionVC : InsViewController
 
 INS_P_STRONG(SCUserInfo *, userModel);
+
+@property(nonatomic,weak) id<LoverConditionVCDelegate> delegate;
 
 @end
 

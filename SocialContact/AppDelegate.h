@@ -18,5 +18,10 @@
 
 - (void)configRootVC;
 
+/*
+ 漂流瓶聊天列表
+ */
+@property (strong, nonatomic) NSMutableArray *isBottleCharts;
+
 @end
 

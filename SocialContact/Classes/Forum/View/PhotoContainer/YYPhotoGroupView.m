@@ -63,7 +63,7 @@
 @property (nonatomic, strong) CAShapeLayer *progressLayer;
 
 @property (nonatomic, strong) YYPhotoGroupItem *item;
-@property (nonatomic, readonly) BOOL itemDidLoad;
+@property (nonatomic) BOOL itemDidLoad;
 - (void)resizeSubviewSize;
 @end
 
@@ -136,29 +136,29 @@
         return;
     }
     
-    @weakify(self);
+    WEAKSELF;
 	
     [_imageView sd_setImageWithURL:item.largeImageURL placeholderImage:item.thumbImage options:SDWebImageAllowInvalidSSLCertificates progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         
-        @normalize(self);
-        if (!self) return;
+        
+        if (!weakSelf) return;
         CGFloat progress = receivedSize / (float)expectedSize;
         progress = progress < 0.01 ? 0.01 : progress > 1 ? 1 : progress;
         if (isnan(progress)) progress = 0;
-        self.progressLayer.hidden = NO;
-        self.progressLayer.strokeEnd = progress;
+        weakSelf.progressLayer.hidden = NO;
+        weakSelf.progressLayer.strokeEnd = progress;
         
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         
-        @normalize(self);
-        if (!self) return;
-        self.progressLayer.hidden = YES;
-        self.maximumZoomScale = 3;
+        
+        if (!weakSelf) return;
+        weakSelf.progressLayer.hidden = YES;
+        weakSelf.maximumZoomScale = 3;
         if (image) {
-            self->_itemDidLoad = YES;
+            weakSelf.itemDidLoad = YES;
             
-            [self resizeSubviewSize];
-            [self.imageView.layer addFadeAnimationWithDuration:0.1 curve:UIViewAnimationCurveLinear];
+            [weakSelf resizeSubviewSize];
+            [weakSelf.imageView.layer addFadeAnimationWithDuration:0.1 curve:UIViewAnimationCurveLinear];
         }
     }];
     

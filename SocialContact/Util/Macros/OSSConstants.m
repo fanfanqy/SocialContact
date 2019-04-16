@@ -36,8 +36,8 @@ NSInteger const kRequest_OK = 200;
 NSString *const kServerBusyAlert = @"服务器忙，请稍后再试";//@"服务器忙，请稍后再试"
 
 
-NSInteger const kNickNameMaxWords = 20; //20
-NSInteger const kSelfIntroduceMaxWords = 100; //100
+NSInteger const kNickNameMaxWords = 10; //20
+NSInteger const kSelfIntroduceMaxWords = 40; //100
 
 
 NSString *const HXAppKey = @"1142180504177015#guagua";// @"1142180504177015#guagua"
@@ -90,12 +90,21 @@ NSString *const kCustomMessageUnreadCount = @"CustomMessageUnreadCount";
 NSString *const kUserMessageUnreadCount = @"UserMessageUnreadCount";
 
 
-
-NSString *const kRongYunKey = @"mgb7ka1nmdwtg";
+//new:  x18ywvqfxcc6c
+//old:  mgb7ka1nmdwtg
+NSString *const kRongYunKey = @"x18ywvqfxcc6c";
 
 NSString *const kQINIU_TokenKey = @"";
 
 NSString *const kQINIU_HOSTKey = @"http://lhxq.top/";
+
+NSString *const kWeChatPartnerId = @"1527643731";
+
+NSString *const kWeChatAppId = @"wx502707dff6e8ce6c";
+
+NSString *const kWeChatAppS = @"7968e86926fc96525807d0256edaadff";
+
+
 
 // 色值
 
@@ -106,3 +115,10 @@ NSString *const kIMDriftingBottleBtnBackgroundColor = @"F57C00";
 NSString *const kIMLoveSkillBtnBackgroundColor = @"03A9F4";
 
 NSString *const kIMInviteFriendBtnBackgroundColor = @"4CAF50";
+
+
+// 主动发消息 每天个数
+NSInteger const kConstChatCount = 3; //3
+
+// 一键打招呼 每天个数
+ NSInteger const kConstSayHiCount = 1; //1

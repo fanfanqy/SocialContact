@@ -8,12 +8,14 @@
 
 #import "AppDelegate.h"
 
+#import "WXApiManager.h"
 
 #import "AXWebViewController.h"
 #import "LoadManager.h"
 
 #import "MainTabBarController.h"
 #import "LoginViewController.h"
+#import "GeRenZiLiaoVC.h"
 
 // 引入 JPush 功能所需头文件
 #import <JPUSHService.h>
@@ -31,6 +33,9 @@
 
 @property (nonatomic, weak) UIButton *selectedCover;
 
+@property(strong, nonatomic)NSTimer *monitorDateChageTimer;//定时刷新日历
+@property(assign, nonatomic)UIBackgroundTaskIdentifier backTaskId;//后台任务
+
 @end
 
 @implementation AppDelegate
@@ -44,24 +49,28 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //Required
-    //notice: 3.0.0 及以后版本注册可以这样写，也可以继续用之前的注册方式
-    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
-    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-        // 可以添加自定义 categories
-        // NSSet<UNNotificationCategory *> *categories for iOS10 or later
-        // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
-    }
-    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
     
-    // Required
-    // init Push
-    // notice: 2.1.5 版本的 SDK 新增的注册方法，改成可上报 IDFA，如果没有使用 IDFA 直接传 nil
-    // 如需继续使用 pushConfig.plist 文件声明 appKey 等配置内容，请依旧使用 [JPUSHService setupWithOption:launchOptions] 方式初始化。
-    [JPUSHService setupWithOption:launchOptions appKey:@"3d20691d52cbc75875d16bd9" channel:nil apsForProduction:YES];
+    //向微信注册
+    [WXApi registerApp:kWeChatAppId];
     
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//    //Required
+//    //notice: 3.0.0 及以后版本注册可以这样写，也可以继续用之前的注册方式
+//    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
+//    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
+//    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+//        // 可以添加自定义 categories
+//        // NSSet<UNNotificationCategory *> *categories for iOS10 or later
+//        // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
+//    }
+//    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+//
+//    // Required
+//    // init Push
+//    // notice: 2.1.5 版本的 SDK 新增的注册方法，改成可上报 IDFA，如果没有使用 IDFA 直接传 nil
+//    // 如需继续使用 pushConfig.plist 文件声明 appKey 等配置内容，请依旧使用 [JPUSHService setupWithOption:launchOptions] 方式初始化。
+//    [JPUSHService setupWithOption:launchOptions appKey:@"3d20691d52cbc75875d16bd9" channel:nil apsForProduction:YES];
+    
+//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     // 自定义的全局样式渲染
     [SCCommonUIDefine renderGlobalAppearances];
@@ -70,8 +79,11 @@
     self.window = [[UIWindow alloc]init];
     self.window.frame = [UIScreen mainScreen].bounds;
     [self SDWebImageConfig];
-    [self configRootVC];
     [self  thirdLibraryApplication:application didFinishLaunchingWithOptions:launchOptions otherOptions:nil];
+    [self requestBottleCharts];
+    
+    [self configRootVC];
+    
     return YES;
 }
 
@@ -85,19 +97,68 @@
 }
 
 
+- (void)requestBottleCharts{
+    
+    self.isBottleCharts = [NSMutableArray array];
+    
+    WEAKSELF;
+    GETRequest *request = [GETRequest requestWithPath:@"/api/chatrecord/record_list/" parameters:nil completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            
+        }else{
+//            record_list
+            weakSelf.isBottleCharts = request.responseObject[@"data"][@"record_list"];
+            
+        }
+        
+    }];
+    [InsNetwork addRequest:request];
+    
+}
+
+
 - (void)configRootVC{
+    
+    
+    
+    /**
+     ios 11适配
+     */
+    [UITableView appearance].estimatedRowHeight = 0;
+    [UITableView appearance].estimatedSectionHeaderHeight = 0;
+    [UITableView appearance].estimatedSectionFooterHeight = 0;
+    if (@available(iOS 11, *)) {
+        [UIScrollView appearance].contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever; //iOS11 解决SafeArea的问题，同时能解决pop时上级页面scrollView抖动的问题
+    }
+    
     if ([SCUserCenter sharedCenter].currentUser) {
         
-        MainTabBarController *tabBarController = [[MainTabBarController alloc] init];
-        [tabBarController hideTabBadgeBackgroundSeparator];
-        tabBarController.delegate = self;
-        self.tabBarController = tabBarController;
-        [self.window setRootViewController:tabBarController];
-        [self.window makeKeyAndVisible];
-//        [self customizeInterfaceWithTabBarController:tabBarController];
+        if ([SCUserCenter sharedCenter].currentUser.userInfo.name.length == 0 || [SCUserCenter sharedCenter].currentUser.userInfo.gender == 0) {
+            
+            [SVProgressHUD showImage:AlertErrorImage status:@"请完善个人信息"];
+            [SVProgressHUD dismissWithDelay:1.5];
+            
+            GeRenZiLiaoVC *gerenZiLiaoVC = [GeRenZiLiaoVC new];
+            gerenZiLiaoVC.vcType = 1;
+            gerenZiLiaoVC.title = @"完善个人信息";
+            gerenZiLiaoVC.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+            
+            UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:gerenZiLiaoVC];
+            [self.window setRootViewController:nav];
+            [self.window makeKeyAndVisible];
+            
+        }else{
         
-        // 连接融云
-        [[SCIM shared] startWithAppKey:kRongYunKey];
+            MainTabBarController *tabBarController = [[MainTabBarController alloc] init];
+            [tabBarController hideTabBadgeBackgroundSeparator];
+            tabBarController.delegate = self;
+            self.tabBarController = tabBarController;
+            [self.window setRootViewController:tabBarController];
+            [self.window makeKeyAndVisible];
+            // 连接融云
+            [[SCIM shared] startWithAppKey:kRongYunKey];
+        }
         
     }else{
         LoginViewController *vc = [[LoginViewController alloc]init];
@@ -188,15 +249,15 @@
         backgroundImage = [UIImage imageNamed:@"navigationbar_background_tall"];
         
         textAttributes = @{
-                           NSFontAttributeName : [UIFont boldSystemFontOfSize:18],
-                           NSForegroundColorAttributeName : YD_ColorBlack_1F2124,
+                           NSFontAttributeName : [[UIFont fontWithName:@"Heiti SC" size:14]fontWithBold],
+                           NSForegroundColorAttributeName : Font_color333,
                            };
     } else {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
         backgroundImage = [UIImage imageNamed:@"navigationbar_background"];
         textAttributes = @{
-                           UITextAttributeFont : [UIFont boldSystemFontOfSize:18],
-                           UITextAttributeTextColor : YD_ColorBlack_1F2124,
+                           UITextAttributeFont : [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold],
+                           UITextAttributeTextColor : Font_color333,
                            UITextAttributeTextShadowColor : [UIColor clearColor],
                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetZero],
                            };
@@ -212,6 +273,15 @@
 
 #pragma mark - delegate
 
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+    if (tabBarController.selectedIndex == 0 || tabBarController.selectedIndex == 1 || tabBarController.selectedIndex == 2) {
+        // 首页导航栏颜色：白色
+        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    }else{
+        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
+    }
+}
+
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     [[self cyl_tabBarController] updateSelectionStatusIfNeededForTabBarController:tabBarController shouldSelectViewController:viewController];
     return YES;
@@ -219,7 +289,7 @@
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectControl:(UIControl *)control {
     UIView *animationView;
-    /*
+    
     if ([control cyl_isTabButton]) {
         //更改红标状态
 //        if ([[self cyl_tabBarController].selectedViewController cyl_isShowTabBadgePoint]) {
@@ -239,7 +309,7 @@
     }
     
 //    if ([self cyl_tabBarController].selectedIndex % 2 == 0) {
-//        [self addScaleAnimationOnView:animationView repeatCount:1];
+        [self addScaleAnimationOnView:animationView repeatCount:1];
 //    } else {
 //        [self addRotateAnimationOnView:animationView];
 //    }
@@ -249,7 +319,7 @@
     //        BOOL shouldSelectedCoverShow = ([self cyl_tabBarController].selectedIndex == 0);
     //        [self setSelectedCoverShow:shouldSelectedCoverShow];
     //    }
-    */
+    
     
 }
 
@@ -289,61 +359,70 @@
    
 }
 
-- (void)application:(UIApplication *)application
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    /// Required - 注册 DeviceToken
-    [JPUSHService registerDeviceToken:deviceToken];
+//- (void)application:(UIApplication *)application
+//didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+//    /// Required - 注册 DeviceToken
+//    [JPUSHService registerDeviceToken:deviceToken];
+//}
+//
+//- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings{
+//    [application registerForRemoteNotifications];
+//}
+//
+//#pragma mark- JPUSHRegisterDelegate
+//// iOS 12 Support
+//- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center openSettingsForNotification:(UNNotification *)notification{
+//    if (notification && [notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+//        //从通知界面直接进入应用
+//    }else{
+//        //从通知设置界面进入应用
+//    }
+//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//}
+//
+//// iOS 10 Support
+//- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
+//    // Required
+//    NSDictionary * userInfo = notification.request.content.userInfo;
+//    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+//        [JPUSHService handleRemoteNotification:userInfo];
+//    }
+//    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有 Badge、Sound、Alert 三种类型可以选择设置
+//}
+//
+//// iOS 10 Support
+//- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+//    // Required
+//    NSDictionary * userInfo = response.notification.request.content.userInfo;
+//    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+//        [JPUSHService handleRemoteNotification:userInfo];
+//    }
+//    completionHandler();  // 系统要求执行这个方法
+//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//}
+//
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+//
+//    // Required, iOS 7 Support
+//    [JPUSHService handleRemoteNotification:userInfo];
+//    completionHandler(UIBackgroundFetchResultNewData);
+//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//}
+//
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//
+//    // Required, For systems with less than or equal to iOS 6
+//    [JPUSHService handleRemoteNotification:userInfo];
+//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return  [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings{
-    [application registerForRemoteNotifications];
-}
-
-#pragma mark- JPUSHRegisterDelegate
-// iOS 12 Support
-- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center openSettingsForNotification:(UNNotification *)notification{
-    if (notification && [notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        //从通知界面直接进入应用
-    }else{
-        //从通知设置界面进入应用
-    }
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-}
-
-// iOS 10 Support
-- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
-    // Required
-    NSDictionary * userInfo = notification.request.content.userInfo;
-    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        [JPUSHService handleRemoteNotification:userInfo];
-    }
-    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有 Badge、Sound、Alert 三种类型可以选择设置
-}
-
-// iOS 10 Support
-- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    // Required
-    NSDictionary * userInfo = response.notification.request.content.userInfo;
-    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        [JPUSHService handleRemoteNotification:userInfo];
-    }
-    completionHandler();  // 系统要求执行这个方法
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     
-    // Required, iOS 7 Support
-    [JPUSHService handleRemoteNotification:userInfo];
-    completionHandler(UIBackgroundFetchResultNewData);
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-    // Required, For systems with less than or equal to iOS 6
-    [JPUSHService handleRemoteNotification:userInfo];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
 
@@ -356,6 +435,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
             NSLog(@"result = %@",resultDic);
             [[NSNotificationCenter defaultCenter]postNotificationName:@"PayBackApp" object:resultDic];
         }];
+    }else{
+        NSLog(@"hostUrl:%@",url);
+        if ([url.absoluteString containsString:kWeChatAppId]) {
+            [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+        }
+        
     }
     return YES;
 }
@@ -363,23 +448,199 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
+    RCConnectionStatus status = [[RCIMClient sharedRCIMClient] getConnectionStatus];
+    if (status != ConnectionStatus_SignUp) {
+        int unreadMsgCount = [[RCIMClient sharedRCIMClient]
+                              getUnreadCount:@[
+                                               @(ConversationType_PRIVATE),
+                                               @(ConversationType_DISCUSSION),
+                                               @(ConversationType_APPSERVICE),
+                                               @(ConversationType_PUBLICSERVICE),
+                                               @(ConversationType_GROUP)
+                                               ]];
+        application.applicationIconBadgeNumber = unreadMsgCount;
+    }
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSLog(@"%s",__func__);
+    
+    /**
+     最后的页面是登录模块的页面，开启后台任务，验证码计时器可以正常运行
+     */
+    [self beginBackTask];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    NSLog(@"%s",__func__);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    NSLog(@"%s",__func__);
+}
+
+//申请后台
+-(void)beginBackTask
+{
+    NSLog(@"beginBackTask");
+    WEAKSELF;
+    _backTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        //在时间到之前会进入这个block，一般是iOS7及以上是3分钟。按照规范，在这里要手动结束后台，你不写也是会结束的（据说会crash）
+        NSLog(@"将要挂起");
+        [weakSelf endBackTask];
+    }];
+}
+
+//注销后台任务
+-(void)endBackTask
+{
+    NSLog(@"endBackTask");
+    [[UIApplication sharedApplication] endBackgroundTask:_backTaskId];
+    _backTaskId = UIBackgroundTaskInvalid;
+}
+
+//进入前台
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    
+    NSLog(@"%s",__func__);
+    
+    [self endBackTask];//结束后台任务
+    
+    /**
+     定时器用于自动更新剩余聊天个数，当进入是23：50或其他时间，在打开APP情况下，如果日期过了一天，设置定时器多长时间后更新聊天个数
+     */
+    NSDate *nowDate = [NSDate date];
+    NSInteger hour = [nowDate hour];
+    NSInteger minute = [nowDate minute];
+    NSInteger second = [nowDate second];
+    NSTimeInterval delta = 24*60*60 - hour*60*60-minute*60-second; // 计算出差多少秒刚好到明天,重新执行聊天限制个数;
+    if (_monitorDateChageTimer) {
+        [_monitorDateChageTimer invalidate];
+        _monitorDateChageTimer = nil;
+    }
+    WEAKSELF;
+    _monitorDateChageTimer = [NSTimer scheduledTimerWithTimeInterval:delta block:^(NSTimer * _Nonnull timer) {
+        
+        // to do
+        [weakSelf refreshTotalChatCount];
+        
+    } repeats:NO];
+    
+    /**
+     日期不是同一天了，重新执行聊天限制个数
+     */
+    NSDate *oldDate = [[NSUserDefaults standardUserDefaults] valueForKey:kEnterBackgroundDate];
+    if (oldDate) {
+        NSInteger dayNow = [nowDate day];
+        NSInteger dayOld = [oldDate day];
+        if (dayNow != dayOld) {//day不一样，不是同一天，重新执行聊天限制个数
+            
+            [self refreshTotalChatCount];
+        }
+    }else{
+        [self refreshTotalChatCount];
+    }
+    
+}
+
+- (void)refreshTotalChatCount{
+    
+    if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+        
+        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date] forKey:kEnterBackgroundDate];
+        // 最大聊天个数，可以和3个人聊天
+        [[NSUserDefaults standardUserDefaults]setObject:@(kConstChatCount) forKey:kChatCount];
+        [[NSUserDefaults standardUserDefaults]setObject:@(kConstSayHiCount) forKey:kSayHiCount];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:kChatedUser];
+        
+    }else{
+        
+        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date] forKey:kEnterBackgroundDate];
+        // 最大聊天个数，可以和3个人聊天
+        [[NSUserDefaults standardUserDefaults]setObject:@(1000) forKey:kChatCount];
+        [[NSUserDefaults standardUserDefaults]setObject:@(1000) forKey:kSayHiCount];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:kChatedUser];
+    }
+    
+    
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings: (UIUserNotificationSettings *)notificationSettings {
+    [application registerForRemoteNotifications];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    NSString *token = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    [[RCIMClient sharedRCIMClient] setDeviceToken:token];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"didFailToRegisterForRemoteNotificationsWithError ERROR：%@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    // 统计推送打开率
+    [[RCIMClient sharedRCIMClient] recordRemoteNotificationEvent:userInfo];
+    // 获取融云推送服务扩展字段
+    NSDictionary *pushServiceData = [[RCIMClient sharedRCIMClient] getPushExtraFromRemoteNotification:userInfo];
+    if (pushServiceData) {
+        NSLog(@"该远程推送包含来自融云的推送服务");
+        for (id key in [pushServiceData allKeys]) {
+            NSLog(@"key = %@, value = %@", key, pushServiceData[key]);
+        }
+    }
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    // 统计推送打开率
+    [[RCIMClient sharedRCIMClient] recordLocalNotificationEvent:notification];
+    //震动
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}
+
+
+//iOS10新增：处理前台收到通知的代理方法
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler API_AVAILABLE(ios(10.0)){
+    
+    //    NSDictionary * userInfo = notification.request.content.userInfo;
+    if (@available(iOS 10.0, *)) {
+        if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+            //应用处于前台时的远程推送接受
+            //关闭U-Push自带的弹出框
+            //        [UMessage setAutoAlert:NO];
+            //必须加这句代码
+            //        [UMessage didReceiveRemoteNotification:userInfo];
+            
+        }else{
+            //应用处于前台时的本地推送接受
+        }
+    } else {
+        // Fallback on earlier versions
+    }
+    //当应用处于前台时提示设置，需要哪个可以设置哪一个
+    if (@available(iOS 10.0, *)) {
+        completionHandler(UNNotificationPresentationOptionSound|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionAlert);
+    } else {
+        // Fallback on earlier versions
+    }
+}
+
+//iOS10新增：处理后台点击通知的代理方法
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0)){
+    //        NSDictionary * userInfo = response.notification.request.content.userInfo;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        //应用处于后台时的远程推送接受
+        //必须加这句代码
+        //         [UMessage didReceiveRemoteNotification:userInfo];
+        
+    }else{
+        //应用处于后台时的本地推送接受
+    }
 }
 
 @end

@@ -26,14 +26,14 @@
                             <constraint firstAttribute="height" constant="20" id="VfF-0j-NNn"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9RB-uX-cPe">
-                        <rect key="frame" x="46" y="17" width="42" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9RB-uX-cPe">
+                        <rect key="frame" x="46" y="17" width="238" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="ExG-rB-Kb5"/>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="vsZ-x4-Msf"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.12156862745098039" green="0.12941176470588234" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow-r" translatesAutoresizingMaskIntoConstraints="NO" id="6Y4-Nf-tz7">
@@ -44,10 +44,9 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D5V-He-kh9">
-                        <rect key="frame" x="257" y="17" width="42" height="21"/>
+                        <rect key="frame" x="299" y="17" width="0.0" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="6q4-6g-sbl"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="f3c-2N-KvC"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -57,6 +56,7 @@
                 <constraints>
                     <constraint firstItem="6Y4-Nf-tz7" firstAttribute="centerY" secondItem="D5V-He-kh9" secondAttribute="centerY" id="3jF-Vo-HGk"/>
                     <constraint firstItem="9RB-uX-cPe" firstAttribute="leading" secondItem="XPd-4h-WRc" secondAttribute="trailing" constant="11" id="H5L-Rl-MLe"/>
+                    <constraint firstItem="D5V-He-kh9" firstAttribute="leading" secondItem="9RB-uX-cPe" secondAttribute="trailing" constant="15" id="J9N-C7-ykB"/>
                     <constraint firstAttribute="trailing" secondItem="6Y4-Nf-tz7" secondAttribute="trailing" constant="15" id="Y7d-zS-eUs"/>
                     <constraint firstItem="XPd-4h-WRc" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="bfK-Pe-i4J"/>
                     <constraint firstItem="9RB-uX-cPe" firstAttribute="centerY" secondItem="XPd-4h-WRc" secondAttribute="centerY" id="c4Z-V7-AEg"/>

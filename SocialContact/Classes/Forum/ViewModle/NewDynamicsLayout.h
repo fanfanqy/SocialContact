@@ -18,7 +18,9 @@ typedef NS_ENUM(NSInteger,MomentUIType){
 	MomentUITypeMineList = 3,// 个人列表 UI
     MomentUITypeNearby = 4, // 附近的人，谁看过我，我的粉丝，我的关注
     MomentUITypeNotice = 5, // 通知
-    
+    MomentUITypeActivity = 6, // 活动
+    MomentUITypeAskWeChatOrYueTa = 21, // 交换微信、约她
+    MomentUITypePointsStore = 22, // 积分商城
 };
 
 typedef NS_ENUM(NSInteger,MomentRequestType){
@@ -41,6 +43,13 @@ typedef NS_ENUM(NSInteger,MomentRequestType){
     MomentRequestTypeNotice = 17,// 通知，消息列表
     MomentRequestTypeWhoLookMe = 18, // 谁看过我
     MomentRequestTypeJiFenList = 19, // 积分列表
+    MomentRequestTypeActivity = 20, // 活动
+    MomentRequestTypeAskWeChatSend = 21, // 交换微信、约她
+    MomentRequestTypeAskWeChatReceived = 22, // 交换微信、约她
+    MomentRequestTypeYueTaSend = 23, // 交换微信、约她
+    MomentRequestTypeYueTaReceived = 24, // 交换微信、约她
+    MomentRequestTypePointSkus = 25,// 积分商品列表
+    MomentRequestTypePointSkusExchages = 26,// 我的兑换记录
 };
 
 
@@ -61,6 +70,8 @@ static CGFloat const kMomentPhotoContainBottomTopicTop =20;
 static CGFloat const kMomentPortraitWH =40;
 
 static CGFloat const kDynamicsLineSpacing = 6;
+
+static CGFloat const kDynamicsSectionViewHeight = 8;
 
 //static CGFloat const kDynamicsPortraitWidthAndHeight = 40;
 

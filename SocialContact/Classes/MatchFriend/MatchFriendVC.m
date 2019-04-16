@@ -15,13 +15,17 @@
 #import "LoverConditionVC.h"
 #import "DCIMChatViewController.h"
 
-@interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
+#import "GreetVC.h"
+
+@interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource,LoverConditionVCDelegate>
 
 INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 @property (nonatomic, strong) NSMutableArray *array;
 
 @property (nonatomic, strong) NSMutableArray *recommendUserArray;
+
+@property (nonatomic, strong) NSMutableArray *sayHiArray;
 
 @property (nonatomic) NSUInteger currentIndex;
 
@@ -52,6 +56,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 @property(nonatomic,strong) UIButton *wantToTop;
 
+
+@property(nonatomic,strong) NSDictionary *conditionDic;
+
 @end
 
 @implementation MatchFriendVC
@@ -61,18 +68,97 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
     self.fd_prefersNavigationBarHidden = YES;
     [self setUpUI];
+    
+    // 3分钟换一下
+    WEAKSELF;
+    [NSTimer timerWithTimeInterval:3*60 block:^(NSTimer * _Nonnull timer) {
+        
+        [weakSelf fetchData:YES requestType:MomentRequestTypeRecentlyUser];
+        
+    } repeats:YES];
+    
+    
+    NSInteger sayHiCount = [[[NSUserDefaults standardUserDefaults]objectForKey:kSayHiCount]integerValue];
+    if (sayHiCount > 0) {
+        if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+            [self fetchDataSayHi];
+        }
+    }
+    
+}
+
+- (void)sayHi{
+    
+
+    GreetVC *pop = [GreetVC new];
+    pop.dataArray = self.sayHiArray;
+    STPopupController *popVericodeController = [[STPopupController alloc] initWithRootViewController:pop];
+    popVericodeController.style = STPopupStyleFormSheet;
+    [popVericodeController presentInViewController:self];
+    
+}
+
+- (void)fetchDataSayHi{
+    
+    NSDictionary *dic = @{
+                          @"page":@(1),
+                          };
+    WEAKSELF;
+    
+//      推荐用户
+//    /api/customers/recommend/
+    
+//     最近登录用户
+//    /customer/active/lists/
+    
+    GETRequest *request = [GETRequest requestWithPath:@"/api/customers/service_top/" parameters:dic completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
+            
+        }else{
+            
+            [weakSelf.sayHiArray removeAllObjects];
+            
+            NSArray *resultArray = request.responseObject[@"data"][@"results"];
+            
+            if ( resultArray && resultArray.count > 0 ) {
+                
+                [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    
+                    SCUserInfo *model = [SCUserInfo modelWithDictionary:obj];
+                    
+                    model.isSelectedSayHi = YES;
+                    [weakSelf.sayHiArray addObject:model];
+                    
+                }];
+                
+                
+                [weakSelf sayHi];
+            }
+            
+            
+            
+        }
+        
+    }];
+    [InsNetwork addRequest:request];
+    
 }
 
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
+    
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
 }
 
 - (void)setUpUI{
@@ -87,19 +173,21 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     
     self.recommendUserArray = [NSMutableArray array];
     
-    @weakify(self);
+    self.sayHiArray = [NSMutableArray array];
+    
+    WEAKSELF;
     [self.tableView setLoadNewData:^{
-        @normalize(self);
-        [self fetchData:YES requestType:self.momentRequestType];
+        
+        [weakSelf fetchData:YES requestType:weakSelf.momentRequestType];
     }];
     
     [self.tableView setLoadMoreData:^{
-        @normalize(self);
-        [self fetchData:NO requestType:self.momentRequestType];
+        
+        [weakSelf fetchData:NO requestType:weakSelf.momentRequestType];
     }];
     
     [self.tableView hideFooter];
-    [self showLoading];
+    
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self fetchData:YES requestType:self.momentRequestType];
@@ -115,8 +203,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (void)fetchData:(BOOL)refresh requestType:(MomentRequestType)momentRequestType{
+    [self showLoading];
     WEAKSELF;
-    NSDictionary *param = nil;
+    NSMutableDictionary *param = nil;
     NSString *url = @"";
     if (momentRequestType == MomentRequestTypeUnknow) {
         if (refresh) {
@@ -134,8 +223,17 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     
     switch (momentRequestType) {
         case MomentRequestTypeUnknow:
-            url = @"/customer/unknown/lists/";
-            param = @{@"page": [NSNumber numberWithInteger:_page]};
+//            url = @"/customer/unknown/lists/";
+//            url = @"/customer/active/lists/";
+            url = @"/api/customers/";
+            
+            if (_conditionDic) {
+                param = [NSMutableDictionary dictionaryWithDictionary:_conditionDic];
+                [param setValue:[NSNumber numberWithInteger:_page] forKey:@"page"];
+            }else{
+                param = @{@"page": [NSNumber numberWithInteger:_page]};
+            }
+            
             break;
             
         case MomentRequestTypeRecentlyUser:
@@ -161,34 +259,27 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
             
             NSArray *resultArray = request.responseObject[@"data"][@"results"];
             
-            if ( resultArray && resultArray.count > 0 ) {
-                
-                if (resultArray.count == 10) {
-                    [weakSelf.tableView showFooter];
-                } else {
-                    [weakSelf.tableView hideFooter];
-                }
-            } else {
-//                [weakSelf.tableView hideFooter];
-            }
-            
-            
             if (momentRequestType == weakSelf.momentRequestType) {
+
+                if (![Help canPerformLoadRequest:request.responseObject]) {
+                    [weakSelf.tableView endRefreshNoMoreData];
+                }else{
+                    [weakSelf.tableView showFooter];
+                }
+                
                 if (refresh) {
                     [weakSelf.array removeAllObjects];
-                }else{
-                    if (resultArray.count == 0) {
-                        [weakSelf.tableView endRefreshNoMoreData];
-                    }
                 }
             }else{
                 if (refresh) {
                     [weakSelf.recommendUserArray removeAllObjects];
                 }else{
                     if (weakSelf.recommendUserArray.count == 0) {
-                        [weakSelf.tableView endRefreshNoMoreData];
+                        #pragma mark TODO
+                        
                     }
                 }
+               
             }
             
             [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -201,6 +292,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
                 
             }];
             if (momentRequestType == weakSelf.momentRequestType) {
+                
                 [weakSelf.tableView reloadData];
             }else{
                 [weakSelf.collectionView reloadData];
@@ -214,7 +306,10 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
                 [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
                 [SVProgressHUD dismissWithDelay:1.5];
             } else {
-                [weakSelf showError:request.error reload:nil];
+                [weakSelf showError:request.error reload:^{
+                    [weakSelf fetchData:YES requestType:weakSelf.momentRequestType];
+                    [weakSelf fetchData:YES requestType:MomentRequestTypeRecentlyUser];
+                }];
             }
             
         }
@@ -225,52 +320,54 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (void)heartBeat:(NSIndexPath *)indexPath{
     
-    NSString *service_vip_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
-    if ([NSString ins_String:service_vip_expired_at]) {
+#pragma mark TODO 
+
+    // 去聊天
+    SCUserInfo *userInfo = self.array[indexPath.row];
     
-        [self showLoading];
-        WEAKSELF;
-        [Help vipIsExpired:^(BOOL expired) {
-            [weakSelf hideLoading];
-            if (expired) {
-                [self goVipVC:@"您的Vip已过期"];
-            }else{
-                // 心动成功
-                [weakSelf.view makeToast:@"心动成功"];
-            }
-        } topIsExpired:nil];
-        
-    }else{
-        [self goVipVC:@"Vip 充值"];
+    NSInteger targetId = userInfo.user_id;
+    if (targetId == 0) {
+        targetId = userInfo.iD;
     }
     
+    // 加关注
+    NSDictionary *para = @{@"customer_id": [NSNumber numberWithInteger:targetId],
+                           @"status":@(1),
+                           };
+    NSString *url = @"/customer/following/";
+    WEAKSELF;
+    POSTRequest *request = [POSTRequest requestWithPath:url parameters:para completionHandler:^(InsRequest *request) {
+        
+        if (!request.error) {
+            [weakSelf.view makeToast:@"心动成功"];
+        }else{
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
+        }
+        
+    }];
+    [InsNetwork addRequest:request];
     
 }
 
 - (void)chatClick:(NSIndexPath *)indexPath{
     
-    NSString *service_vip_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
-    if ([NSString ins_String:service_vip_expired_at]) {
-        
-        [self showLoading];
-        WEAKSELF;
-        [Help vipIsExpired:^(BOOL expired) {
-            [weakSelf hideLoading];
-            if (expired) {
-                [self goVipVC:@"您的Vip已过期"];
-            }else{
-                SCUserInfo *userInfo = weakSelf.array[indexPath.row];
-                // 去聊天
-                DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",userInfo.userId]];
-                vc.title = userInfo.name;
-                [weakSelf.navigationController pushViewController:vc animated:YES];
-            }
-        } topIsExpired:nil];
-   
-        
-    }else{
-        [self goVipVC:@"Vip 充值"];
+    
+    // 去聊天
+    SCUserInfo *userInfo = self.array[indexPath.row];
+    
+    NSInteger targetId = userInfo.user_id;
+    if (targetId == 0) {
+        targetId = userInfo.iD;
     }
+    
+    DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId]];
+    vc.isActiveChat = YES;
+    vc.title = userInfo.name;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    
+    
 }
 
 - (void)goVipVC:(NSString *)alertTitle{
@@ -319,7 +416,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 187+(kScreenWidth-20)/1.6+20;
+    return 187+(kScreenWidth-20)/1.2+30;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -328,6 +425,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     SCUserInfo *model = self.array[indexPath.row];
     UserHomepageVC *vc = [UserHomepageVC new];
     vc.userId = model.iD;
+    vc.name = model.name;
     [self.navigationController pushViewController:vc animated:YES];
     
 }
@@ -357,12 +455,13 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (UIView *)topBarView{
     if (!_topBarView) {
         _topBarView = [UIView new];
-        _topBarView.backgroundColor = YD_ColorBlack_1F2124;
+        _topBarView.backgroundColor = Font_color333;
         _topBarView.frame = CGRectMake(0, 0, self.view.width, GuaTopHeight);
         [_topBarView addSubview:self.customerBtn];
         [_topBarView addSubview:self.conditionSelect];
-        [_topBarView addSubview:self.userAmount];
-        [_topBarView addSubview:self.unknowUserImg];
+#pragma mark TODO 是否删除总用户数显示
+//        [_topBarView addSubview:self.userAmount];
+//        [_topBarView addSubview:self.unknowUserImg];
     }
     return _topBarView;
 }
@@ -398,7 +497,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _userAmount = [UIButton buttonWithType:UIButtonTypeCustom];
         _userAmount.frame = CGRectMake(kScreenWidth - 60 - 50 -20, 10+StatusBarHeight, 60, 32);
 //        [_userAmount setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        
+        _userAmount.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:12];
         [_userAmount setTitle:@"1000" forState:UIControlStateNormal];
         [_userAmount setTitleColor:ORANGE forState:UIControlStateNormal];
         [_userAmount addTarget:self action:@selector(userAmountClick) forControlEvents:UIControlEventTouchUpInside];
@@ -418,14 +517,28 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     
 }
 
+#pragma mark 客服按钮点击
 - (void)customerBtnClick{
+#pragma mark TODO
     
 }
 
 - (void)conditionSelectClick{
     LoverConditionVC *vc = [LoverConditionVC new];
-    vc.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+    vc.title = @"筛选";
+    vc.delegate = self;
+    vc.userModel = [SCUserInfo new];
+    
+#pragma mark TODO 确认传一个初始化的userModel 是不是可以
+//    [SCUserCenter sharedCenter].currentUser.userInfo;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)selectCondition:(NSDictionary *)conditionDic{
+    
+    _conditionDic = [NSMutableDictionary dictionaryWithDictionary:conditionDic];
+    [self fetchData:YES requestType:MomentRequestTypeUnknow];
+    
 }
 
 - (void)userAmountClick{
@@ -438,35 +551,45 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (void)wantToTopClick{
     
-    SCLAlertView *alert = [[SCLAlertView alloc] init];
-    alert.shouldDismissOnTapOutside = YES;
-    //    alert.iconTintColor = [UIColor colorWithHexString:@"F57C00"];
-    [alert removeTopCircle];
-    //    backgroundColor, borderWidth, borderColor, textColor
-    alert.buttonFormatBlock = ^NSDictionary *{
-        return @{
-                 @"backgroundColor":ORANGE,
-                 @"textColor":[UIColor whiteColor],
-                 };
-    };
     
-    //Using Block
-    WEAKSELF;
-    [alert addButton:@"前去充值" actionBlock:^(void) {
-        VipVC *vc = [VipVC new];
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    }];
+    VipVC *vc = [VipVC new];
+    vc.type = 2;
+    [self.navigationController pushViewController:vc animated:YES];
     
-    [alert showNotice:self title:@"VIP 充值" subTitle:@"充值后可以嗨嗨嗨" closeButtonTitle:@"暂不" duration:0.0f]; // Notice
-    
+//    SCLAlertView *alert = [[SCLAlertView alloc] init];
+//    alert.shouldDismissOnTapOutside = YES;
+//    //    alert.iconTintColor = [UIColor colorWithHexString:@"F57C00"];
+//    [alert removeTopCircle];
+//    //    backgroundColor, borderWidth, borderColor, textColor
+//    alert.buttonFormatBlock = ^NSDictionary *{
+//        return @{
+//                 @"backgroundColor":ORANGE,
+//                 @"textColor":[UIColor whiteColor],
+//                 };
+//    };
+//
+//    //Using Block
+//    WEAKSELF;
+//    [alert addButton:@"前去充值" actionBlock:^(void) {
+//        VipVC *vc = [VipVC new];
+//        vc.type = 2;
+//        [weakSelf.navigationController pushViewController:vc animated:YES];
+//    }];
+//
+//    [alert showNotice:self title:@"VIP 充值" subTitle:@"充值后可以嗨嗨嗨" closeButtonTitle:@"暂不" duration:0.0f]; // Notice
+//
 }
 
 
 - (UIView *)tableViewHeaderView{
     if (!_tableViewHeaderView) {
-        _tableViewHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 190)];
+        _tableViewHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth,40+ ((kScreenWidth-40)/3.0-16)+10+70+10)];
         [_tableViewHeaderView addSubview:self.todayRecommend];
-        [_tableViewHeaderView addSubview:self.wantToTop];
+        
+        // 是否上线了
+        if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+            [_tableViewHeaderView addSubview:self.wantToTop];
+        }
         [_tableViewHeaderView addSubview:self.collectionView];
     }
     return _tableViewHeaderView;
@@ -482,13 +605,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.alwaysBounceHorizontal = YES;
-        _collectionView.frame = CGRectMake(0, 40, self.view.frame.size.width, 150);
-//        _collectionView.contentInset = UIEdgeInsetsMake(25, 0, 0, 0);
+        _collectionView.frame = CGRectMake(0, 40, self.view.frame.size.width, ((kScreenWidth-40)/3.0-16)+10+70);
         _collectionView.showsHorizontalScrollIndicator = NO;        //注册
         [_collectionView registerNib:[UINib nibWithNibName:@"RecommendUserCell" bundle:nil] forCellWithReuseIdentifier:@"RecommendUserCell"];
-//        [self.view addSubview:_collectionView];
-//        [_collectionView addSubview:self.todayRecommend];
-//        [_collectionView addSubview:self.wantToTop];
     }
     return _collectionView;
 }
@@ -499,9 +618,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _todayRecommend = [UIButton buttonWithType:UIButtonTypeCustom];
         _todayRecommend.frame = CGRectMake(10, 0, 65, 40);
         [_todayRecommend setTitle:@"今日推荐" forState:UIControlStateNormal];
-        _todayRecommend.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
-//        [_todayRecommend sizeToFit];
-        [_todayRecommend setTitleColor:ORANGE forState:UIControlStateNormal];
+        _todayRecommend.titleLabel.font = [[UIFont fontWithName:@"Heiti SC" size:15] fontWithBold];
+        
+        [_todayRecommend setTitleColor:m1 forState:UIControlStateNormal];
         [_todayRecommend addTarget:self action:@selector(todayRecommendClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _todayRecommend;
@@ -512,9 +631,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _wantToTop = [UIButton buttonWithType:UIButtonTypeCustom];
         _wantToTop.frame = CGRectMake(kScreenWidth - 75, 0, 65, 40);
         [_wantToTop setTitle:@"我要置顶" forState:UIControlStateNormal];
-        _wantToTop.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
-//        [_wantToTop sizeToFit];
-        [_wantToTop setTitleColor:ORANGE forState:UIControlStateNormal];
+        _wantToTop.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+//        [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
+        [_wantToTop setTitleColor:Black forState:UIControlStateNormal];
         [_wantToTop addTarget:self action:@selector(wantToTopClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _wantToTop;
@@ -528,7 +647,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
    
-    return self.recommendUserArray.count;
+    return self.recommendUserArray.count > 3 ? 3: self.recommendUserArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -545,7 +664,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 #pragma mark - item宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    return CGSizeMake((kScreenWidth-50)/4.0, 150);
+    return CGSizeMake((kScreenWidth-40)/3.0, ((kScreenWidth-40)/3.0-10)+10+70);
  
 }
 
@@ -565,8 +684,12 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-#pragma mark TODO
-    
+
+    SCUserInfo *model = self.recommendUserArray[indexPath.row];
+    UserHomepageVC *vc = [UserHomepageVC new];
+    vc.userId = model.iD;
+    vc.name = model.name;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

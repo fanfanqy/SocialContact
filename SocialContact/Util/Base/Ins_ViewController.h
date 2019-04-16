@@ -60,4 +60,6 @@
 - (void)fetchData;
 
 
+- (void)createCustomTitleView:(NSString *)title backgroundColor:(UIColor *)backgroundColor rightItem:(UIButton *)rightBtn backContainAlpha:(BOOL)contain;
+
 @end

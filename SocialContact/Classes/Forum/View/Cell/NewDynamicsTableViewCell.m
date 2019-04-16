@@ -44,8 +44,18 @@
         if (isExit) {
             placeHoldImage = [[SDWebImageManager sharedManager].imageCache imageFromCacheForKey:layout.model.from_customer.avatar_url];
         }
-
-        [_portrait sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",layout.model.from_customer.avatar_url]] placeholderImage:placeHoldImage options:SDWebImageRefreshCached];
+        
+        NSString *avatarUrl = @"";
+        if ([NSString ins_String:layout.model.from_customer.avatar_url]) {
+            avatarUrl = layout.model.from_customer.avatar_url;
+            if (![avatarUrl containsString:@"http"]) {
+                avatarUrl = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,avatarUrl];
+            }
+        }
+        if (![avatarUrl containsString:@"http"]) {
+            avatarUrl = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,avatarUrl];
+        }
+        [_portrait sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:placeHoldImage options:SDWebImageRefreshCached];
     }
 
     //昵称
@@ -112,7 +122,7 @@
 {
 	if (!_nameLabel) {
 		_nameLabel = [YYLabel new];
-		UIFont *font = [UIFont systemFontOfSize:14];
+		UIFont *font = [UIFont fontWithName:@"Heiti SC" size:14];
 		_nameLabel.font = font;
 		_nameLabel.textColor = UIColorHex(0D0E15);
 	}
@@ -168,7 +178,7 @@
     UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 0.3)];
     line.backgroundColor = Line;
     
-    YYLabel *zanUsersLabel = [[YYLabel alloc]initWithFrame:CGRectMake(kMomentContentInsetLeft, 10, kScreenWidth, _cell.layout.zanUsersHeight-8)];
+    YYLabel *zanUsersLabel = [[YYLabel alloc]initWithFrame:CGRectMake(kMomentContentInsetLeft, 10, kScreenWidth-2*kMomentContentInsetLeft, _cell.layout.zanUsersHeight+5)];
     WEAKSELF;
     zanUsersLabel.highlightTapAction = ^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
         if ([weakSelf.cell.delegate respondsToSelector:@selector(cell:didClickInLabel:textRange:)]) {
@@ -177,12 +187,12 @@
     };
     zanUsersLabel.textLayout = _cell.layout.zanUsersLayout;
     
-    UIImageView *imgV = [[UIImageView alloc]initWithFrame:CGRectMake(kMomentContentInsetLeft, _cell.layout.zanUsersHeight + 12, 20, 20)];
+    UIImageView *imgV = [[UIImageView alloc]initWithFrame:CGRectMake(kMomentContentInsetLeft, _cell.layout.zanUsersHeight + 15 + 6, 20, 20)];
     imgV.contentMode = UIViewContentModeScaleAspectFit;
     imgV.image = [UIImage imageNamed:@"find_comment"];
     
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(40, _cell.layout.zanUsersHeight + 0, kScreenWidth-50, 40)];
-    label.font = [UIFont systemFontOfSize:14];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(40, _cell.layout.zanUsersHeight + 15, kScreenWidth-50, 30)];
+    label.font = [UIFont fontWithName:@"Heiti SC" size:14];
     label.textColor = Font_color333;
     if (self.commentArray.count == 0) {
         label.text = @"最新评论";
@@ -298,8 +308,8 @@
     self.portrait.height = kMomentPortraitWH;
     
     self.time.top = kMomentContentInsetTop+kMomentPortraitWH/2.0;
-    self.time.left = kScreenWidth-kMomentContentInsetRight-60;
-    self.time.width = 60;
+    self.time.left = kScreenWidth-kMomentContentInsetRight-150;
+    self.time.width = 150;
     self.time.height = kMomentPortraitWH/2.0;
     
     self.name.top = kMomentContentInsetTop;
@@ -309,7 +319,7 @@
     
     self.address.top = self.name.bottom;
     self.address.left = self.name.left;
-    self.address.width = 50;
+    self.address.width = 100;
     self.address.height = kMomentPortraitWH/2.0;
     
     self.content.top = self.portrait.bottom + kMomentAvatarBottomContentTop;
@@ -345,7 +355,7 @@
 
     self.sectionView.left = 0;
     self.sectionView.width = kScreenWidth;
-    self.sectionView.height = 5;
+    self.sectionView.height = kDynamicsSectionViewHeight;
     
 
 
@@ -389,15 +399,23 @@
         if (model.is_hidden_name) {
             self.portrait.image = [UIImage imageNamed:@"icon_default_person"];
         }else{
+            NSString *avatarUrl = @"";
+            
             if ([NSString ins_String:model.customer.avatar_url]) {
-                [self.portrait sd_setImageWithURL:[NSURL URLWithString:model.customer.avatar_url?:@""]];
+                if ([NSString ins_String:model.customer.avatar_url]) {
+                    avatarUrl = model.customer.avatar_url;
+                    if (![avatarUrl containsString:@"http"]) {
+                        avatarUrl = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,avatarUrl];
+                    }
+                }
+                [self.portrait sd_setImageWithURL:[NSURL URLWithString:avatarUrl?:@""]];
             }else{
                 self.portrait.image = [UIImage imageNamed:@"icon_default_person"];
             }
         }
         
         NSMutableAttributedString * attString = [[NSMutableAttributedString alloc] initWithString:model.customer.name?:@""];
-        attString.font = [UIFont systemFontOfSize:15];
+        attString.font = [UIFont fontWithName:@"Heiti SC" size:15];
         UIImage *image;
         if (model.customer.gender == 1) {
             image = [UIImage imageNamed:@"ic_male"];
@@ -405,13 +423,27 @@
             image = [UIImage imageNamed:@"ic_women"];
         }
         if (image) {
-            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(15, 15) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
+            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(15, 15) alignToFont:[UIFont fontWithName:@"Heiti SC" size:15] alignment:YYTextVerticalAlignmentCenter];
             [attString appendAttributedString:attachText];
         }
+        
+        UIImage *vipImage;
+        if (model.customer.service_vip_expired_at) {
+            NSDate *date = [model.customer.service_vip_expired_at sc_dateWithUTCString];
+            NSTimeInterval interval = [date timeIntervalSinceNow];
+            if (interval > 0) {
+                vipImage = [UIImage imageNamed:@"ic_huiyuan"];
+            }
+        }
+        if (vipImage) {
+            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(15, 15) alignToFont:[UIFont fontWithName:@"Heiti SC" size:15] alignment:YYTextVerticalAlignmentCenter];
+            [attString appendAttributedString:attachText];
+        }
+        
         self.name.attributedText = attString;
         
         if ([NSString ins_String:model.customer.address_home]) {
-            self.address.text = [NSString stringWithFormat:@"  %@  ",model.customer.address_home?:@""];
+            self.address.text = [NSString stringWithFormat:@"%@",model.customer.address_home?:@""];
         }else{
             self.address.text = @"";
         }
@@ -420,6 +452,8 @@
         self.time.text = layout.formatedTimeString?:@"";
         self.content.textLayout = layout.contentLayout;
     }
+    
+//    [self.address sizeToFit];
     
     self.content.height = layout.contentHeight;
     
@@ -552,9 +586,9 @@
     if (!_name) {
         _name = [YYLabel new];
 		_name.textVerticalAlignment = YYTextVerticalAlignmentTop;
-		UIFont *font = [UIFont systemFontOfSize:15];
+		UIFont *font = [UIFont fontWithName:@"Heiti SC" size:15];
 		_name.font = font;
-        _name.textColor = YD_ColorBlack_1F2124;
+        _name.textColor = Font_color333;
         
     }
     return _name;
@@ -564,7 +598,7 @@
 	if (!_address) {
 		_address = [YYLabel new];
 //        _address.textAlignment = NSTextAlignmentCenter;
-		_address.font = [UIFont systemFontOfSize:12];
+		_address.font = [UIFont fontWithName:@"Heiti SC" size:12];
         _address.textColor = YD_Color666;
 //        _address.layer.borderColor = YD_Color666.CGColor;
 //        _address.layer.borderWidth = 1.f;
@@ -578,7 +612,7 @@
     if (!_time) {
         _time = [YYLabel new];
         _time.textAlignment = NSTextAlignmentRight;
-        _time.font = [UIFont systemFontOfSize:12];
+        _time.font = [UIFont fontWithName:@"Heiti SC" size:12];
         _time.textColor = YD_Color666;
     }
     return _time;
@@ -587,7 +621,7 @@
 - (YYLabel *)content{
     if (!_content) {
         _content = [YYLabel new];
-        _content.font = [UIFont systemFontOfSize:12];
+        _content.font = [UIFont fontWithName:@"Heiti SC" size:12];
         _content.textColor = YD_Color666;
         WEAKSELF;
         _content.highlightTapAction = ^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
@@ -602,8 +636,8 @@
 - (YYLabel *)topics{
     if (!_topics) {
         _topics = [YYLabel new];
-        _topics.font = [UIFont systemFontOfSize:12];
-        _topics.textColor = ORANGE;
+        _topics.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _topics.textColor = m1;
         _topics.hidden = YES;
         _topics.userInteractionEnabled = YES;
         WEAKSELF;
@@ -635,8 +669,8 @@
     if (!_zanCount) {
         _zanCount = [YYLabel new];
         _zanCount.textAlignment = NSTextAlignmentLeft;
-        _zanCount.font = [UIFont systemFontOfSize:12];
-        _zanCount.textColor = YD_ColorBlack_1F2124;
+        _zanCount.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _zanCount.textColor = Font_color333;
         WEAKSELF;
         [_zanCount jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
             [weakSelf zanBtnClick];
@@ -664,8 +698,8 @@
     if (!_commentCount) {
         _commentCount = [YYLabel new];
         _commentCount.textAlignment = NSTextAlignmentLeft;
-        _commentCount.font = [UIFont systemFontOfSize:12];
-        _commentCount.textColor = YD_ColorBlack_1F2124;
+        _commentCount.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _commentCount.textColor = Font_color333;
         WEAKSELF;
         [_commentCount jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
             [weakSelf commentBtnClick];

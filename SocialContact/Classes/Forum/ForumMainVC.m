@@ -42,20 +42,20 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
 }
 
 
 - (UIView *)topBarView{
     if (!_topBarView) {
         _topBarView = [UIView new];
-        _topBarView.backgroundColor = YD_ColorBlack_1F2124;
+        _topBarView.backgroundColor = Font_color333;
         _topBarView.frame = CGRectMake(0, 0, self.view.width, StatusBarHeight+55);
     }
     return _topBarView;
@@ -65,10 +65,10 @@
     if (!_categoryView) {
        
         //1、初始化JXCategoryTitleView
-        _categoryView = [[JXCategoryTitleView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, 150, 50)];
+        _categoryView = [[JXCategoryTitleView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, 230, 50)];
         _categoryView.delegate = self;
 //        _categoryView.titles = @[@"话题",@"最新",@"关注",@"技能"];
-        _categoryView.titles = @[@"朋友圈",@"话题"];
+        _categoryView.titles = @[@"朋友圈",@"话题",@"活动"];
         //2、添加并配置指示器
         //lineView
         JXCategoryIndicatorLineView *lineView = [[JXCategoryIndicatorLineView alloc] init];
@@ -84,8 +84,8 @@
         self.categoryView.titleColor = m2;
         self.categoryView.titleSelectedColor = m1;
         
-        self.categoryView.titleSelectedFont = [UIFont systemFontOfSize:25];
-        self.categoryView.titleFont = [UIFont systemFontOfSize:17];
+        self.categoryView.titleSelectedFont = [UIFont fontWithName:@"Heiti SC" size:25];
+        self.categoryView.titleFont = [UIFont fontWithName:@"Heiti SC" size:17];
         
     }
     return _categoryView;
@@ -108,7 +108,7 @@
 
 - (SwipeView *)swipeView{
     if (!_swipeView) {
-        _swipeView = [[SwipeView alloc]initWithFrame:CGRectMake(0, StatusBarHeight+50, kScreenWidth, kScreenHeight-50-UITabBarHeight)];
+        _swipeView = [[SwipeView alloc]initWithFrame:CGRectMake(0, StatusBarHeight+55, kScreenWidth, kScreenHeight-55-UITabBarHeight-StatusBarHeight)];
         _swipeView.pagingEnabled    = YES;
         _swipeView.delegate         = self;
         _swipeView.dataSource       = self;
@@ -157,20 +157,30 @@
         _vcItem = [NSMutableArray array];
     }
 
-    
+//   最新动态
     ForumVC *vc2  = [[ForumVC alloc]init];
     vc2.forumVCType = ForumVCTypeMoment;
     vc2.momentUIType = MomentUITypeList;
-    vc2.height = kScreenHeight-StatusBarHeight-50-UITabBarHeight;
+    vc2.height = kScreenHeight-StatusBarHeight-55-UITabBarHeight;
     vc2.momentRequestType = MomentRequestTypeNewest;
     vc2.fatherVC = self;
     [_vcItem addObject:vc2];
     
+//   话题
     ForumVC *vc1  = [[ForumVC alloc]init];
     vc1.forumVCType = ForumVCTypeTopic;
-    vc1.height = kScreenHeight-StatusBarHeight-50-UITabBarHeight;
+    vc1.height = kScreenHeight-StatusBarHeight-55-UITabBarHeight;
     vc1.fatherVC = self;
     [_vcItem addObject:vc1];
+    
+//    活动
+    ForumVC *vc3  = [[ForumVC alloc]init];
+    vc3.forumVCType = ForumVCTypeActivity;
+    vc3.momentUIType = MomentUITypeActivity;
+    vc3.height = kScreenHeight-StatusBarHeight-55-UITabBarHeight;
+    vc3.momentRequestType = MomentRequestTypeActivity;
+    vc3.fatherVC = self;
+    [_vcItem addObject:vc3];
     
 //    ForumVC *vc3  = [[ForumVC alloc]init];
 //    vc3.forumVCType = ForumVCTypeMoment;

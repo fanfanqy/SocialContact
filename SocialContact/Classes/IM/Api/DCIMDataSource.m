@@ -38,10 +38,10 @@ static DCIMDataSource * _SOURCES;
 	} else {
 //        /moments/topic/<int:pk>/
         // 数据库中查询不到，从网络请求中读取
-        GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"/moments/topic/%@/",groupId] parameters:nil completionHandler:^(InsRequest *requset) {
+        GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"/moments/topic/%@/",groupId] parameters:nil completionHandler:^(InsRequest *request) {
             
             if (!request.error) {
-                TopicModel *topicModel = [TopicModel modelWithDictionary:requset.responseObject[@"data"]];
+                TopicModel *topicModel = [TopicModel modelWithDictionary:request.responseObject[@"data"]];
                 
                 RCGroup *groupInfo = [[RCGroup alloc]initWithGroupId:[NSString stringWithFormat:@"%ld",topicModel.iD] groupName:topicModel.name portraitUri:topicModel.logo_url];
                 [groupInfo updateToDB];
@@ -132,13 +132,13 @@ static DCIMDataSource * _SOURCES;
     } else {
         
         // 数据库中查询不到，从网络请求中读取
-        GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"customer/%@/",userId] parameters:nil completionHandler:^(InsRequest *requset) {
+        GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"customer/%@/",userId] parameters:nil completionHandler:^(InsRequest *request) {
             
             if (!request.error) {
-                SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:requset.responseObject[@"data"]];
+                SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
                 [userInfo updateToDB];
                 
-                RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",userInfo.userId] name:userInfo.name portrait:userInfo.avatar_url] ;
+                RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",userInfo.user_id] name:userInfo.name portrait:userInfo.avatar_url] ;
                 [rcUserInfo updateToDB];
                 [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];
                 completion(rcUserInfo);

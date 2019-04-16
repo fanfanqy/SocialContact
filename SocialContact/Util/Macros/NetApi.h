@@ -11,9 +11,11 @@
 
 #define URLSTR(main,str) [NSString stringWithFormat:@"%@%@",main,str]
 
-#define APP_HOST  @"https://test.lhxq.top/" //正式
+//https://www.handanxiaohongniang.com/
+//https://test.lhxq.top/
+#define APP_HOST  @"https://www.handanxiaohongniang.com/" //正式
 #define Referer   APP_HOST
-#define QINIU_HOST  @"http://lhxq.top/" //七牛的
+
 
 
 #define kApi_loginRegister_existsWithMobile 	URLSTR(HOST,@"/login/existsWithMobile.htm")

@@ -16,7 +16,7 @@ static const CGFloat buttonHeight = 30;
 
 @property (nonatomic , strong) UIView           * buttonBackgroundView;
 @property (nonatomic , strong) NSArray          * butArray;
-@property (nonatomic , strong) UITextView       * textView;
+@property (nonatomic , strong) YYTextView       * textView;
 @property (nonatomic , strong) UIButton         * submit;
 @property (nonatomic , strong) NSMutableArray   * array;
 @property (nonatomic , strong) UIView           * navigationBackView;
@@ -42,7 +42,10 @@ static const CGFloat buttonHeight = 30;
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
-
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self.view endEditing:YES];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -89,20 +92,29 @@ static const CGFloat buttonHeight = 30;
 - (void)setNavigationIteam{
     
     self.submit = [[UIButton alloc]initWithFrame:CGRectMake((self.view.frame.size.width-40) / 2, self.textView.frame.origin.y + self.textView.frame.size.height + gap, buttonHeight * 2, buttonHeight)];
-    self.submit.titleLabel.font = [UIFont systemFontOfSize:16];
+    self.submit.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.submit];
-    [self.submit setTitle:NSLocalizedString(@"submit", nil) forState:UIControlStateNormal];
-    [self.submit setTitleColor:YD_ColorBlack_1F2124 forState:UIControlStateNormal];
+    [self.submit setTitle:NSLocalizedString(@"提交", nil) forState:UIControlStateNormal];
+    [self.submit setTitleColor:Font_color333 forState:UIControlStateNormal];
     [self.submit addTarget:self action:@selector(submitAction:) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
 - (void)creatView{
     
-    self.textView = [[UITextView alloc]initWithFrame:CGRectMake(gap, 0, self.view.frame.size.width - 2 * gap, kScreenHeight - 50)];
+    self.textView = [[YYTextView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kScreenHeight - 50)];
+    self.textView.textContainerInset = UIEdgeInsetsMake(20, 15, 20, 15);
     [self.view addSubview:self.textView];
-    self.textView.layer.cornerRadius = gap;
-    self.textView.font = [UIFont systemFontOfSize:17];
+
+    self.textView.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    
+    NSString *placeholderPlainText = @"请写下您的反馈...";
+    if (placeholderPlainText) {
+        NSMutableAttributedString *atr = [[NSMutableAttributedString alloc] initWithString:placeholderPlainText];
+        atr.color = UIColorHex(c4c4c4);
+        atr.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        _textView.placeholderAttributedText = atr;
+    }
     
     UIToolbar* keyboardDoneButtonView = [[UIToolbar alloc] init];
     keyboardDoneButtonView.barStyle = UIBarStyleDefault;
@@ -112,7 +124,7 @@ static const CGFloat buttonHeight = 30;
     // toolbar上的2个按钮
     UIBarButtonItem *SpaceButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                target:nil  action:nil]; // 让完成按钮显示在右侧
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"complete", nil)
+    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil)
                                                                    style:UIBarButtonItemStyleDone target:self
                                                                   action:@selector(pickerDoneClicked)];
     [keyboardDoneButtonView setItems:[NSArray arrayWithObjects:SpaceButton, doneButton, nil]];
@@ -122,6 +134,29 @@ static const CGFloat buttonHeight = 30;
 
 - (void)submitAction:(UIButton *)button{
 
+    if (self.textView.text.length < 10) {
+        [self.view makeToast:@"请详细描述您的问题，不少于10个字"];
+        return;
+    }
+    
+//    /feedback/
+    [self showLoading];
+    WEAKSELF;
+    
+    NSDictionary *dic = @{
+                          @"content":self.textView.text,
+                          };
+    POSTRequest *request = [POSTRequest requestWithPath:@"/feedback/" parameters:nil completionHandler:^(InsRequest *request) {
+        [weakSelf hideLoading];
+        if (request.error) {
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
+        }else{
+            [weakSelf.view makeToast:@"反馈成功"];
+        }
+        
+    }];
+    [InsNetwork addRequest:request];
 }
 
 -(void)pickerDoneClicked{

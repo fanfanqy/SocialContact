@@ -84,6 +84,12 @@ extern NSString *const kQiNiuTokenKey;
 extern NSString *const kQINIU_HOSTKey;
 
 
+extern NSString *const kWeChatPartnerId;
+extern NSString *const kWeChatAppId;
+extern NSString *const kWeChatAppS;
+
+
+
 // 色值
 extern NSString *const kIMNearByBtnBackgroundColor;
 
@@ -92,3 +98,15 @@ extern NSString *const kIMDriftingBottleBtnBackgroundColor;
 extern NSString *const kIMLoveSkillBtnBackgroundColor;
 
 extern NSString *const kIMInviteFriendBtnBackgroundColor;
+
+
+// 主动发消息 每天个数
+extern NSInteger const kConstChatCount; //3
+
+// 一键打招呼 每天个数
+extern NSInteger const kConstSayHiCount; //1
+
+// 分享的URL
+static NSString *kSCShareLinkURL = @"http://tech.qq.com/zt2012/tmtdecode/252.htm";
+
+static NSString *kSCShareDes = @"真实高效同城婚恋平台脱单神器，【实名制】【成功率高】【高效专业】，拒绝婚托婚骗，真诚征婚交友";

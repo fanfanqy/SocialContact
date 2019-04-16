@@ -25,11 +25,11 @@
         [formatterYesterday setLocale:[NSLocale currentLocale]];
         
         formatterSameYear = [[NSDateFormatter alloc] init];
-        [formatterSameYear setDateFormat:@"M-d"];
+        [formatterSameYear setDateFormat:@"M-d HH:mm"];
         [formatterSameYear setLocale:[NSLocale currentLocale]];
         
         formatterFullDate = [[NSDateFormatter alloc] init];
-        [formatterFullDate setDateFormat:@"yy-M-dd"];
+        [formatterFullDate setDateFormat:@"yy-M-dd HH:mm"];
         [formatterFullDate setLocale:[NSLocale currentLocale]];
     });
     

@@ -27,9 +27,9 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="mcu-9g-nhg" secondAttribute="bottom" id="6eO-8U-3Fc"/>
+                            <constraint firstItem="mcu-9g-nhg" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Mrv-iz-utV"/>
                             <constraint firstItem="mcu-9g-nhg" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="jAJ-dg-aGh"/>
-                            <constraint firstItem="mcu-9g-nhg" firstAttribute="top" secondItem="Ik6-Fu-LCs" secondAttribute="bottom" constant="-20" id="lzh-km-BJT"/>
-                            <constraint firstItem="oF9-Yw-Vjp" firstAttribute="top" secondItem="mcu-9g-nhg" secondAttribute="bottom" id="p7B-2U-gjI"/>
                             <constraint firstAttribute="trailing" secondItem="mcu-9g-nhg" secondAttribute="trailing" id="rBT-oc-nSY"/>
                         </constraints>
                     </view>
@@ -41,6 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg_welcome" width="269.25" height="451.5"/>
+        <image name="bg_welcome" width="1080" height="1619"/>
     </resources>
 </document>

@@ -13,6 +13,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.avatarImg.layer.cornerRadius = 24.f;
+    self.avatarImg.layer.masksToBounds = YES;
+    self.titleL.font = [UIFont fontWithName:@"Heiti SC" size:15];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -34,32 +34,46 @@
     [super viewDidLoad];
     [self _initNavBar];
     [self initTextView];
-    //    self.fd_interactivePopDisabled = YES;
-
-    [self.view addSubview:self.publishButton];
+    
+    self.fd_interactivePopDisabled = YES;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.publishButton];
     
     [_textView becomeFirstResponder];
-    
+    if (self.model) {
+        
+        if (_modifyType == ModifyTypeNickName) {
+           _textView.text = self.model.name;
+        }else if (_modifyType == ModifyTypeSelfIntroduce) {
+            _textView.text = self.model.intro;
+            
+        }else if (_modifyType == ModifyTypeWeChat) {
+            _textView.text = self.model.wechat_id;
+            
+        }
+    }else{
+        self.model = [SCUserInfo new];
+    }
     
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.view endEditing:YES];
-    //    self.fd_interactivePopDisabled = NO;
 }
-
-
 
 - (void)_initNavBar {
     if (_modifyType == ModifyTypeNickName) {
         self.title = @"设置昵称";
         _maxWords = kNickNameMaxWords;
-    }
-    if (_modifyType == ModifyTypeSelfIntroduce) {
-        self.title = @"设置个性签名";
+    }else if (_modifyType == ModifyTypeSelfIntroduce) {
+        self.title = @"设置个人签名";
         _maxWords = kSelfIntroduceMaxWords;
 
+    }else if (_modifyType == ModifyTypeWeChat) {
+        self.title = @"设置微信号";
+        _maxWords = kSelfIntroduceMaxWords;
+        
     }
 }
 
@@ -72,11 +86,11 @@
         _publishButton.left = kScreenWidth-54-20;
         _publishButton.layer.cornerRadius = 4.0;
         _publishButton.layer.masksToBounds = YES;
-        _publishButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _publishButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
         [_publishButton setTitle:@"完成" forState:UIControlStateNormal];
         [_publishButton setTitleColor:UIColorHex(FFFFFF) forState:UIControlStateNormal];
         [_publishButton setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateDisabled];
-        [_publishButton setBackgroundImage:[UIImage imageWithColor:UIColorHex(63D190)] forState:UIControlStateNormal];
+        [_publishButton setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
         [_publishButton addTarget:self action:@selector(_publishBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _publishButton;
@@ -85,34 +99,26 @@
 - (void)initTextView {
     if (_textView) return;
     _textView = [YYTextView new];
-    _textView.top = GuaTopHeight;
+    _textView.top = 0;
     _textView.size = CGSizeMake(self.view.width, 160);
     _textView.textContainerInset = UIEdgeInsetsMake(16, 16, 16, 16);
     _textView.layer.borderWidth = 1;
-    _textView.layer.borderColor = UIColorHex(C8C8C8).CGColor;
+    _textView.layer.borderColor = Line.CGColor;
     
     _textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _textView.showsVerticalScrollIndicator = NO;
     _textView.alwaysBounceVertical = YES;
     _textView.allowsCopyAttributedString = NO;
-    _textView.font = [UIFont systemFontOfSize:16];
+    _textView.font = [UIFont fontWithName:@"Heiti SC" size:15];
     _textView.delegate = self;
     _textView.inputAccessoryView = [UIView new];
     
-//    TextLinePositionModifier *modifier = [TextLinePositionModifier new];
-//    modifier.font = [UIFont fontWithName:@"Heiti SC" size:16];
-//    modifier.paddingTop = 12;
-//    modifier.paddingBottom = 12;
-//    modifier.lineHeightMultiple = 1.5;
-    
-//    _textView.linePositionModifier = modifier;
-    
-    NSString *placeholderPlainText ;
+    NSString *placeholderPlainText = self.title;
     
     if (placeholderPlainText) {
         NSMutableAttributedString *atr = [[NSMutableAttributedString alloc] initWithString:placeholderPlainText];
         atr.color = UIColorHex(c4c4c4);
-        atr.font = [UIFont systemFontOfSize:16];
+        atr.font = [UIFont fontWithName:@"Heiti SC" size:15];
         _textView.placeholderAttributedText = atr;
     }
     [self.view addSubview:_textView];
@@ -121,56 +127,83 @@
 
 - (void)_publishBtnClick{
     [self.view endEditing:YES];
-    if ([NSString ins_String:_textView.text]) {
-        WEAKSELF
+    if (![NSString ins_String:_textView.text]) {
+        [self.view makeToast:@"请重新输入内容"];
+        return;
+    }else{
         if (_modifyType == ModifyTypeNickName) {
             
-//            [AlertControllerManager alertWithTitle:nil message:@"没有输入昵称，请重新输入" textFieldNumber:0 actionNumber:1 actionTitles:@[@"我知道了"] textFieldHandler:nil actionHandler:^(UIAlertAction *action, NSUInteger index) {
-//                weakSelf.textView.text = nil;
-//                [weakSelf.textView becomeFirstResponder];
-//            } vc:self];
+            if(_textView.text.length > _maxWords){
+                [self.view makeToast:@"昵称过长，赞不支持"];
+                return;
+            }
+            self.model.name = _textView.text;
+        }else if (_modifyType == ModifyTypeSelfIntroduce) {
+            
+            if(_textView.text.length > _maxWords){
+                [self.view makeToast:@"个人签名过长，暂不支持"];
+                return;
+            }
+            self.model.intro = _textView.text;
+        }else if (_modifyType == ModifyTypeWeChat) {
+            self.model.wechat_id = _textView.text;
         }
-        if (_modifyType == ModifyTypeSelfIntroduce) {
-//            [AlertControllerManager alertWithTitle:nil message:@"没有输入个性签名，请重新输入" textFieldNumber:0 actionNumber:1 actionTitles:@[@"我知道了"] textFieldHandler:nil actionHandler:^(UIAlertAction *action, NSUInteger index) {
-//                weakSelf.textView.text = nil;
-//                [weakSelf.textView becomeFirstResponder];
-//            } vc:self];
-        }
-        
-    }else{
-        
-        [self modifyUserinfo];
         
     }
+    
+    [self modifyUserinfo];
 }
 
 - (void)modifyUserinfo{
-    WEAKSELF
+    
+    NSDictionary *dic;
     
     if (_modifyType == ModifyTypeNickName) {
-//        self.model.nickname = self.textView.text;
-    }
-    if (_modifyType == ModifyTypeSelfIntroduce) {
-//        self.model.selfIntroduction = self.textView.text;
+        self.model.name = self.textView.text;
+        dic = @{
+                @"name":self.model.name?:@"",
+                };
+    }else if (_modifyType == ModifyTypeSelfIntroduce) {
+        self.model.intro = self.textView.text;
+        dic = @{
+                @"intro":self.model.intro?:@"",
+                };
+        
+    }else if (_modifyType == ModifyTypeWeChat) {
+        self.model.wechat_id = self.textView.text;
+        dic = @{
+                @"wechat_id":self.model.wechat_id?:@"",
+                };
     }
     
-//    [ChannelRequest modifyStudentInfoWithUserInfoModel:self.model Success:^(NetResponseModel *model) {
-//
-//        if (model) {
-//            [weakSelf.navigationController.view makeToast:model.msg];
-//            if (model.code == kRequest_OK) {
-//
-//                [[UserManager sharedInstance]setUserInfoModel:weakSelf.model];
-//
-//                [weakSelf.navigationController popViewControllerAnimated:YES];
-//            }
-//        }else{
-//            [weakSelf.tableView makeToast:kServerBusyAlert];
-//        }
-//
-//    } failure:^(NSError *error) {
-//        [weakSelf.navigationController.view makeToast:error.localizedDescription];
-//    }];
+    
+    WEAKSELF;
+    POSTRequest *request = [POSTRequest requestWithPath:@"/customer/profile/" parameters:dic ?: nil completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
+        }else{
+            weakSelf.model = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
+            
+            // 1.
+            [SCUserCenter sharedCenter].currentUser.userInfo = weakSelf.model;
+            [[SCUserCenter sharedCenter].currentUser updateToDB];
+            
+            // 2.
+            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",[SCUserCenter sharedCenter].currentUser.user_id] name:[SCUserCenter sharedCenter].currentUser.name portrait:weakSelf.model.avatar_url] ;
+            [rcUserInfo updateToDB];
+            [RCIM sharedRCIM].currentUserInfo = rcUserInfo;
+            [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];
+            
+            [weakSelf.view makeToast:@"设置完成"];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            });
+        }
+    }];
+    [InsNetwork addRequest:request];
     
 }
 
@@ -187,11 +220,11 @@
         }
         return NO;
     }
-    if ([text isEqualToString:@"\n"]){
-        [self.textView resignFirstResponder];//在这里做你响应return键的代码//判断输入的字是否是回车，即按下return
-        [self _publishBtnClick];
-        return NO; //这里返回NO，就代表return键值失效，即页面上按下return，不会出现换行，如果为yes，则输入页面会换行
-    }
+//    if ([text isEqualToString:@"\n"]){
+//        [self.textView resignFirstResponder];//在这里做你响应return键的代码//判断输入的字是否是回车，即按下return
+//        [self _publishBtnClick];
+//        return NO; //这里返回NO，就代表return键值失效，即页面上按下return，不会出现换行，如果为yes，则输入页面会换行
+//    }
     return YES;
 }
 

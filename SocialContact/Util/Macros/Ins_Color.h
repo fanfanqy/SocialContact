@@ -9,7 +9,7 @@
 #ifndef Ins_Color_h
 #define Ins_Color_h
 
-#define MAIN_COLOR [UIColor colorWithHexString:@"619fff"]
+#define MAIN_COLOR [UIColor colorWithHexString:@"F57C00"]
 #define MAIN_COLOR_NEW MAIN_COLOR
 #define MAIN_COLOR_Blur [UIColor colorWithHexString:@"619fff"]
 
@@ -20,14 +20,16 @@
 #define BLUE [UIColor colorWithHexString:@"03A9F4"]
 #define Black [UIColor colorWithHexString:@"1F2124"]
 
+#define YueHuiRed [UIColor colorWithHexString:@"E92A34"]
+
 
 #define LOGO_BG    [UIColor colorWithHexString:@"3a404e"]
 #define BackGroundColor    [UIColor colorWithHexString:@"F7F7F7"]
 #define NavigationBarLine  [UIColor colorWithHexString:@"e9e9ea"]
 
 #define Font_color1    [UIColor colorWithHexString:@"000000"]
-#define Font_color2    [UIColor colorWithHexString:@"333333"]
-#define Font_color333    [UIColor colorWithHexString:@"333333"]
+#define Font_color2    [UIColor colorWithHexString:@"1f2124"]
+#define Font_color333    [UIColor colorWithHexString:@"1f2124"]
 #define Font_color3    [UIColor colorWithHexString:@"979797"]
 #define Line           [UIColor colorWithHexString:@"e9e9ea"]
 #define YD_Color666    [UIColor colorWithHexString:@"666666"]
@@ -35,7 +37,7 @@
 #define YD_HomeWarningRed [UIColor colorWithHexString:@"fe675f"]
 #define YD_ColorRed_FF3B30    [UIColor colorWithHexString:@"FF3B30"]
 
-#define YD_ColorBlack_1F2124 [UIColor colorWithHexString:@"1F2124"]
+#define YD_Color_1F2124 [UIColor colorWithHexString:@"1F2124"]
 
 
 #define  m1 [UIColor colorWithHexString:@"FF5722"]

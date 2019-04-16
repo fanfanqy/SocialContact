@@ -11,6 +11,7 @@
 #import "Notice.h"
 #import "WhoLookMeModel.h"
 #import "UserPointsModel.h"
+#import "FollowsModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @protocol NearByUserCellDelegate <NSObject>
@@ -28,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *address;
 @property (weak, nonatomic) IBOutlet UILabel *personalSignature;
 @property (weak, nonatomic) IBOutlet UILabel *distance;
+@property (weak, nonatomic) IBOutlet UIImageView *vipFlagV;
+@property (weak, nonatomic) IBOutlet UIImageView *genderImg;
 
 
 /**
@@ -43,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) WhoLookMeModel *lookMeModel;
 
 @property (strong, nonatomic) UserPointsModel *userPointsModel;
+
+@property (strong, nonatomic) FollowsModel *followsModel;
 
 @property (assign, nonatomic) NSInteger userId;
 

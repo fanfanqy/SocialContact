@@ -14,12 +14,15 @@
     [super awakeFromNib];
     // Initialization code
     self.backgroundColor = [UIColor whiteColor];
-    self.layer.cornerRadius = 6;
+    self.layer.cornerRadius = 8;
     self.layer.masksToBounds = YES;
     
-    self.address.layer.borderColor = YD_ColorBlack_1F2124.CGColor;
-    self.address.layer.borderWidth = 1.f;
-    self.address.layer.cornerRadius = 9.f;
+    self.address.layer.borderColor = Font_color333.CGColor;
+    self.address.layer.borderWidth = .5;
+    self.address.layer.cornerRadius = 10.f;
+    
+    self.nick.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    self.address.font = [UIFont fontWithName:@"Heiti SC" size:12];
     
 }
 
@@ -30,21 +33,24 @@
     UIImage *placeholdImage = [UIImage imageNamed:@"icon_default_person"];
     if ([NSString ins_String:model.avatar_url]) {
         avatarUrl = model.avatar_url;
+        if (![avatarUrl containsString:@"http"]) {
+            avatarUrl = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,avatarUrl];
+        }
         [self.img sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:placeholdImage];
     }else{
        self.img.image = placeholdImage;
     }
-    
+   
     if ([NSString ins_String:model.name]) {
         self.nick.text = model.name;
     }else{
-        self.nick.text = [NSString stringWithFormat:@" %@ ",@"未知"];
+        self.nick.text = [NSString stringWithFormat:@" %@ ",@"--"];
     }
     
     if ([NSString ins_String:model.address_home]) {
         self.address.text = [NSString stringWithFormat:@"  %@  ",model.address_home];
     }else{
-        self.address.text = [NSString stringWithFormat:@"  %@  ",@"未知"];
+        self.address.text = [NSString stringWithFormat:@"  %@  ",@"--"];
     }
     
 //    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];

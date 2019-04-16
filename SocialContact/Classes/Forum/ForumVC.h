@@ -16,7 +16,9 @@ typedef NS_ENUM(NSInteger,ForumVCType){
     ForumVCTypeTopic = 2, // UI
     ForumVCTypeTopicSelect = 3,
     ForumVCTypeNoticeOrNearBy = 4,
-    
+    ForumVCTypeActivity = 5,
+    ForumVCTypeAskWeChatOrYueTa = 6,
+    ForumVCTypePointsStore = 7, // 积分商城
 };
 
 typedef NS_ENUM(NSInteger,ForumVCGoToType){

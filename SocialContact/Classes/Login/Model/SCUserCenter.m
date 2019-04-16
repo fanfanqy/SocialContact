@@ -80,10 +80,11 @@ static SCUserCenter *CENTER = nil;
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"userList"];
 }
 
-+ (void) getOtherUserInformationWithUserId:(NSInteger)userId completion: (void(^)(id responseObj, BOOL succeed, NSError *error)) complationBlock{
++ (void)getSelfInformationAndUpdateDBWithUserId:(NSInteger)userId completion: (void(^)(id responseObj, BOOL succeed, NSError *error)) complationBlock{
     
     //[SCUserCenter sharedCenter].currentUser.userInfo.account] 自己的
-    GETRequest *request = [GETRequest  requestWithPath:[NSString stringWithFormat:@"customer/%ld/",userId] parameters:nil completionHandler:^(InsRequest *request) {
+//    /customer/profile ： 当前登录用户的个人信息
+    GETRequest *request = [GETRequest  requestWithPath:@"/customer/profile" parameters:nil completionHandler:^(InsRequest *request) {
         
         if (!request.error) {
             SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];

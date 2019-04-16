@@ -8,6 +8,7 @@
 
 #import "SCIM.h"
 #import "DCIMDataSource.h"
+#import "NSObject+HhtCategory.h"
 
 @interface  SCIM() <RCIMConnectionStatusDelegate, RCIMReceiveMessageDelegate>
 
@@ -55,6 +56,30 @@ static SCIM *_dcim = nil;
  */
 - (void)onRCIMReceiveMessage:(RCMessage *)message left:(int)left{
     
+    // 处理新消息到来TabBar的变化
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIViewController *vc = [AppDelegate sharedDelegate].window.rootViewController;
+        if ([vc isKindOfClass:[CYLTabBarController class]]) {
+            
+            CYLTabBarController *tabBarViewController = (CYLTabBarController *)vc;
+            if ( [RCIMClient sharedRCIMClient].getTotalUnreadCount != 0 ) {
+                tabBarViewController.tabBar.items[2].badgeValue = [[NSString alloc] initWithFormat:@"%d", [RCIMClient sharedRCIMClient].getTotalUnreadCount];
+            } else {
+                tabBarViewController.tabBar.items[2].badgeValue = nil;
+            }
+        }
+        
+        
+    });
+    
+    if (left == 0) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"RefreshOtherMessageIsVip" object:message.targetId];
+        
+        if ([self runningInBackground]) {
+            [self addLocalNotification];
+        }
+    }
+    
 }
 
 #pragma mark -
@@ -79,11 +104,12 @@ static SCIM *_dcim = nil;
     [RCIM sharedRCIM].portraitImageViewCornerRadius = 23;
     [RCIM sharedRCIM].globalMessagePortraitSize = CGSizeMake(46, 46);
     // 开启用户信息和群组信息的持久化
-    [RCIM sharedRCIM].enablePersistentUserInfoCache = NO;
+    [RCIM sharedRCIM].enablePersistentUserInfoCache = YES;
+    [RCIM sharedRCIM].globalNavigationBarTintColor = Black;
     // 开启输入状态监听
     [RCIM sharedRCIM].enableTypingStatus = YES;
-    // 关闭前台语音消息推送 --- 避免视频播放中断和小益语音唤醒冲突
-    [RCIM sharedRCIM].disableMessageAlertSound = NO;
+    // 开启前台语音消息推送
+    [RCIM sharedRCIM].disableMessageAlertSound = YES;
     // 开启已读回执
     [RCIM sharedRCIM].enabledReadReceiptConversationTypeList = @[@(ConversationType_PRIVATE),@(ConversationType_DISCUSSION),@(ConversationType_GROUP)];
     // 开启多端未读状态同步
@@ -110,88 +136,51 @@ static SCIM *_dcim = nil;
     
 //    // 注册自定义消息
 //    [[RCIM sharedRCIM] registerMessageType:[DCIMPermissionMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMStatuMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMHiddenMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMOrderMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMHealthChangeMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMCCMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMPayMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMPermissionChangeMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMNotReadingCountMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMNotificationMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMCameraMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMHealthReport class]];
-//    [[RCIM sharedRCIM] registerMessageType:[DCIMCallMessage class]];
-//    [[RCIM sharedRCIM] registerMessageType:[SystemMessageContentModel class]];
-    
-    // 清空标记位
-//    [self setCombinedWithCameraWarning:NO];
-    
-#pragma mark -
-    
-    // 先激活一下RTC 通道
-//    RTCAudioSessionConfiguration *webRTCConfig =
-//    [RTCAudioSessionConfiguration webRTCConfiguration];
-//    webRTCConfig.categoryOptions = webRTCConfig.categoryOptions |
-//    AVAudioSessionCategoryOptionDefaultToSpeaker;
-//    [RTCAudioSessionConfiguration setWebRTCConfiguration:webRTCConfig];
-//    RTCAudioSession *session = [RTCAudioSession sharedInstance];
-//    [session addDelegate:self];
-//
-//    [self configureAudioSession];
-//
-//    // 配置 WEBRTC
-//    ARDSettingsModel *settingsModel = [[ARDSettingsModel alloc] init];
-//
-//    [[settingsModel availableVideoCodecs] enumerateObjectsUsingBlock:^(RTCVideoCodecInfo *obj, NSUInteger idx, BOOL *stop) {
-//        NSLog(@"<RTC> %@: %@", obj.name, obj.parameters);
-//
-//        if ( [obj.name isEqualToString:@"H264"] && obj.parameters && obj.parameters[@"profile-level-id"] && [@"42e02a" isEqualToString:obj.parameters[@"profile-level-id"]]  ) {
-//            [settingsModel storeVideoCodecSetting:obj];
-//            *stop = YES;
-//        }
-//    }];
-//
-//    [[settingsModel availableVideoResolutions] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        NSLog(@"<RTC> %@", obj);
-//    }];
-//
-//    [settingsModel storeVideoResolutionSetting:@"192x144"];
-//    [settingsModel storeVideoCodecSetting:[settingsModel availableVideoCodecs][0]];
-    
-//    // 钟表
-//    self.seconds = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeIncrement) userInfo:nil repeats:YES];
-//    [[NSRunLoop currentRunLoop] addTimer:self.seconds forMode:NSRunLoopCommonModes];
-//    // 秒
-//    self.incrementSeconds = 0;
-//
+
+
     [self conn];
 }
 
 - (void) conn {
     // 连接融云
-    @weakify(self);
+    WEAKSELF;
     [[RCIM sharedRCIM] connectWithToken:[SCUserCenter sharedCenter].currentUser.im_token success:^(NSString *userId) {
         NSLog(@"融云登录成功：%@", userId);
-        
+        // 申请要通知
+        [weakSelf registerRemoteNotification];
         
     } error:^(RCConnectErrorCode status) {
-//        @normalize(self);
-//        [self refreshToken];
+        
     } tokenIncorrect:^{
-        @normalize(self);
-        [self refreshToken];
+        
+        [weakSelf refreshToken];
     }];
 }
 
+
+- (void)registerRemoteNotification{
+    
+#pragma mark
+    // 开启消息推送，这个较早请求用户的允许状态，可以等到融云token异步获取返回后请求状态。
+    if ([[UIApplication sharedApplication]
+         respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings
+                                                settingsForTypes:(UIUserNotificationTypeBadge |
+                                                                  UIUserNotificationTypeSound |
+                                                                  UIUserNotificationTypeAlert)
+                                                categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+}
+
 - (void) refreshToken {
-    @weakify(self);
+    WEAKSELF;
     GETRequest *request = [GETRequest requestWithPath:@"/im/" parameters:nil completionHandler:^(InsRequest *request) {
-        @normalize(self);
+        
         if (!request.error) {
             [SCUserCenter sharedCenter].currentUser.im_token = request.responseObject[@"data"][@"token"];
             [[SCUserCenter sharedCenter].currentUser updateToDB];
-            [self conn];
+            [weakSelf conn];
         }
         
     }];

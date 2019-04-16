@@ -15,6 +15,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setUpUI];
         [self setViewAtuoLayout];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
@@ -23,41 +24,44 @@
     _userModel = userModel;
     
     UIImage *placeholdImage = nil;
-    if (userModel.gender == 1) {
-        placeholdImage = [UIImage imageNamed:@"icon_default_person"];
+    if (userModel.gender == 0) {
+        placeholdImage = [UIImage imageNamed:@""];
+    }else if (userModel.gender == 1){
+        placeholdImage = [UIImage imageNamed:@"ic_male"];
     }else if (userModel.gender == 2){
-        placeholdImage = [UIImage imageNamed:@"icon_default_person"];
-    }else if (userModel.gender == 0){
-        placeholdImage = [UIImage imageNamed:@"icon_default_person"];
+        placeholdImage = [UIImage imageNamed:@"ic_women"];
     }
+    self.genderImg.image = placeholdImage;
     
-    
-    if ([NSString ins_String:userModel.avatar_url]) {
-        
-        BOOL containsImage = [[YYWebImageManager sharedManager].cache containsImageForKey:userModel.avatar_url];
-        
-        if (containsImage) {
-            placeholdImage = [[YYWebImageManager sharedManager].cache getImageForKey:userModel.avatar_url];
+    if (self.userModel.service_vip_expired_at) {
+        NSDate *date = [self.userModel.service_vip_expired_at sc_dateWithUTCString];
+        NSTimeInterval interval = [date timeIntervalSinceNow];
+        if (interval < 0) {
+            self.huiYuan.hidden = YES;
+        }else{
+            self.huiYuan.hidden = NO;
         }
-    
     }else{
-        self.avatarImg.image = placeholdImage;
-        
+        self.huiYuan.hidden = YES;
     }
     
     NSString *avatarUrlStr = userModel.avatar_url;
-    if ([NSString ins_String:avatarUrlStr]) {
-        [self.avatarImg setImageWithURL:[NSURL URLWithString:avatarUrlStr] placeholder:placeholdImage options:YYWebImageOptionRefreshImageCache completion:nil];
-    }
+    [self.avatarImg sc_setImgWithUrl:avatarUrlStr placeholderImg:@"icon_default_person"];
 
-    self.nickNameLB.text =  userModel.name;
-    self.follow.text = [NSString stringWithFormat:@"关注：%ld",userModel.following_count];
-    self.followers.text = [NSString stringWithFormat:@"粉丝：%ld",userModel.followers_count];
-//    self.genderImg.image = [UIImage imageNamed:[NSString getImageStrWithSex:userModel.sex] inBundle:Bundle compatibleWithTraitCollection:nil];
+    self.nickNameLB.text =  userModel.name ?:@"";
+    
+    self.introduce.text = userModel.intro ? [NSString stringWithFormat:@"个性签名：%@",userModel.intro] :@"暂无个人介绍";
+//    self.follow.text = [NSString stringWithFormat:@"关注：%ld",userModel.following_count];
+//    self.followers.text = [NSString stringWithFormat:@"粉丝：%ld",userModel.followers_count];
+
 }
 
 - (void)setUpUI
 {
+    
+    self.contentView.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor clearColor];
+    
     _avatarBgImg = [UIImageView new];
 
     _avatarBgImg.layer.masksToBounds = YES;
@@ -65,27 +69,55 @@
     
     _avatarImg = [UIImageView new];
     _avatarImg.backgroundColor = [UIColor clearColor];
-    _avatarImg.layer.cornerRadius = 32;
+    _avatarImg.layer.cornerRadius = 40;
     _avatarImg.contentMode = UIViewContentModeScaleAspectFill;
 //    _avatarImg.layer.borderWidth = 1;
 //    _avatarImg.layer.borderColor = [UIColor colorWithHexString:@"eeeeee"].CGColor;
     _avatarImg.layer.masksToBounds = YES;
     
     _nickNameLB = [UILabel new];
-    _nickNameLB.font = [UIFont systemFontOfSize:18];
-    _nickNameLB.textColor = [UIColor colorWithHexString:@"333333"];
+    _nickNameLB.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
+    _nickNameLB.textColor = [UIColor colorWithHexString:@"1f2124"];
     
     
     _genderImg = [UIImageView new];
-    
-    _follow = [UILabel new];
-    _follow.font =  [UIFont systemFontOfSize:13];
-    _follow.textColor = [UIColor colorWithHexString:@"999999"];
+    _genderImg.contentMode = UIViewContentModeScaleAspectFit;
     
     
-    _followers = [UILabel new];
-    _followers.font = [UIFont systemFontOfSize:13];
-    _followers.textColor = [UIColor colorWithHexString:@"999999"];
+    _huiYuan = [UIImageView new];
+    _huiYuan.image = [UIImage imageNamed:@"ic_huiyuan"];
+    _huiYuan.contentMode = UIViewContentModeScaleAspectFit;
+    
+    
+    _introduce = [TTTAttributedLabel new];
+    _introduce.lineSpacing = 5.f;
+    _introduce.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+    _introduce.textColor = Black;
+    _introduce.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
+    _introduce.textAlignment = NSTextAlignmentLeft;
+    _introduce.numberOfLines = 0;
+    
+//    _follow = [UILabel new];
+//    _follow.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+//    _follow.textColor = RED;
+//    _follow.userInteractionEnabled = YES;
+//    WEAKSELF;
+//    [_follow jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+//        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(myGuanZhuClicked)]) {
+//            [weakSelf.delegate myGuanZhuClicked];
+//        }
+//    }];
+//
+//    _followers = [UILabel new];
+//    _followers.font = [UIFont fontWithName:@"Heiti SC" size:15];
+//    _followers.textColor = RED;
+//    _followers.userInteractionEnabled = YES;
+//    [_followers jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+//        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(myFenSiClicked)]) {
+//            [weakSelf.delegate myFenSiClicked];
+//        }
+//    }];
+    
     
     _rightArrowImg = [UIButton new];
     _rightArrowImg.userInteractionEnabled = NO;
@@ -95,15 +127,18 @@
     
     _setupBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _setupBtn.contentMode = UIViewContentModeScaleAspectFit;
-    [_setupBtn setImage:[UIImage imageNamed:@"shezhi"] forState:UIControlStateNormal];
+    _setupBtn.showsTouchWhenHighlighted = YES;
+    [_setupBtn setImage:[UIImage imageNamed:@"ic_setting"] forState:UIControlStateNormal];
     [_setupBtn addTarget:self action:@selector(setupBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
     [self.contentView addSubview:_avatarBgImg];
     [self.contentView addSubview:_avatarImg];
     [self.contentView addSubview:_nickNameLB];
     [self.contentView addSubview:_genderImg];
-    [self.contentView addSubview:_follow];
-    [self.contentView addSubview:_followers];
+    [self.contentView addSubview:_huiYuan];
+    [self.contentView addSubview:_introduce];
+//    [self.contentView addSubview:_follow];
+//    [self.contentView addSubview:_followers];
     [self.contentView addSubview:_rightArrowImg];
     [self.contentView addSubview:_setupBtn];
 }
@@ -117,8 +152,8 @@
 
         make.left.mas_equalTo(self).mas_offset(15);
         make.centerY.mas_equalTo(self);
-        make.width.mas_equalTo(64);
-        make.height.mas_equalTo(64);
+        make.width.mas_equalTo(80);
+        make.height.mas_equalTo(80);
 
     }];
     
@@ -146,20 +181,35 @@
         make.width.height.mas_equalTo(22);
     }];
     
-    [_follow mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_huiYuan mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.left.mas_equalTo(self.avatarBgImg.mas_right).mas_offset(10);
-        make.top.mas_equalTo(self.avatarBgImg.mas_centerY).mas_offset(4);
-        make.width.mas_greaterThanOrEqualTo(100);
-        make.height.mas_equalTo(20);
+        make.left.mas_equalTo(self.genderImg.mas_right).mas_offset(10);
+        make.centerY.mas_equalTo(self.nickNameLB.mas_centerY);
+        make.width.height.mas_equalTo(22);
     }];
     
-    [_followers mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.follow.mas_right).mas_offset(5);
-        make.centerY.mas_equalTo(self.follow);
-        make.width.mas_greaterThanOrEqualTo(1);
-        make.height.mas_equalTo(20);
+    [_introduce mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        make.left.mas_equalTo(self.avatarImg.mas_right).mas_offset(10);
+        make.top.mas_equalTo(self.nickNameLB.mas_bottom).mas_offset(5);
+        make.right.mas_equalTo(self).mas_offset(-15);
+        make.bottom.mas_equalTo(self).mas_offset(-10);
     }];
+    
+//    [_follow mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.left.mas_equalTo(self.avatarBgImg.mas_right).mas_offset(10);
+//        make.top.mas_equalTo(self.avatarBgImg.mas_centerY).mas_offset(10);
+//        make.width.mas_greaterThanOrEqualTo(1);
+//        make.height.mas_equalTo(20);
+//    }];
+//
+//    [_followers mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.mas_equalTo(self.follow.mas_right).mas_offset(15);
+//        make.centerY.mas_equalTo(self.follow);
+//        make.width.mas_greaterThanOrEqualTo(1);
+//        make.height.mas_equalTo(20);
+//    }];
     
     [_rightArrowImg mas_makeConstraints:^(MASConstraintMaker *make) {
         
@@ -167,6 +217,7 @@
         make.centerY.mas_equalTo(self.avatarBgImg);
         make.width.mas_equalTo(6);
         make.height.mas_equalTo(12);
+        
     }];
     
     [_setupBtn mas_makeConstraints:^(MASConstraintMaker *make) {

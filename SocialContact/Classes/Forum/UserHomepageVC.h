@@ -12,7 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserHomepageVC : InsViewController
 
-@property(nonatomic,assign)NSInteger userId;
+@property(nonatomic,assign) NSInteger userId;
+
+
+
+@property(nonatomic,strong) NSString *name;
 
 @end
 

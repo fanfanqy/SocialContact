@@ -148,23 +148,23 @@
     [self startRequest];
     
     AFURLSessionManager * sessionManager = [InsNetwork sharedInstance].sessionManager;
-    @weakify(self);
+    WEAKSELF;
     
     if ( _files.count > 0 ) {
         _task = [sessionManager
          uploadTaskWithStreamedRequest:buildRequest
          progress:^(NSProgress * uploadProgress) {
-             @normalize(self);
+             
              [self progressUpdate:uploadProgress];
          } completionHandler:^(NSURLResponse * response, id responseObject, NSError * error) {
-             @normalize(self);
+             
              [self completionWithObj:responseObject error:error response:response];
          }];
     } else {
         CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
         _task = [sessionManager dataTaskWithRequest:buildRequest uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            @normalize(self);
-            [self completionWithObj:responseObject error:error response:response];
+            
+            [weakSelf completionWithObj:responseObject error:error response:response];
             if ( [StartOption sharedInstance].debugger  ) {
                    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
                    NSLog(@"->network, %@ - cost: %.2f", buildRequest.URL.path, endTime - startTime);
@@ -272,17 +272,17 @@
     [self startRequest];
     
     AFURLSessionManager * sessionManager = [InsNetwork sharedInstance].sessionManager;
-    @weakify(self);
+    WEAKSELF;
     
     if ( _files.count > 0 ) {
         _task =
         [sessionManager
          uploadTaskWithStreamedRequest:buildRequest
          progress:^(NSProgress * uploadProgress) {
-             @normalize(self);
+             
              [self progressUpdate:uploadProgress];
          } completionHandler:^(NSURLResponse * response, id responseObject, NSError * error) {
-             @normalize(self);
+             
              [self completionWithObj:responseObject error:error response:response];
          }];
     } else {
@@ -338,7 +338,7 @@
     if ( httpResponse.statusCode != 200 ) {
         NSError * err =
         [NSError errorWithDomain:INS_DOMAIN code:dic[@"errorCode"]? [dic[@"status_code"] integerValue] : error.code
-                        userInfo:@{NSLocalizedDescriptionKey:dic[@"detail"] ?: INS_ERROR_STR_DEFULT}];
+                        userInfo:@{NSLocalizedDescriptionKey:dic[kRequestMessageKey] ?: INS_ERROR_STR_DEFULT}];
         self->_error = err;
         [self failWithError];
         return ;
@@ -460,22 +460,23 @@
 
 - (void) verifiedParam {
     _securityError = NO;
-    if ( _parameters && [_parameters isKindOfClass:[NSDictionary class]] ) {
-        NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:((NSDictionary *)_parameters )];
-        for (NSString * key in dict.allKeys) {
-            if ( [[dict objectForKey:key] isKindOfClass:[NSString class]]) {
-                
-                if ( [NSString ins_String:((NSString *) [dict objectForKey:key])] && [((NSString *) [dict objectForKey:key]) isIncludingEmoji] ) {
-                    [dict setObject:[((NSString *) [dict objectForKey:key]) stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:key];
-                }
-            }
-        }
-        _parameters = dict;
-    }
+//    if ( _parameters && [_parameters isKindOfClass:[NSDictionary class]] ) {
+//        NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:((NSDictionary *)_parameters )];
+//        for (NSString * key in dict.allKeys) {
+//            if ( [[dict objectForKey:key] isKindOfClass:[NSString class]]) {
+//
+//                if ( [NSString ins_String:((NSString *) [dict objectForKey:key])] && [((NSString *) [dict objectForKey:key]) isIncludingEmoji] ) {
+//                    [dict setObject:[((NSString *) [dict objectForKey:key]) stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:key];
+//                }
+//            }
+//        }
+//        _parameters = dict;
+//    }
+
     
-    if ( !_parameters ) {
-        _parameters = [NSMutableDictionary dictionaryWithCapacity:1];
-    }
+//    if ( !_parameters ) {
+//        _parameters = [NSMutableDictionary dictionaryWithCapacity:1];
+//    }
     
 
     
@@ -541,6 +542,11 @@
     }
     [request setValue:Referer forHTTPHeaderField:@"Referer"];
     
+    NSString *shortVersion = [ORAppUtil appShortVersion];
+    [request setValue:shortVersion forHTTPHeaderField:@"version"];
+    
+    [request setValue:[NSString stringWithFormat:@"%lf",[SCUserCenter sharedCenter].currentUser.userInfo.latitude] forHTTPHeaderField:@"latitude"];
+    [request setValue:[NSString stringWithFormat:@"%lf",[SCUserCenter sharedCenter].currentUser.userInfo.longitude] forHTTPHeaderField:@"longitude"];
     
 }
 

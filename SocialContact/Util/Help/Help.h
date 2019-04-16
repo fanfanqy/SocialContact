@@ -14,6 +14,8 @@ typedef void(^VipIsExpired)(BOOL expired);
 
 @interface Help : NSObject
 
++ (BOOL)canPerformLoadRequest:(id)responseObject;
+
 //在最大压缩条件下,文件小于 maxFileSize
 + (NSData *)compressImage:(UIImage *)image;
 
@@ -21,7 +23,7 @@ typedef void(^VipIsExpired)(BOOL expired);
 
 /*
  PROFESSION_CHOICE = (
- (0, '未知'),
+ (0, '--'),
  (1, '事业单位'),
  (2, '政府机关'),
  (3, '私营企业'),
@@ -31,7 +33,7 @@ typedef void(^VipIsExpired)(BOOL expired);
  
  # education
  EDUCATION_CHOICE = (
- (0, '未知'),
+ (0, '--'),
  (1, '初中'),
  (2, '高中'),
  (3, '中专'),
@@ -44,7 +46,7 @@ typedef void(^VipIsExpired)(BOOL expired);
  
  # income
  INCOME_CHOICE = (
- (0, '未知'),
+ (0, '--'),
  (1, '10万以下'),
  (2, '10万~20万'),
  (3, '20万~50万'),
@@ -53,7 +55,7 @@ typedef void(^VipIsExpired)(BOOL expired);
  
  # marital_status
  MARITAL_STATUS_CHOICE = (
- (0, '未知'),
+ (0, '--'),
  (1, '未婚'),
  (2, '离异'),
  (3, '丧偶'),
@@ -61,7 +63,7 @@ typedef void(^VipIsExpired)(BOOL expired);
  
  # child_status
  CHILD_STATUS_CHOICE = (
- (0, '未知'),
+ (0, '--'),
  (1, '无'),
  (2, '有，和我在一起'),
  (3, '有，不和我在一起'),

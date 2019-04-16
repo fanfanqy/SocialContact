@@ -13,6 +13,20 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    self.avatar.layer.cornerRadius = 45.f;
+    self.avatar.layer.masksToBounds = YES;
+    
+    self.name.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
+    self.jifen.font =  [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
+    
+    if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+        
+        self.dangqianjifenT.text = @"当前记录";
+        
+    }else{
+        
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

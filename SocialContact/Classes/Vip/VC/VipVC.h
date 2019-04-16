@@ -12,13 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VipVC : InsViewController
 
-//service_type    int    服务类型, 1: VIP服务; 2: 置顶服务
+//service_type    int    服务类型, 1: VIP服务; 2: 置顶服务； 3    红娘线上服务卡；4    红娘线下服务卡
 
 /*
- * 0:置顶
- 1: 会员
+ 1    会员
+ 2    首页置顶显示
+ 3    红娘服务卡
+
  */
 INS_P_ASSIGN(NSInteger, type);
+
+INS_P_ASSIGN(NSInteger, userId);
 
 @end
 

@@ -30,7 +30,7 @@
             }
         }
     }
-    
+ 
     return self;
 }
 
@@ -49,59 +49,44 @@
 - (void)setLoadNewData:(void (^)(void))loadNewData {
     _loadNewData = loadNewData;
     __weak typeof(self)weakSelf = self;
-    
-//    MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingBlock:^{
+
+//    MJRefreshStateHeader *header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
 //        weakSelf.loadNewData();
 //    }];
-    MJRefreshStateHeader *header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.loadNewData();
     }];
-    header.ignoredScrollViewContentInsetTop = 20;
-//    header.height = 100;
     
-//    NSData *data = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"refresh" ofType:@"gif"]];
-
-//    NSDictionary *dict = [UIImage imagesFromGif:data];
-//    NSArray *images = @[[UIImage imageNamed:@"refresh"],[UIImage imageNamed:@"refresh1"],[UIImage imageNamed:@"refresh2"],[UIImage imageNamed:@"refresh3"]];
-//    [header setImages:images forState:MJRefreshStateRefreshing];
-//    if (images.count > 0) {
-//        [header setImages:@[images.firstObject] forState:MJRefreshStatePulling];
-//        [header setImages:@[images.firstObject] forState:MJRefreshStateWillRefresh];
-//        [header setImages:@[images.firstObject] forState:MJRefreshStateIdle];
-//    }
+    header.ignoredScrollViewContentInsetTop = StatusBarHeight;
     
-//    [header setTitle:@"下拉加载" forState:MJRefreshStateIdle];
-//    [header setTitle:@"松开加载" forState:MJRefreshStatePulling];
-//    [header setTitle:@"将要加载" forState:MJRefreshStateWillRefresh];
-//    [header setTitle:@"正在加载..." forState:MJRefreshStateRefreshing];
     
-    [header setTitle:@"- end -" forState:MJRefreshStateNoMoreData];
     
-    header.stateLabel.hidden = YES;
+    header.stateLabel.hidden = NO;
     header.lastUpdatedTimeLabel.hidden = YES;
-    
-//    [header.gifView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.bottom.mas_equalTo(0);
-//        make.centerX.mas_equalTo(-75);
-//        make.centerX.mas_equalTo(0);
-//        make.width.mas_equalTo(75);
-//        make.height.mas_equalTo(96);
-//    }];
-//    [header.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.mas_equalTo(header.gifView.mas_right).offset(10);
-//        make.centerY.mas_equalTo(header.gifView.mas_centerY);
-//    }];
+
     self.mj_header = header;
     
 }
 
 
 - (void)setLoadMoreData:(void (^)(void))loadMoreData {
+    
     _loadMoreData = loadMoreData;
     __weak typeof(self)weakSelf = self;
+    
     MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         weakSelf.loadMoreData();
     }];
+    
+//    MJRefreshAutoFooter *footer = [MJRefreshAutoFooter footerWithRefreshingBlock:^{
+//        weakSelf.loadMoreData();
+//    }];
+    
+//    MJRefreshBackStateFooter *footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
+//        weakSelf.loadMoreData();
+//    }];
+    [footer setTitle:@"--end--" forState:MJRefreshStateNoMoreData];
+    
     self.mj_footer = footer;
 }
 
@@ -114,8 +99,11 @@
 }
 
 - (void)endRefreshNoMoreData {
-    [self.mj_footer endRefreshing];
-    self.mj_footer.state = MJRefreshStateNoMoreData;
+    
+//    [self.mj_footer endRefreshing];
+//    self.mj_footer.state = MJRefreshStateNoMoreData;
+    
+    [self.mj_footer endRefreshingWithNoMoreData];
 }
 
 - (void)endRefresh {

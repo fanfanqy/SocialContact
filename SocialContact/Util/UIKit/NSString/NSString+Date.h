@@ -21,4 +21,8 @@
 
 + (NSString *)ageStringWithDate:(NSDate *)date;
 
+- (NSDate *)sc_dateWithUTCString;
+
+- (NSString *)sc_timeAgoWithUTCString;
+
 @end

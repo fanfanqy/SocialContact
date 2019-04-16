@@ -29,6 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *address;
 @property (weak, nonatomic) IBOutlet UILabel *otherInfo;
 @property (weak, nonatomic) IBOutlet UILabel *years_to_marry;
+@property (weak, nonatomic) IBOutlet UIButton *heartBeatBtn;
+@property (weak, nonatomic) IBOutlet UIButton *chatBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *vipImg;
 
 @property (strong, nonatomic) SCUserInfo *model;
 @property (strong, nonatomic) NSIndexPath *indexPath;

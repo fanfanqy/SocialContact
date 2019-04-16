@@ -60,34 +60,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"%@：init——————————————————————————————————————————", self);
-  // 初始化类名称为唯一标识
-  self->_ins_vc_identifier = NSStringFromClass(self.class);
-    
-    self->_fixedFrame = CGRectMake(0, 0, kScreenWidth, kScreenHeight - GuaTopHeight);
-    
-    
-  self->_fixedScrollFrame = CGRectMake(0, 0, kScreenWidth, kScreenHeight - GuaTopHeight);
-    
-
-    
-    
-  self->_fixedScrollInsets = UIEdgeInsetsZero;
-
-  // TabBar存在
-  if ( self.tabBarController ) {
-    // H-=49
-    self->_fixedFrame = CGRectMake(
-                                   CGRectGetMinX(self->_fixedFrame),
-                                   CGRectGetMinY(self->_fixedFrame),
-                                   CGRectGetWidth(self->_fixedFrame),
-                                   CGRectGetHeight(self->_fixedFrame) - UITabBarHeight);
-    // 下距 49
-    self->_fixedScrollInsets = UIEdgeInsetsMake(
-                                                self->_fixedScrollInsets.top,
-                                                self->_fixedScrollInsets.left,
-                                                self->_fixedScrollInsets.bottom + UITabBarHeight,
-                                                self->_fixedScrollInsets.right);
-  }
+//  // 初始化类名称为唯一标识
+//  self->_ins_vc_identifier = NSStringFromClass(self.class);
+//    
+//    self->_fixedFrame = CGRectMake(0, 0, kScreenWidth, kScreenHeight - GuaTopHeight);
+//    
+//    
+//  self->_fixedScrollFrame = CGRectMake(0, 0, kScreenWidth, kScreenHeight - GuaTopHeight);
+//    
+//
+//    
+//    
+//  self->_fixedScrollInsets = UIEdgeInsetsZero;
+//
+//  // TabBar存在
+//  if ( self.tabBarController ) {
+//    // H-=49
+//    self->_fixedFrame = CGRectMake(
+//                                   CGRectGetMinX(self->_fixedFrame),
+//                                   CGRectGetMinY(self->_fixedFrame),
+//                                   CGRectGetWidth(self->_fixedFrame),
+//                                   CGRectGetHeight(self->_fixedFrame) - UITabBarHeight);
+//    // 下距 49
+//    self->_fixedScrollInsets = UIEdgeInsetsMake(
+//                                                self->_fixedScrollInsets.top,
+//                                                self->_fixedScrollInsets.left,
+//                                                self->_fixedScrollInsets.bottom + UITabBarHeight,
+//                                                self->_fixedScrollInsets.right);
+//  }
 
   // 手动布局滑动视图
   if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)]) {
@@ -96,8 +96,6 @@
   
   self.view.backgroundColor = [UIColor whiteColor];
 
-//  UINavigationBar *bar = self.navigationController.navigationBar;
-//  [bar setShadowImage:[UIImage new]];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back_icon"] style:UIBarButtonItemStyleDone target:self action:@selector(leftBarButtonItemClick)];
     self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     
@@ -238,7 +236,7 @@
         _netSetAction = [[UIButton alloc] initWithFrame:CGRectMake(0, 190, (kScreenWidth - 70) * 0.5, 45)];
         _netSetAction.backgroundColor = MAIN_COLOR;
         [_netSetAction setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _netSetAction.titleLabel.font = [UIFont systemFontOfSize:17];
+        _netSetAction.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
         _netSetAction.titleLabel.textAlignment = NSTextAlignmentLeft;
         [_netSetAction setTitle:@"设置网络" forState:UIControlStateNormal];
         [_netSetAction addTarget:self action:@selector(clickAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -253,7 +251,7 @@
         _reloadAction = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.netSetAction.frame) + 15, 190,  (kScreenWidth - 70) * 0.5, 45)];
         _reloadAction.backgroundColor = MAIN_COLOR;
         [_reloadAction setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _reloadAction.titleLabel.font = [UIFont systemFontOfSize:17];
+        _reloadAction.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
         _reloadAction.titleLabel.textAlignment = NSTextAlignmentLeft;
         [_reloadAction setTitle:@"重新加载" forState:UIControlStateNormal];
         _reloadAction.layer.cornerRadius = 5.0;
@@ -278,7 +276,7 @@
         UILabel *text = [[UILabel alloc] initWithFrame:CGRectMake(0, 120,  kScreenWidth - 60, 20)];
         text.text = @"网络异常，请检查您的网络状态";
         text.textAlignment = NSTextAlignmentCenter;
-        text.font = [UIFont systemFontOfSize:14];
+        text.font = [UIFont fontWithName:@"Heiti SC" size:14];
         text.textColor = Font_color2;
         _netweakLabel = text;
     }
@@ -312,12 +310,69 @@
     if (!_loadingText) {
         _loadingText = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 100, 20)];
         _loadingText.textColor = Font_color2;
-        _loadingText.font = [UIFont systemFontOfSize:14];
+        _loadingText.font = [UIFont fontWithName:@"Heiti SC" size:14];
         _loadingText.text = @"正在加载中...";
         _loadingText.textAlignment = NSTextAlignmentCenter;
     }
     return _loadingText;
 }
 
+
+- (void)createCustomTitleView:(NSString *)title backgroundColor:(UIColor *)backgroundColor rightItem:(UIButton *)rightBtn backContainAlpha:(BOOL)contain{
+    //白色导航栏背景替代view
+    UIView * navigationBackView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, GuaTopHeight)];
+    [self.view addSubview:navigationBackView];
+    if (backgroundColor) {
+        navigationBackView.backgroundColor = backgroundColor;
+    }
+
+    //返回按钮
+    UIImage *leftimage = [UIImage imageNamed:@"ic_back_white"];
+//    if (backImage) {
+//        leftimage = [UIImage imageNamed:backImage];
+//    }
+    UIButton * leftButton = [[UIButton alloc]init];
+    CGFloat statusBarHeight = StatusBarHeight;
+    leftButton.frame = CGRectMake(0, statusBarHeight, GuaTopHeight-statusBarHeight, GuaTopHeight-statusBarHeight);
+    
+    if (contain) {
+        [leftButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.5]] forState:UIControlStateNormal];
+        leftButton.left = 10;
+        leftButton.width = leftButton.width*0.8;
+        leftButton.height = leftButton.height*0.8;
+        leftButton.layer.cornerRadius = (GuaTopHeight-statusBarHeight)/2.0*0.8;
+        leftButton.layer.masksToBounds = YES;
+    }
+    
+    [leftButton setImage:leftimage forState:UIControlStateNormal];
+    [leftButton addTarget:self action:@selector(leftBarButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
+    [navigationBackView addSubview:leftButton];
+    //titleView
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, statusBarHeight, 200, 44)];
+    titleLabel.centerX = kScreenWidth/2.0;
+    titleLabel.font = [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold];
+    titleLabel.text = title;
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [navigationBackView addSubview:titleLabel];
+    
+    
+    rightBtn.top = statusBarHeight;
+    rightBtn.size = CGSizeMake(GuaTopHeight-statusBarHeight, GuaTopHeight-statusBarHeight);
+    rightBtn.right = navigationBackView.size.width - 10;
+    
+    if (contain) {
+        [rightBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.5]] forState:UIControlStateNormal];
+        rightBtn.width = rightBtn.width*0.8;
+        rightBtn.height = rightBtn.height*0.8;
+        rightBtn.layer.cornerRadius = (GuaTopHeight-statusBarHeight)/2.0*0.8;
+        rightBtn.layer.masksToBounds = YES;
+        rightBtn.right = navigationBackView.size.width - 10;
+    }
+    
+    [navigationBackView addSubview:rightBtn];
+    [self.view addSubview:navigationBackView];
+    
+}
 
 @end
