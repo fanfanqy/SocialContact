@@ -24,7 +24,9 @@
 
 #import "MiaiVC.h"
 
+#import "UserHomepageVC.h"
 
+#import "AskWeChatOrYueTaVC.h"
 
 @interface DCIMChatListViewController () <RCMessageCellDelegate,RCConversationCellDelegate,IMHeaderViewDelegate>
 
@@ -33,9 +35,9 @@
 
 @property (strong, nonatomic) IMHeaderView *conversationListTableViewHeaderView;
 
-@property(nonatomic,strong) UIView *topBarView;
+@property(nonatomic,strong) UIImageView *topBarView;
 
-
+INS_P_ASSIGN(NSInteger, askWeChatUnreadCount);
 
 @end
 
@@ -44,11 +46,15 @@
     DCIMButton *noticeBtn;
 }
 
-- (UIView *)topBarView{
+- (UIImageView *)topBarView{
     if (!_topBarView) {
-        _topBarView = [UIView new];
+        _topBarView = [UIImageView new];
         _topBarView.backgroundColor = Font_color333;
         _topBarView.frame = CGRectMake(0, 0, self.view.width, GuaTopHeight);
+        _topBarView.contentMode = UIViewContentModeScaleAspectFill;
+        _topBarView.image = [UIImage imageNamed:@"navbg"];
+        _topBarView.layer.masksToBounds = YES;
+        _topBarView.userInteractionEnabled = YES;
     }
     return _topBarView;
 }
@@ -68,6 +74,8 @@
     [super viewWillAppear:animated];
     
     [self getNoticeCount];
+    
+    [self demandsUnread];
     
     CYLTabBarController *tabBarViewController = (CYLTabBarController *)[AppDelegate sharedDelegate].window.rootViewController;
     if ( [RCIMClient sharedRCIMClient].getTotalUnreadCount != 0 ) {
@@ -109,11 +117,18 @@
 }
 
 - (void)didTapCellPortrait:(RCConversationModel *)model {
-    [self onSelectedTableRow:model.conversationModelType conversationModel:model atIndexPath:[NSIndexPath indexPathForRow:[self.conversationListDataSource indexOfObject:model] inSection:0]];
+    
+    // 获取用户信息
+    UserHomepageVC *vc = [UserHomepageVC new];
+    vc.userId = [model.targetId integerValue];
+    vc.name = @"";
+    [self.navigationController pushViewController:vc animated:YES];
+    
+//    [self onSelectedTableRow:model.conversationModelType conversationModel:model atIndexPath:[NSIndexPath indexPathForRow:[self.conversationListDataSource indexOfObject:model] inSection:0]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 75;
+    return 80;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -194,8 +209,8 @@
     label.centerX = self.view.width/2.0;
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"聊天";
-    label.textColor = m2;
-    label.font = [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold];
+    label.textColor = [UIColor whiteColor];
+    label.font = [[UIFont systemFontOfSize:18]fontWithBold];
     [self.topBarView addSubview:label];
     
     self.conversationListTableView.top = GuaTopHeight;
@@ -203,6 +218,33 @@
     [self.conversationListTableView setTableHeaderView:self.conversationListTableViewHeaderView];
     
     
+    
+}
+
+// 申请未读
+- (void)demandsUnread{
+    
+        WEAKSELF;
+        [SCUserCenter getSelfInformationAndUpdateDBWithUserId:[SCUserCenter sharedCenter].currentUser.userInfo.iD completion:^(id  _Nonnull responseObj, BOOL succeed, NSError * _Nonnull error) {
+            
+            SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:responseObj[@"data"]];
+            
+            
+            if (userInfo) {
+       
+                weakSelf.askWeChatUnreadCount = [userInfo.extra[@"count_demand_wechat"] integerValue] + [userInfo.extra[@"count_demand_date_online"] integerValue];
+                if (weakSelf.askWeChatUnreadCount) {
+                    [weakSelf.conversationListTableViewHeaderView.yueUnread showDLBadgeWithStyle:DLBadgeStyleNumber value:weakSelf.askWeChatUnreadCount animationType:DLBadgeAnimTypeShake];
+                }else{
+                    [weakSelf.conversationListTableViewHeaderView.yueUnread clearBadge];
+                }
+                
+                [weakSelf.conversationListTableView reloadData];
+            }
+            
+        }];
+
+
     
 }
 
@@ -249,7 +291,7 @@
 - (IMHeaderView *)conversationListTableViewHeaderView{
     if (!_conversationListTableViewHeaderView) {
         _conversationListTableViewHeaderView = [[NSBundle mainBundle]loadNibNamed:@"IMHeaderView" owner:nil options:nil][0];
-        _conversationListTableViewHeaderView.height = 130;
+        _conversationListTableViewHeaderView.height = (kScreenWidth-40)/4.0+20+15;
         _conversationListTableViewHeaderView.delegate = self;
     }
     return _conversationListTableViewHeaderView;
@@ -279,8 +321,12 @@
 }
 
 - (void)inviteFriendCLick{
-    InviteFriendVC *vc = [InviteFriendVC new];
-    vc.title = @"邀请好友";
+//    InviteFriendVC *vc = [InviteFriendVC new];
+//    vc.title = @"邀请好友";
+//    [self.navigationController pushViewController:vc animated:YES];
+    
+    AskWeChatOrYueTaVC *vc = [AskWeChatOrYueTaVC new];
+    vc.type = 2;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -306,7 +306,8 @@ INS_P_STRONG(NSString *, avatarUrl);
             [[SCUserCenter sharedCenter].currentUser updateToDB];
             
             // 2.
-            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",[SCUserCenter sharedCenter].currentUser.user_id] name:[SCUserCenter sharedCenter].currentUser.name portrait:userModel.avatar_url] ;
+            // [SCUserCenter sharedCenter].currentUser.user_id
+            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",userModel.iD] name:[SCUserCenter sharedCenter].currentUser.name portrait:userModel.avatar_url] ;
             [rcUserInfo updateToDB];
             [RCIM sharedRCIM].currentUserInfo = rcUserInfo;
             [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];

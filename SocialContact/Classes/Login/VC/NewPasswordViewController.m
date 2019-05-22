@@ -36,7 +36,7 @@
     [placeholder addAttribute:NSForegroundColorAttributeName
                         value:[UIColor colorWithRed:151.0/255.0 green:151.0/255.0 blue:151.0/255.0 alpha:1.0] range:NSMakeRange(0,self.pwdTF.placeholder.length)];
     [placeholder addAttribute:NSFontAttributeName
-                        value:[[UIFont fontWithName:@"Heiti SC" size:14]fontWithBold]
+                        value:[[UIFont systemFontOfSize:14]fontWithBold]
                         range:NSMakeRange(0, self.pwdTF.placeholder.length)];
     self.pwdTF.attributedPlaceholder = placeholder;
 }

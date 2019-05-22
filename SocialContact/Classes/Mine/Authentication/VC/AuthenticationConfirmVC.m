@@ -18,14 +18,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.fd_prefersNavigationBarHidden = YES;
-    self.view.backgroundColor = Black;
-
-//    WEAKSELF;
-//    [self.view jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-//        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(backBtnClicked)]) {
-//            [weakSelf.delegate backBtnClicked];
-//        }
-//    }];
+    self.view.backgroundColor = BackGroundColor;
+    self.title = @"认证";
 }
 
 - (IBAction)goAuthentication:(id)sender {

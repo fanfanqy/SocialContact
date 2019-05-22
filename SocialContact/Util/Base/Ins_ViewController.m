@@ -236,7 +236,7 @@
         _netSetAction = [[UIButton alloc] initWithFrame:CGRectMake(0, 190, (kScreenWidth - 70) * 0.5, 45)];
         _netSetAction.backgroundColor = MAIN_COLOR;
         [_netSetAction setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _netSetAction.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+        _netSetAction.titleLabel.font = [UIFont systemFontOfSize:16];
         _netSetAction.titleLabel.textAlignment = NSTextAlignmentLeft;
         [_netSetAction setTitle:@"设置网络" forState:UIControlStateNormal];
         [_netSetAction addTarget:self action:@selector(clickAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -251,7 +251,7 @@
         _reloadAction = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.netSetAction.frame) + 15, 190,  (kScreenWidth - 70) * 0.5, 45)];
         _reloadAction.backgroundColor = MAIN_COLOR;
         [_reloadAction setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _reloadAction.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+        _reloadAction.titleLabel.font = [UIFont systemFontOfSize:16];
         _reloadAction.titleLabel.textAlignment = NSTextAlignmentLeft;
         [_reloadAction setTitle:@"重新加载" forState:UIControlStateNormal];
         _reloadAction.layer.cornerRadius = 5.0;
@@ -276,7 +276,7 @@
         UILabel *text = [[UILabel alloc] initWithFrame:CGRectMake(0, 120,  kScreenWidth - 60, 20)];
         text.text = @"网络异常，请检查您的网络状态";
         text.textAlignment = NSTextAlignmentCenter;
-        text.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        text.font = [UIFont systemFontOfSize:14];
         text.textColor = Font_color2;
         _netweakLabel = text;
     }
@@ -310,7 +310,7 @@
     if (!_loadingText) {
         _loadingText = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 100, 20)];
         _loadingText.textColor = Font_color2;
-        _loadingText.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        _loadingText.font = [UIFont systemFontOfSize:14];
         _loadingText.text = @"正在加载中...";
         _loadingText.textAlignment = NSTextAlignmentCenter;
     }
@@ -319,28 +319,35 @@
 
 
 - (void)createCustomTitleView:(NSString *)title backgroundColor:(UIColor *)backgroundColor rightItem:(UIButton *)rightBtn backContainAlpha:(BOOL)contain{
+    
+    [self createCustomTitleView:title titleColor:[UIColor whiteColor]  backgroundColor:backgroundColor rightItem:rightBtn backContainAlpha:contain];
+}
+
+
+- (void)createCustomTitleView:(NSString *)title titleColor:(UIColor *)titleColor backgroundColor:(UIColor *)backgroundColor rightItem:(UIButton *)rightBtn backContainAlpha:(BOOL)contain{
+    
     //白色导航栏背景替代view
     UIView * navigationBackView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, GuaTopHeight)];
     [self.view addSubview:navigationBackView];
     if (backgroundColor) {
         navigationBackView.backgroundColor = backgroundColor;
     }
-
+    
     //返回按钮
     UIImage *leftimage = [UIImage imageNamed:@"ic_back_white"];
-//    if (backImage) {
-//        leftimage = [UIImage imageNamed:backImage];
-//    }
+    if ([titleColor isEqual:Black]) {
+        leftimage = [UIImage imageNamed:@"ic_back_black"];
+    }
     UIButton * leftButton = [[UIButton alloc]init];
     CGFloat statusBarHeight = StatusBarHeight;
     leftButton.frame = CGRectMake(0, statusBarHeight, GuaTopHeight-statusBarHeight, GuaTopHeight-statusBarHeight);
     
     if (contain) {
-        [leftButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.5]] forState:UIControlStateNormal];
+        [leftButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.25]] forState:UIControlStateNormal];
         leftButton.left = 10;
-        leftButton.width = leftButton.width*0.8;
-        leftButton.height = leftButton.height*0.8;
-        leftButton.layer.cornerRadius = (GuaTopHeight-statusBarHeight)/2.0*0.8;
+        leftButton.width = leftButton.width*0.75;
+        leftButton.height = leftButton.height*0.75;
+        leftButton.layer.cornerRadius = (GuaTopHeight-statusBarHeight)/2.0*0.75;
         leftButton.layer.masksToBounds = YES;
     }
     
@@ -350,22 +357,27 @@
     //titleView
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, statusBarHeight, 200, 44)];
     titleLabel.centerX = kScreenWidth/2.0;
-    titleLabel.font = [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold];
+    titleLabel.font = [[UIFont systemFontOfSize:18]fontWithBold];
     titleLabel.text = title;
-    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textColor = titleColor;
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [navigationBackView addSubview:titleLabel];
     
     
     rightBtn.top = statusBarHeight;
-    rightBtn.size = CGSizeMake(GuaTopHeight-statusBarHeight, GuaTopHeight-statusBarHeight);
+    if (rightBtn.width > GuaTopHeight-statusBarHeight) {
+        rightBtn.size = CGSizeMake(rightBtn.width, GuaTopHeight-statusBarHeight);
+    }else{
+        rightBtn.size = CGSizeMake(GuaTopHeight-statusBarHeight, GuaTopHeight-statusBarHeight);
+    }
+    
     rightBtn.right = navigationBackView.size.width - 10;
     
     if (contain) {
-        [rightBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.5]] forState:UIControlStateNormal];
-        rightBtn.width = rightBtn.width*0.8;
-        rightBtn.height = rightBtn.height*0.8;
-        rightBtn.layer.cornerRadius = (GuaTopHeight-statusBarHeight)/2.0*0.8;
+        [rightBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.25]] forState:UIControlStateNormal];
+        rightBtn.width = rightBtn.width*0.75;
+        rightBtn.height = rightBtn.height*0.75;
+        rightBtn.layer.cornerRadius = (GuaTopHeight-statusBarHeight)/2.0*0.75;
         rightBtn.layer.masksToBounds = YES;
         rightBtn.right = navigationBackView.size.width - 10;
     }
@@ -374,5 +386,6 @@
     [self.view addSubview:navigationBackView];
     
 }
+
 
 @end

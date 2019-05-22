@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  关注，粉丝，拉黑
  */
 @interface GFLCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *verifyStatusL;
 
 @property (weak, nonatomic) IBOutlet UIButton *lookMeBtn;
 @property (weak, nonatomic) IBOutlet UILabel *lookMeCountLB;
@@ -46,6 +47,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)SCUserInfo          *userModel;
 
 @property(nonatomic,assign)NSInteger          lookMeCount;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarImg;
+@property (weak, nonatomic) IBOutlet UIView *bgView;
+
+@property (weak, nonatomic) IBOutlet UILabel *introduceL;
+@property (weak, nonatomic) IBOutlet YYLabel *nickL;
+@property (weak, nonatomic) IBOutlet UIButton *settingBtn;
 
 @end
 

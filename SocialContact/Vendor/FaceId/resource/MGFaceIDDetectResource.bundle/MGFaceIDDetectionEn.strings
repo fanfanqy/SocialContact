@@ -1,0 +1,57 @@
+/* 
+  Localizable.strings
+  MGFaceIDDetect
+
+  Created by MegviiDev on 2017/7/17.
+  Copyright © 2017年 megvii. All rights reserved.
+*/
+
+"livenessCancelLeftPromptText"                 =           "Cancel";
+"livenessCancelRightPromptText"                 =           "Sure";
+"livenessCancelTitlePromptText"                 =           "Are you sure to quit?";
+"livenessExitLeftPromptText"                 =           "Quit";
+"livenessExitRightPromptText"                 =           "Try again";
+"livenessExitTitlePromptText"                 =           "Verification failed";
+"livenessHomePromptWaitText"                 =           "Please wait for verification";
+"livenessHomePromptBlinkText"                 =           "Please blink your eyes";
+"livenessHomePromptOpenMouthText"                 =           "Please open your mouth and close it";
+"livenessHomePromptShakeHeadText"                 =           "Please shake your head";
+"livenessHomePromptNodText"                 =           "Please nod your head";
+"livenessHomePromptFrontalFaceText" = "Please show your frontal face";
+"livenessHomePromptFaceEreaText" = "Invalid face area for detection";
+"livenessHomePromptBrighterText" = "Please under brighter lights conditions";
+"livenessHomePromptDarkerText" = "Please under less bright lights conditions";
+"livenessHomePromptCloserText" = "Please come closer";
+"livenessHomePromptFurtherText" = "Please be a little farther";
+"livenessHomePromptNoBacklightingText" = "Please avoid side lighting and backlighting";
+"livenessHomePromptFrontalFaceInBoundingBoxText" = "Please fit your full-frontal face in the bounding box";
+"livenessHomePromptNoEyesOcclusionText" = "Please avoid eyes occlusion";
+"livenessHomePromptNoMouthOcclusionText" = "Please avoid mouth occlusion";
+"livenessHomePromptVerticalText" = "Please pick up the phone and keep it vertical";
+"livenessHomePromptStayStillText" = "Good, please stay still";
+
+//  Key
+"key_space_mark"                     =           "";
+"key_start"                          =           "Start";
+"key_get_back"                       =           "Back";
+"key_have_read"                      =           "I accept";
+"key_authentication"                 =           "Authentication";
+
+//  Message
+"message_face_agreement"                    =           "the FaceID User Agreement";
+"message_face_agreement_detail"             =           "User Agreement";
+"message_please_read_agreement"             =           "Please agree to the FaceID Authentication Service User Agreement first";
+
+//  Remind
+"remind_guide_header"   = "FaceID Authentication Services";
+"remind_guide_center"   = "Please face the screen and avoid face occlusion";
+"remind_action_live_detect_success"                =           "In verification";
+"remind_action_live_detect_failure"                =           "Verification failed";
+"remind_action_live_record_verify"                 =           "Please wait for verification";
+
+//  Error
+"error_model_action_live"                 =           "Resource reading failed! Unable to read ActionLive model (Meg_ActionLive), please check the resource file";
+"error_live_detect_failure_reason_action_error"                 =           "Verification failed";
+"error_live_detect_failure_reason_action_timeout"                 =           "Verification timeout";
+"error_action_live_failure_reason"                 =           "To detect the cause of the failure：\n";
+"error_faceid_detect_verify_error"                 =           "FaceID authentication failed, please try again later.";

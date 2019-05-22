@@ -79,10 +79,24 @@
     [self setup];
     [self checkHideUserAction];
     
+    [self setupBackgroundImage:[UIImage imageNamed:@"login_bg"]];
+    
     WEAKSELF;
     [self.view jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
         [weakSelf.view endEditing:YES];
     }];
+    
+    //  默认界面为账号密码登录，通过此方式切换
+    UIButton *tempBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    tempBtn.tag = 5;
+    [self switchLogin:tempBtn];
+    
+}
+
+- (void)setupBackgroundImage:(UIImage *)backgroundImage {
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    backgroundImageView.image = backgroundImage;
+    [self.view insertSubview:backgroundImageView atIndex:0];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -137,18 +151,21 @@
         NSDictionary *params = @{@"account":self.phoneTF.text?:@"",@"password":_vcPWTF.text?:@"",@"code":self.vcTF.text?:@"",@"invitecode":self.vcInviteCodeTF.text?:@""
                                  };
         WEAKSELF;
-        POSTRequest *request = [POSTRequest requestWithPath:@"customer/enroll/" parameters:params?:nil completionHandler:^(InsRequest *request) {
+        POSTRequest *request = [POSTRequest requestWithPath:@"/api/customer/enroll/" parameters:params?:nil completionHandler:^(InsRequest *request) {
            
             [SVProgressHUD dismiss];
             
             if (!request.error) {
                 
-                [SVProgressHUD showImage:AlertSuccessImage status:@"注册成功，请登录"];
-                [SVProgressHUD dismissWithDelay:2];
-                
-                UIButton *tempBtn = [UIButton new];
-                tempBtn.tag = 5;
-                [weakSelf switchLogin:tempBtn];
+                weakSelf.username.text = weakSelf.phoneTF.text;
+                weakSelf.password.text = weakSelf.vcPWTF.text;
+                [weakSelf autoLogin:weakSelf.username.text password:weakSelf.password.text];
+//                [SVProgressHUD showImage:AlertSuccessImage status:@"注册成功，请登录"];
+//                [SVProgressHUD dismissWithDelay:2];
+//
+//                UIButton *tempBtn = [UIButton new];
+//                tempBtn.tag = 5;
+//                [weakSelf switchLogin:tempBtn];
                 
             }else {
                 
@@ -192,7 +209,31 @@
         }else {
             
             [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            
+        }
+    }];
+    [InsNetwork addRequest:request];
+}
+
+- (void)autoLogin:(NSString *)account password:(NSString *)password{
+    
+    [SVProgressHUD show];
+    NSDictionary *params = @{@"account":account,@"password":password,
+                             };
+    WEAKSELF;
+    POSTRequest *request = [POSTRequest requestWithPath:@"/customer/login/" parameters:params?:nil completionHandler:^(InsRequest *request) {
         
+        [SVProgressHUD dismiss];
+        if (!request.error) {
+            
+            [[SCUserCenter sharedCenter] saveUser:account];
+            [weakSelf loginSucced:request.responseObject];
+            [LoginViewController loginSuccess];
+            
+        }else {
+            
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            
         }
     }];
     [InsNetwork addRequest:request];
@@ -342,13 +383,13 @@
     self.fd_prefersNavigationBarHidden = YES;
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName :[UIColor colorWithHexString:@"555"],
-                                                                      NSFontAttributeName : [UIFont fontWithName:@"Heiti SC" size:18]
+                                                                      NSFontAttributeName : [UIFont systemFontOfSize:18]
                                                                       }];
     self.view.backgroundColor = BackGroundColor;
     
     _titleLB = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 50)];
     _titleLB.text = @"手机注册";
-    _titleLB.font = [[UIFont fontWithName:@"Heiti SC" size:30]fontWithBold];
+    _titleLB.font = [[UIFont systemFontOfSize:30]fontWithBold];
     _titleLB.textColor = [UIColor colorWithHexString:@"1f2124"];
     [self.view addSubview:_titleLB];
     
@@ -377,7 +418,7 @@
     [scrollView addSubview:vcRegistView];
     
     UITextField *phoneTF = [[UITextField alloc] init];
-    phoneTF.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    phoneTF.font = [UIFont systemFontOfSize:17];
     _phoneTF = phoneTF;
     
     NSString *holderText2 = @"手机号";
@@ -395,7 +436,7 @@
     [vcRegistView addSubview:lineView1];
     
     UITextField *vcPWTF = [[UITextField alloc] init];
-    vcPWTF.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    vcPWTF.font = [UIFont systemFontOfSize:17];
     _vcPWTF = vcPWTF;
     
     NSString *holderRegistPWText3 = @"密码";
@@ -414,7 +455,7 @@
     
     
     UITextField *vcTF = [[UITextField alloc] init];
-    vcTF.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    vcTF.font = [UIFont systemFontOfSize:17];
     _vcTF = vcTF;
     NSString *holderText3 = @"请输入验证码";
     vcTF.placeholder = holderText3;
@@ -432,7 +473,7 @@
     sendVcBtn.backgroundColor = ORANGE;
     sendVcBtn.layer.cornerRadius = 7.5;
     sendVcBtn.layer.masksToBounds = YES;
-    sendVcBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    sendVcBtn.titleLabel.font = [UIFont systemFontOfSize:17];
     [sendVcBtn addTarget:self action:@selector(codeBtnVerification) forControlEvents:UIControlEventTouchUpInside];
     [vcRegistView addSubview:sendVcBtn];
     _sendVcBtn = sendVcBtn;
@@ -443,7 +484,7 @@
     
     
     UITextField *vcInviteCodeTF = [[UITextField alloc] init];
-    vcInviteCodeTF.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    vcInviteCodeTF.font = [UIFont systemFontOfSize:17];
     _vcInviteCodeTF = vcInviteCodeTF;
     NSString *holderInviteCodePWText3 = @"请输入邀请码（可选项）";
     vcInviteCodeTF.placeholder = holderInviteCodePWText3;
@@ -463,7 +504,7 @@
     UIButton *pwdLoginBtn = [[UIButton alloc] init];
     [pwdLoginBtn setTitle:@"账号密码登录" forState:UIControlStateNormal];
     [pwdLoginBtn setTitleColor:Font_color333 forState:UIControlStateNormal];
-    pwdLoginBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    pwdLoginBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     pwdLoginBtn.tag = 5;
     [pwdLoginBtn addTarget:self action:@selector(switchLogin:) forControlEvents:UIControlEventTouchUpInside];
     [vcRegistView addSubview:pwdLoginBtn];
@@ -502,7 +543,7 @@
     _checkUser = button;
     
     _username = [[UITextField alloc] init];
-    _username.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    _username.font = [UIFont systemFontOfSize:17];
     NSString *holderText = @"请输入账号/手机号";
 //    NSMutableAttributedString *placeholder = [[NSMutableAttributedString alloc] initWithString:holderText];
 //    [placeholder addAttribute:NSForegroundColorAttributeName
@@ -528,12 +569,12 @@
     
     UILabel *leftView_pass = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 45)];
     leftView_pass.text = @"密码";
-    leftView_pass.font = [UIFont fontWithName:@"Heiti SC" size:14];
+    leftView_pass.font = [UIFont systemFontOfSize:14];
     leftView_pass.textAlignment = NSTextAlignmentLeft;
     leftView_pass.textColor = [UIColor colorWithHexString:@"ffffff"];
     
     _password = [[UITextField alloc] init];
-    _password.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    _password.font = [UIFont systemFontOfSize:17];
     _password.secureTextEntry = YES;
     
     UIButton *eyes = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -560,7 +601,7 @@
     UIButton *vcLoginBtn = [[UIButton alloc] init];
     [vcLoginBtn setTitle:@"手机注册" forState:UIControlStateNormal];
     [vcLoginBtn setTitleColor:Font_color333 forState:UIControlStateNormal];
-    vcLoginBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    vcLoginBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     vcLoginBtn.tag = 6;
     [vcLoginBtn addTarget:self action:@selector(switchLogin:) forControlEvents:UIControlEventTouchUpInside];
     [pwdLoginView addSubview:vcLoginBtn];
@@ -572,7 +613,7 @@
     _forget = [[UIButton alloc] init];
     [_forget setTitle:@"忘记密码" forState:UIControlStateNormal];
     [_forget setTitleColor:Font_color333 forState:UIControlStateNormal];
-    _forget.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    _forget.titleLabel.font = [UIFont systemFontOfSize:16];
     [_forget addTarget:self action:@selector(forgetAction) forControlEvents:UIControlEventTouchUpInside];
     [pwdLoginView addSubview:_forget];
     
@@ -585,7 +626,7 @@
     [_loginButton setTitle:@"注册" forState:UIControlStateNormal];
     [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
-    _loginButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    _loginButton.titleLabel.font = [UIFont systemFontOfSize:17];
     [_loginButton setBackgroundColor:ORANGE];
     _loginButton.layer.cornerRadius = 22;
     _loginButton.layer.masksToBounds = YES;
@@ -909,7 +950,7 @@
 - (UILabel *)usageGovButton {
     if (!_usageGovButton) {
         _usageGovButton = [[UILabel alloc] initWithFrame:CGRectZero];
-        _usageGovButton.font = [UIFont fontWithName:@"Heiti SC" size:13];
+        _usageGovButton.font = [UIFont systemFontOfSize:13];
         NSString *text = @"注册或登录即同意《用户注册与隐私保护服务协议》";
         NSMutableAttributedString *content = [[NSMutableAttributedString alloc] initWithString:text];
         [content addAttributes:@{NSForegroundColorAttributeName:MAIN_COLOR} range:NSMakeRange(8, text.length - 8)];

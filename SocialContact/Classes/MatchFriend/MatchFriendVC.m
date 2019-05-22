@@ -7,7 +7,7 @@
 //
 
 #import "MatchFriendVC.h"
-#import "MatchTableViewCell.h"
+#import "MatchV2TableViewCell.h"
 #import "RecommendUserCell.h"
 
 #import "VipVC.h"
@@ -17,7 +17,7 @@
 
 #import "GreetVC.h"
 
-@interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource,LoverConditionVCDelegate>
+@interface MatchFriendVC ()<ZLSwipeableViewDelegate,ZLSwipeableViewDataSource,MatchV2TableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource,LoverConditionVCDelegate>
 
 INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
@@ -37,7 +37,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 @property(nonatomic,assign) NSInteger pageRecentUser;
 
-@property(nonatomic,strong) UIView *topBarView;
+@property(nonatomic,strong) UIImageView *topBarView;
 
 @property(nonatomic,strong) UIButton *customerBtn;// 客服按钮
 
@@ -47,15 +47,15 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 @property(nonatomic,strong) UIButton *userAmount;// 在线人数
 
-
-
-
 @property(nonatomic,strong) UICollectionView *collectionView;
+
+@property(nonatomic,strong) UIImageView *sideLineImgView;
 
 @property(nonatomic,strong) UIButton *todayRecommend;
 
 @property(nonatomic,strong) UIButton *wantToTop;
 
+@property(nonatomic,strong) UIImageView *orangeRightArrowImgView;
 
 @property(nonatomic,strong) NSDictionary *conditionDic;
 
@@ -111,7 +111,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 //     最近登录用户
 //    /customer/active/lists/
     
-    GETRequest *request = [GETRequest requestWithPath:@"/api/customers/service_top/" parameters:dic completionHandler:^(InsRequest *request) {
+//    /api/customers/service_top/
+    
+    GETRequest *request = [GETRequest requestWithPath:@"/api/customers/recommend/" parameters:dic completionHandler:^(InsRequest *request) {
         
         if (request.error) {
             
@@ -325,9 +327,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     // 去聊天
     SCUserInfo *userInfo = self.array[indexPath.row];
     
-    NSInteger targetId = userInfo.user_id;
+    NSInteger targetId = userInfo.iD;
     if (targetId == 0) {
-        targetId = userInfo.iD;
+        targetId = userInfo.user_id;
     }
     
     // 加关注
@@ -356,9 +358,13 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     // 去聊天
     SCUserInfo *userInfo = self.array[indexPath.row];
     
-    NSInteger targetId = userInfo.user_id;
+//    NSInteger targetId = userInfo.user_id;
+//    if (targetId == 0) {
+//        targetId = userInfo.iD;
+//    }
+    NSInteger targetId = userInfo.iD;
     if (targetId == 0) {
-        targetId = userInfo.iD;
+        targetId = userInfo.user_id;
     }
     
     DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId]];
@@ -399,7 +405,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SCUserInfo *model = self.array[indexPath.row];
-    MatchTableViewCell *cell = (MatchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"MatchTableViewCell"];
+    MatchV2TableViewCell *cell = (MatchV2TableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"MatchV2TableViewCell"];
     [cell setModel:model];
     cell.indexPath = indexPath;
     cell.delegate = self;
@@ -416,7 +422,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 187+(kScreenWidth-20)/1.2+30;
+//    return 187+(kScreenWidth-20)+30;
+    return kScreenWidth-180+40;
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -430,18 +438,50 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 44;
+    
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
+    
+    UIImageView *sideLineImgView = [[UIImageView alloc]initWithFrame:CGRectMake(15, 11, 3, 22)];
+    sideLineImgView.image = [UIImage imageNamed:@"side_line"];
+    [view addSubview:sideLineImgView];
+    
+    UIButton *mayLike = [UIButton buttonWithType:UIButtonTypeCustom];
+    mayLike.frame = CGRectMake(25, 0, 70, 44);
+    [mayLike setTitle:@"猜你喜欢" forState:UIControlStateNormal];
+    mayLike.titleLabel.font = [UIFont systemFontOfSize:16];
+    [mayLike setTitleColor:Black forState:UIControlStateNormal];
+//    [mayLike addTarget:self action:@selector(todayRecommendClick) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:mayLike];
+    
+    return view;
+}
+
+- (void)cellDidClick:(NSIndexPath *)indexPath{
+    
+    SCUserInfo *model = self.array[indexPath.row];
+    UserHomepageVC *vc = [UserHomepageVC new];
+    vc.userId = model.iD;
+    vc.name = model.name;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (InsLoadDataTablView *)tableView {
     if ( !_tableView ) {
-        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, GuaTopHeight, self.view.width, kScreenHeight-GuaTopHeight-UITabBarHeight) style:UITableViewStylePlain];
+        _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, GuaTopHeight, self.view.width, kScreenHeight-GuaTopHeight-UITabBarHeight) style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _tableView.separatorColor = Line;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView setSeparatorInset:UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15)];
         _tableView.tableFooterView = [UIView new];
         
-        [_tableView registerNib:[UINib nibWithNibName:@"MatchTableViewCell" bundle:nil] forCellReuseIdentifier:@"MatchTableViewCell"];
+        [_tableView registerNib:[UINib nibWithNibName:@"MatchV2TableViewCell" bundle:nil] forCellReuseIdentifier:@"MatchV2TableViewCell"];
         
         _tableView.tableHeaderView = self.tableViewHeaderView;
         
@@ -452,11 +492,15 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 #pragma mark - LazyLoad
 
 
-- (UIView *)topBarView{
+- (UIImageView *)topBarView{
     if (!_topBarView) {
-        _topBarView = [UIView new];
+        _topBarView = [UIImageView new];
         _topBarView.backgroundColor = Font_color333;
         _topBarView.frame = CGRectMake(0, 0, self.view.width, GuaTopHeight);
+        _topBarView.contentMode = UIViewContentModeScaleAspectFill;
+        _topBarView.image = [UIImage imageNamed:@"navbg"];
+        _topBarView.layer.masksToBounds = YES;
+        _topBarView.userInteractionEnabled = YES;
         [_topBarView addSubview:self.customerBtn];
         [_topBarView addSubview:self.conditionSelect];
 #pragma mark TODO 是否删除总用户数显示
@@ -470,10 +514,13 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     if (!_customerBtn) {
         _customerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _customerBtn.frame = CGRectMake(20, 10+StatusBarHeight,  30, 30);
-        [_customerBtn setImage:[UIImage imageNamed:@"icon_kefu"] forState:UIControlStateNormal];
+        UIImage *image = [UIImage imageNamed:@"icon_kefu"];
         
-        [_customerBtn setTitle:@"客服" forState:UIControlStateNormal];
-        [_customerBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_customerBtn setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _customerBtn.tintColor = [UIColor whiteColor];
+        
+//        [_customerBtn setTitle:@"客服" forState:UIControlStateNormal];
+//        [_customerBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [_customerBtn addTarget:self action:@selector(customerBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customerBtn;
@@ -482,7 +529,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (UIButton *)conditionSelect{
     if (!_conditionSelect) {
         _conditionSelect = [UIButton buttonWithType:UIButtonTypeCustom];
-        _conditionSelect.frame = CGRectMake(kScreenWidth - 60, 10+StatusBarHeight, 30, 30);
+        _conditionSelect.frame = CGRectMake(kScreenWidth - 50, 10+StatusBarHeight, 30, 30);
         [_conditionSelect setImage:[UIImage imageNamed:@"icon_shaixuan"] forState:UIControlStateNormal];
         
 //        [_conditionSelect setTitle:@"筛选" forState:UIControlStateNormal];
@@ -497,7 +544,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _userAmount = [UIButton buttonWithType:UIButtonTypeCustom];
         _userAmount.frame = CGRectMake(kScreenWidth - 60 - 50 -20, 10+StatusBarHeight, 60, 32);
 //        [_userAmount setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        _userAmount.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _userAmount.titleLabel.font = [UIFont systemFontOfSize:12];
         [_userAmount setTitle:@"1000" forState:UIControlStateNormal];
         [_userAmount setTitleColor:ORANGE forState:UIControlStateNormal];
         [_userAmount addTarget:self action:@selector(userAmountClick) forControlEvents:UIControlEventTouchUpInside];
@@ -558,7 +605,7 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
     
 //    SCLAlertView *alert = [[SCLAlertView alloc] init];
 //    alert.shouldDismissOnTapOutside = YES;
-//    //    alert.iconTintColor = [UIColor colorWithHexString:@"F57C00"];
+//    //    alert.iconTintColor = [UIColor colorWithHexString:@"ff9f70"];
 //    [alert removeTopCircle];
 //    //    backgroundColor, borderWidth, borderColor, textColor
 //    alert.buttonFormatBlock = ^NSDictionary *{
@@ -583,13 +630,19 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (UIView *)tableViewHeaderView{
     if (!_tableViewHeaderView) {
-        _tableViewHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth,40+ ((kScreenWidth-40)/3.0-16)+10+70+10)];
+        _tableViewHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth,64+ ((kScreenWidth-40)/3.0-16)+10+70+10)];
+        _tableViewHeaderView.userInteractionEnabled = YES;
+        [_tableViewHeaderView addSubview:self.sideLineImgView];
+        
         [_tableViewHeaderView addSubview:self.todayRecommend];
         
         // 是否上线了
         if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
             [_tableViewHeaderView addSubview:self.wantToTop];
         }
+        
+        [_tableViewHeaderView addSubview:self.orangeRightArrowImgView];
+        
         [_tableViewHeaderView addSubview:self.collectionView];
     }
     return _tableViewHeaderView;
@@ -605,22 +658,30 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.alwaysBounceHorizontal = YES;
-        _collectionView.frame = CGRectMake(0, 40, self.view.frame.size.width, ((kScreenWidth-40)/3.0-16)+10+70);
+        _collectionView.frame = CGRectMake(0, 64, self.view.frame.size.width, ((kScreenWidth-40)/3.0-16)+10+70);
         _collectionView.showsHorizontalScrollIndicator = NO;        //注册
         [_collectionView registerNib:[UINib nibWithNibName:@"RecommendUserCell" bundle:nil] forCellWithReuseIdentifier:@"RecommendUserCell"];
     }
     return _collectionView;
 }
 
+- (UIImageView *)sideLineImgView{
+    if (!_sideLineImgView) {
+        _sideLineImgView = [[UIImageView alloc]initWithFrame:CGRectMake(15, 11+10, 3, 22)];
+        _sideLineImgView.image = [UIImage imageNamed:@"side_line"];
+        
+    }
+    return _sideLineImgView;
+}
 
 - (UIButton *)todayRecommend{
     if (!_todayRecommend) {
         _todayRecommend = [UIButton buttonWithType:UIButtonTypeCustom];
-        _todayRecommend.frame = CGRectMake(10, 0, 65, 40);
-        [_todayRecommend setTitle:@"今日推荐" forState:UIControlStateNormal];
-        _todayRecommend.titleLabel.font = [[UIFont fontWithName:@"Heiti SC" size:15] fontWithBold];
+        _todayRecommend.frame = CGRectMake(25, 10, 70, 44);
+        [_todayRecommend setTitle:@"每日推荐" forState:UIControlStateNormal];
+        _todayRecommend.titleLabel.font = [UIFont systemFontOfSize:16];
         
-        [_todayRecommend setTitleColor:m1 forState:UIControlStateNormal];
+        [_todayRecommend setTitleColor:Black forState:UIControlStateNormal];
         [_todayRecommend addTarget:self action:@selector(todayRecommendClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _todayRecommend;
@@ -629,16 +690,23 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 - (UIButton *)wantToTop{
     if (!_wantToTop) {
         _wantToTop = [UIButton buttonWithType:UIButtonTypeCustom];
-        _wantToTop.frame = CGRectMake(kScreenWidth - 75, 0, 65, 40);
+        _wantToTop.frame = CGRectMake(105, 20+10, 44, 10);
         [_wantToTop setTitle:@"我要置顶" forState:UIControlStateNormal];
-        _wantToTop.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
-//        [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
-        [_wantToTop setTitleColor:Black forState:UIControlStateNormal];
+        _wantToTop.titleLabel.font = [UIFont systemFontOfSize:10];
+        [_wantToTop setTitleColor:m1 forState:UIControlStateNormal];
         [_wantToTop addTarget:self action:@selector(wantToTopClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _wantToTop;
 }
 
+- (UIImageView *)orangeRightArrowImgView{
+    if (!_orangeRightArrowImgView) {
+        _orangeRightArrowImgView = [[UIImageView alloc]initWithFrame:CGRectMake(150, 20+10, 5, 10)];
+        _orangeRightArrowImgView.image = [UIImage imageNamed:@"orange_arrow"];
+        _orangeRightArrowImgView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    return _orangeRightArrowImgView;
+}
 
 #pragma mark - <UICollectionViewDataSource>
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

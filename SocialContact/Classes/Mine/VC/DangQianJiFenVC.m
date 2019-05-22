@@ -63,29 +63,13 @@ INS_P_ASSIGN(NSInteger, showEmpty);
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-        self.title = @"当前积分";
-        UIBarButtonItem *pointsStore = [[UIBarButtonItem alloc]initWithTitle:@"积分商城" style:UIBarButtonItemStylePlain target:self action:@selector(goPointsStore)];
-        self.navigationItem.rightBarButtonItem = pointsStore;
-    }else{
-        self.title = @"当前记录";
-    }
+    
+    self.title = @"我的积分";
+    UIBarButtonItem *pointsStore = [[UIBarButtonItem alloc]initWithTitle:@"积分商城" style:UIBarButtonItemStylePlain target:self action:@selector(goPointsStore)];
+    self.navigationItem.rightBarButtonItem = pointsStore;
     
     [self setUpUI];
-    
-   
-    
-//    DCIMButton *rightBtn = [[DCIMButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
-//    [rightBtn setImage:[UIImage imageNamed:@"icon_task"] forState:UIControlStateNormal];
-//    rightBtn.tintColor = MAIN_COLOR;
-//
-//    [rightBtn addTarget:self action:@selector(rightBtnAction) forControlEvents:UIControlEventTouchUpInside];
-    
-//    UIBarButtonItem *rightBtnItem = [[UIBarButtonItem alloc]initWithCustomView:rightBtn];
-//    self.navigationItem.rightBarButtonItems = @[pointsStore,rightBtnItem];
-    
-    
-    
+        
 }
 
 - (void)goPointsStore{
@@ -110,11 +94,6 @@ INS_P_ASSIGN(NSInteger, showEmpty);
 //    vc.momentRequestType = MomentRequestTypeJiFenList;
 //    vc.momentUIType = MomentUITypeNotice;
 //    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-
 }
 
 - (void)setUpUI{
@@ -216,7 +195,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         JiFenCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JiFenCell"];
         UserPointsModel *model = self.array[0];
         
-        [cell.avatar sc_setImgWithUrl:[SCUserCenter sharedCenter].currentUser.userInfo.avatar_url placeholderImg:@""];
+        [cell.avatar sc_setImgWithUrl:[SCUserCenter sharedCenter].currentUser.userInfo.avatar_url placeholderImg:@"icon_default_person"];
         cell.name.text = [SCUserCenter sharedCenter].currentUser.userInfo.name;
         cell.jifen.text = [NSString stringWithFormat:@"%ld",model.total_left];
         return cell;
@@ -269,7 +248,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 && indexPath.row == 0) {
-        return 160;
+        return 345;
     }
     return 85;
 }
@@ -307,7 +286,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         [view addSubview:sectionView];
         
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, kScreenWidth, 40)];
-        label.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        label.font = [UIFont systemFontOfSize:16];
         label.text = @"积分明细";
         label.textColor = Font_color333;
         [view addSubview:label];
@@ -326,7 +305,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor whiteColor];
-        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15);
+        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 15);
         _tableView.separatorColor = Line;
         _tableView.rowHeight = 55;
         _tableView.tableFooterView = [UIView new];

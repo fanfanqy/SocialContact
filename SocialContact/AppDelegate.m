@@ -16,6 +16,7 @@
 #import "MainTabBarController.h"
 #import "LoginViewController.h"
 #import "GeRenZiLiaoVC.h"
+#import "AuthenticationVC.h"
 
 // 引入 JPush 功能所需头文件
 #import <JPUSHService.h>
@@ -80,7 +81,6 @@
     self.window.frame = [UIScreen mainScreen].bounds;
     [self SDWebImageConfig];
     [self  thirdLibraryApplication:application didFinishLaunchingWithOptions:launchOptions otherOptions:nil];
-    [self requestBottleCharts];
     
     [self configRootVC];
     
@@ -134,9 +134,10 @@
     
     if ([SCUserCenter sharedCenter].currentUser) {
         
-        if ([SCUserCenter sharedCenter].currentUser.userInfo.name.length == 0 || [SCUserCenter sharedCenter].currentUser.userInfo.gender == 0) {
+        // 头像审核中，返回是空的
+        if (![Help checkFillAllInfo:[SCUserCenter sharedCenter].currentUser.userInfo ignoreAvatar:YES] ) {
             
-            [SVProgressHUD showImage:AlertErrorImage status:@"请完善个人信息"];
+            [SVProgressHUD showImage:AlertErrorImage status:@"请先完善个人信息"];
             [SVProgressHUD dismissWithDelay:1.5];
             
             GeRenZiLiaoVC *gerenZiLiaoVC = [GeRenZiLiaoVC new];
@@ -148,8 +149,23 @@
             [self.window setRootViewController:nav];
             [self.window makeKeyAndVisible];
             
-        }else{
-        
+        }
+//        else if (![SCUserCenter sharedCenter].currentUser.userInfo.is_idcard_verified){
+//            
+//            [SVProgressHUD showImage:AlertErrorImage status:@"请先进行实名认证"];
+//            [SVProgressHUD dismissWithDelay:1.5];
+//            
+//            AuthenticationVC *vc = [[AuthenticationVC alloc]initWithNibName:@"AuthenticationVC" bundle:nil];
+//            vc.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+//            vc.type = 1;
+//            
+//            UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+//            [self.window setRootViewController:nav];
+//            [self.window makeKeyAndVisible];
+//            
+//        }
+        else{
+            
             MainTabBarController *tabBarController = [[MainTabBarController alloc] init];
             [tabBarController hideTabBadgeBackgroundSeparator];
             tabBarController.delegate = self;
@@ -158,6 +174,9 @@
             [self.window makeKeyAndVisible];
             // 连接融云
             [[SCIM shared] startWithAppKey:kRongYunKey];
+            
+            [self requestBottleCharts];
+            [self mapManagerConfig];
         }
         
     }else{
@@ -249,14 +268,14 @@
         backgroundImage = [UIImage imageNamed:@"navigationbar_background_tall"];
         
         textAttributes = @{
-                           NSFontAttributeName : [[UIFont fontWithName:@"Heiti SC" size:14]fontWithBold],
+                           NSFontAttributeName : [[UIFont systemFontOfSize:14]fontWithBold],
                            NSForegroundColorAttributeName : Font_color333,
                            };
     } else {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
         backgroundImage = [UIImage imageNamed:@"navigationbar_background"];
         textAttributes = @{
-                           UITextAttributeFont : [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold],
+                           UITextAttributeFont : [[UIFont systemFontOfSize:18]fontWithBold],
                            UITextAttributeTextColor : Font_color333,
                            UITextAttributeTextShadowColor : [UIColor clearColor],
                            UITextAttributeTextShadowOffset : [NSValue valueWithUIOffset:UIOffsetZero],
@@ -274,12 +293,9 @@
 #pragma mark - delegate
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
-    if (tabBarController.selectedIndex == 0 || tabBarController.selectedIndex == 1 || tabBarController.selectedIndex == 2) {
-        // 首页导航栏颜色：白色
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
-    }else{
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault];
-    }
+    
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
@@ -547,22 +563,27 @@
 
 - (void)refreshTotalChatCount{
     
-    if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-        
-        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date] forKey:kEnterBackgroundDate];
-        // 最大聊天个数，可以和3个人聊天
-        [[NSUserDefaults standardUserDefaults]setObject:@(kConstChatCount) forKey:kChatCount];
-        [[NSUserDefaults standardUserDefaults]setObject:@(kConstSayHiCount) forKey:kSayHiCount];
-        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:kChatedUser];
-        
-    }else{
-        
-        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date] forKey:kEnterBackgroundDate];
-        // 最大聊天个数，可以和3个人聊天
-        [[NSUserDefaults standardUserDefaults]setObject:@(1000) forKey:kChatCount];
-        [[NSUserDefaults standardUserDefaults]setObject:@(1000) forKey:kSayHiCount];
-        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:kChatedUser];
-    }
+    
+    [[NSUserDefaults standardUserDefaults]setObject:[NSDate date] forKey:kEnterBackgroundDate];
+    // 最大聊天个数，可以和3个人聊天
+    [[NSUserDefaults standardUserDefaults]setObject:@(kConstChatCount) forKey:kChatCount];
+    [[NSUserDefaults standardUserDefaults]setObject:@(kConstSayHiCount) forKey:kSayHiCount];
+    [[NSUserDefaults standardUserDefaults]setObject:nil forKey:kChatedUser];
+    [[NSUserDefaults standardUserDefaults]setObject:@(kConstPickBottleCount) forKey:kPickBottleCount];
+    [[NSUserDefaults standardUserDefaults]setObject:@(kConstSendBottleCount) forKey:kSendBottleCount];
+    
+//    if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+//        
+//        
+//        
+//    }else{
+//        
+//        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date] forKey:kEnterBackgroundDate];
+//        // 最大聊天个数，可以和3个人聊天
+//        [[NSUserDefaults standardUserDefaults]setObject:@(1000) forKey:kChatCount];
+//        [[NSUserDefaults standardUserDefaults]setObject:@(1000) forKey:kSayHiCount];
+//        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:kChatedUser];
+//    }
     
     
 }

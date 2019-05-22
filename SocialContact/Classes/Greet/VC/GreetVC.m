@@ -35,6 +35,7 @@
 //    self.dataArray = [NSMutableArray array];
     self.messageTemplatesArray = [NSMutableArray array];
     [self initPop];
+    self.view.layer.cornerRadius = 10.f;
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.sureBtn];
     
@@ -45,8 +46,8 @@
 
 - (void)initPop {
     self.view.backgroundColor = [UIColor whiteColor];
-    CGFloat height = 330;
-    self.contentSizeInPopup = CGSizeMake(self.view.frame.size.width-50, height);
+    CGFloat height = 450;
+    self.contentSizeInPopup = CGSizeMake(self.view.frame.size.width*0.8, height);
     self.popupController.navigationBarHidden = YES;
     [self.popupController.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTap)]];
 }
@@ -71,32 +72,33 @@
         
         if (!userInfo.isSelectedSayHi) {
             continue;
-        }
-        NSString *content = @"";
-        if (self.messageTemplatesArray.count > 0) {
-            NSInteger sayMessageIndex = arc4random()%self.messageTemplatesArray.count;
-            SayHiTemplateModel *model =self.messageTemplatesArray[sayMessageIndex];
-            content = model.text;
-        }
-        
-        if (content.length == 0) {
-            content = [NSString stringWithFormat:@"您好，%@，我是%@，很高兴认识你",userInfo.name, [SCUserCenter sharedCenter].currentUser.userInfo.name];
-        }
-        
-        RCTextMessage *rcMC = [RCTextMessage messageWithContent:content];
-        
-        NSInteger targetId = userInfo.user_id;
-        if (targetId == 0) {
-            targetId = userInfo.iD;
-        }
-        [[RCIM sharedRCIM] sendMessage:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId] content:rcMC pushContent:content pushData:content success:^(long messageId) {
+        }else{
+            NSString *content = @"";
+            if (self.messageTemplatesArray.count > 0) {
+                NSInteger sayMessageIndex = arc4random()%self.messageTemplatesArray.count;
+                SayHiTemplateModel *model =self.messageTemplatesArray[sayMessageIndex];
+                content = model.text;
+            }
             
-            NSLog(@"打招呼成功");
+            if (content.length == 0) {
+                content = [NSString stringWithFormat:@"您好，%@，我是%@，很高兴认识你",userInfo.name, [SCUserCenter sharedCenter].currentUser.userInfo.name];
+            }
             
-        } error:^(RCErrorCode nErrorCode, long messageId) {
-            NSLog(@"打招呼失败");
+            RCTextMessage *rcMC = [RCTextMessage messageWithContent:content];
             
-        }];
+            NSInteger targetId = userInfo.iD;
+            if (targetId == 0) {
+                targetId = userInfo.user_id;
+            }
+            [[RCIM sharedRCIM] sendMessage:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId] content:rcMC pushContent:content pushData:content success:^(long messageId) {
+                
+                NSLog(@"打招呼成功");
+                
+            } error:^(RCErrorCode nErrorCode, long messageId) {
+                NSLog(@"打招呼失败");
+                
+            }];
+        }
     }
     
     [SVProgressHUD showImage:AlertSuccessImage status:@"打招呼成功"];
@@ -112,7 +114,7 @@
                           @"page":@(1),
                           };
     WEAKSELF;
-    GETRequest *request = [GETRequest requestWithPath:@"/api/customers/recommend/" parameters:dic completionHandler:^(InsRequest *request) {
+    GETRequest *request = [GETRequest requestWithPath:@"/api/message-templates/" parameters:dic completionHandler:^(InsRequest *request) {
         
         if (request.error) {
             
@@ -154,7 +156,7 @@
         [_sureBtn setBackgroundColor:ORANGE];
         _sureBtn.titleLabel.font = [UIFont systemFontOfSize:16];
         _sureBtn.titleLabel.textColor = [UIColor whiteColor];
-        _sureBtn.frame = CGRectMake(40, 270, self.view.width-80, 50);
+        _sureBtn.frame = CGRectMake(40, 390, self.view.width-80, 50);
     }
     return _sureBtn;
 }
@@ -169,7 +171,7 @@
         UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc]init];
         
         layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 260) collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 390) collectionViewLayout:layout];
         _collectionView.backgroundColor = [UIColor whiteColor];
         if (@available(iOS 10, *)) {
             [_collectionView setPrefetchingEnabled: NO];
@@ -178,7 +180,7 @@
         _collectionView.delegate = self;
         [self.view addSubview:_collectionView];
         
-        [_collectionView registerNib:[UINib nibWithNibName:@"SayHiCell" bundle:nil ] forCellWithReuseIdentifier:@"SayHiCell"];
+        [_collectionView registerNib:[UINib nibWithNibName:@"SayHiCell" bundle:nil] forCellWithReuseIdentifier:@"SayHiCell"];
         [_collectionView reloadData];
     }
     return _collectionView;

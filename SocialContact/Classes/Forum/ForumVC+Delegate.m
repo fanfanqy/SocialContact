@@ -110,7 +110,7 @@
 - (void)cellDidClickCommenterPortait:(NewDynamicsTableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
  
     CommentLayout *layout = cell.layout.commentLayoutArr[indexPath.row];
-    [self goUserHomePageVC:layout.model.from_customer.user_id name:layout.model.from_customer.name];
+    [self goUserHomePageVC:layout.model.from_customer.iD name:layout.model.from_customer.name];
 }
 
 /**
@@ -119,7 +119,7 @@
 - (void)cellDidLongPressCommenterPortait:(NewDynamicsTableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
     
     CommentLayout *layout = cell.layout.commentLayoutArr[indexPath.row];
-    [self goUserHomePageVC:layout.model.from_customer.user_id name:layout.model.from_customer.name];
+    [self goUserHomePageVC:layout.model.from_customer.iD name:layout.model.from_customer.name];
 }
 
 
@@ -155,7 +155,7 @@
 - (void)gotoDetail:(MomentModel *)momentModel{
     
     ForumVC *vc = [ForumVC new];
-    vc.title = @"动态详情";
+    vc.title = @"动态";
     vc.forumVCType = ForumVCTypeMoment;
     vc.momentUIType = MomentUITypeDetail;
     vc.momentRequestType = MomentRequestTypeUserMomentDetail;

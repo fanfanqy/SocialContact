@@ -14,7 +14,7 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.title.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    self.title.font = [UIFont systemFontOfSize:16];
     
     self.img1.hidden = YES;
     self.img2.hidden = YES;

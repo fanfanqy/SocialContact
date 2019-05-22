@@ -62,4 +62,6 @@
 
 - (void)createCustomTitleView:(NSString *)title backgroundColor:(UIColor *)backgroundColor rightItem:(UIButton *)rightBtn backContainAlpha:(BOOL)contain;
 
+- (void)createCustomTitleView:(NSString *)title titleColor:(UIColor *)titleColor backgroundColor:(UIColor *)backgroundColor rightItem:(UIButton *)rightBtn backContainAlpha:(BOOL)contain;
+
 @end

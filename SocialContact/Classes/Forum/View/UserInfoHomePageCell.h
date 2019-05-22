@@ -11,14 +11,17 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UserInfoHomePageCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *nick;
-@property (weak, nonatomic) IBOutlet UIImageView *gender;
+//@property (weak, nonatomic) IBOutlet UILabel *nick;
+//@property (weak, nonatomic) IBOutlet UIImageView *gender;
 @property (weak, nonatomic) IBOutlet UIView *tagView;
-@property (weak, nonatomic) IBOutlet UILabel *introduce;
-@property (weak, nonatomic) IBOutlet UIImageView *huiYuan;
+//@property (weak, nonatomic) IBOutlet UIImageView *huiYuan;
 @property (weak, nonatomic) IBOutlet UILabel *selfIntroduce;
 
+@property (assign, nonatomic) CGFloat tagHeight;
+
 @property (nonatomic,strong) SCUserInfo *userInfo;
+
++ (CGFloat)calculateTagHeight:(SCUserInfo *)userInfo;
 
 @end
 

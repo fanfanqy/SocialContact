@@ -67,7 +67,7 @@
         self.title = @"设置昵称";
         _maxWords = kNickNameMaxWords;
     }else if (_modifyType == ModifyTypeSelfIntroduce) {
-        self.title = @"设置个人签名";
+        self.title = @"设置自我介绍";
         _maxWords = kSelfIntroduceMaxWords;
 
     }else if (_modifyType == ModifyTypeWeChat) {
@@ -86,7 +86,7 @@
         _publishButton.left = kScreenWidth-54-20;
         _publishButton.layer.cornerRadius = 4.0;
         _publishButton.layer.masksToBounds = YES;
-        _publishButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        _publishButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_publishButton setTitle:@"完成" forState:UIControlStateNormal];
         [_publishButton setTitleColor:UIColorHex(FFFFFF) forState:UIControlStateNormal];
         [_publishButton setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateDisabled];
@@ -109,7 +109,7 @@
     _textView.showsVerticalScrollIndicator = NO;
     _textView.alwaysBounceVertical = YES;
     _textView.allowsCopyAttributedString = NO;
-    _textView.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    _textView.font = [UIFont systemFontOfSize:15];
     _textView.delegate = self;
     _textView.inputAccessoryView = [UIView new];
     
@@ -118,7 +118,7 @@
     if (placeholderPlainText) {
         NSMutableAttributedString *atr = [[NSMutableAttributedString alloc] initWithString:placeholderPlainText];
         atr.color = UIColorHex(c4c4c4);
-        atr.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        atr.font = [UIFont systemFontOfSize:15];
         _textView.placeholderAttributedText = atr;
     }
     [self.view addSubview:_textView];
@@ -128,7 +128,7 @@
 - (void)_publishBtnClick{
     [self.view endEditing:YES];
     if (![NSString ins_String:_textView.text]) {
-        [self.view makeToast:@"请重新输入内容"];
+        [self.view makeToast:@"请输入有效内容"];
         return;
     }else{
         if (_modifyType == ModifyTypeNickName) {
@@ -141,7 +141,7 @@
         }else if (_modifyType == ModifyTypeSelfIntroduce) {
             
             if(_textView.text.length > _maxWords){
-                [self.view makeToast:@"个人签名过长，暂不支持"];
+                [self.view makeToast:@"自我介绍过长，暂不支持"];
                 return;
             }
             self.model.intro = _textView.text;
@@ -190,8 +190,8 @@
             [SCUserCenter sharedCenter].currentUser.userInfo = weakSelf.model;
             [[SCUserCenter sharedCenter].currentUser updateToDB];
             
-            // 2.
-            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",[SCUserCenter sharedCenter].currentUser.user_id] name:[SCUserCenter sharedCenter].currentUser.name portrait:weakSelf.model.avatar_url] ;
+            // 2.[SCUserCenter sharedCenter].currentUser.user_id
+            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",weakSelf.model.iD] name:[SCUserCenter sharedCenter].currentUser.name portrait:weakSelf.model.avatar_url] ;
             [rcUserInfo updateToDB];
             [RCIM sharedRCIM].currentUserInfo = rcUserInfo;
             [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];

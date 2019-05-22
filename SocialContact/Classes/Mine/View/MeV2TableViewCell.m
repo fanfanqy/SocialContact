@@ -14,20 +14,21 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.ziliaoT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.zeouT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.renzhengT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.lookMeT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.fenxiangT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.jifenT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.receiveWechatT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.openVipT.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.yueT.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    self.ziliaoT.font = [UIFont systemFontOfSize:15];
+    self.zeouT.font = [UIFont systemFontOfSize:15];
+    self.renzhengT.font = [UIFont systemFontOfSize:15];
+//    self.lookMeT.font = [UIFont systemFontOf size:15];
+    self.fenxiangT.font = [UIFont systemFontOfSize:15];
+    self.jifenT.font = [UIFont systemFontOfSize:15];
+    self.receiveWechatT.font = [UIFont systemFontOfSize:15];
+    self.openVipT.font = [UIFont systemFontOfSize:15];
     
-    if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-        self.openVipT.text = @"建议反馈";
-        self.jifenT.text = @"当前";
-    }
+//    self.bgView.layer.cornerRadius  = 10.f;
+    self.bgView.layer.shadowColor = [UIColor colorWithRed:139/255.0 green:139/255.0 blue:139/255.0 alpha:0.28].CGColor;
+    self.bgView.layer.shadowOffset = CGSizeMake(0,1);
+    self.bgView.layer.shadowOpacity = 1;
+    self.bgView.layer.shadowRadius = 3;
+    self.bgView.layer.cornerRadius = 3.3;
     
 }
 - (IBAction)gerenziliaoClick:(id)sender {
@@ -80,13 +81,7 @@
     }
     
 }
-- (IBAction)yueClick:(id)sender {
-    
-    if (_delegate && [_delegate respondsToSelector:@selector(yueClicked)]) {
-        [_delegate yueClicked];
-    }
-    
-}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

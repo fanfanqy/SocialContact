@@ -50,30 +50,30 @@ typedef NS_ENUM(NSInteger,MomentRequestType){
     MomentRequestTypeYueTaReceived = 24, // 交换微信、约她
     MomentRequestTypePointSkus = 25,// 积分商品列表
     MomentRequestTypePointSkusExchages = 26,// 我的兑换记录
+    MomentRequestTypeBothFollowing = 27,// 互相关注
+    MomentRequestTypeAskWeChatCard = 28, // 微信名片
+    
 };
 
 
 static CGFloat const kMomentContentInsetLeft = 15;
-static CGFloat const kMomentContentInsetTop = 15;
+static CGFloat const kMomentContentInsetTop = 20;
 static CGFloat const kMomentContentInsetRight = 15;
 static CGFloat const kMomentContentInsetBootm = 15;
 
+static CGFloat const kMomentAvatarRightNickLeft = 15;
 
-static CGFloat const kMomentAvatarRightNickLeft =20;
-
-static CGFloat const kMomentAvatarBottomContentTop =20;
+static CGFloat const kMomentAvatarBottomContentTop = 0;
 
 static CGFloat const kMomentContentBottomPhotoContainTop =20;
 
 static CGFloat const kMomentPhotoContainBottomTopicTop =20;
 
-static CGFloat const kMomentPortraitWH =40;
+static CGFloat const kMomentPortraitWH =44;
 
 static CGFloat const kDynamicsLineSpacing = 6;
 
-static CGFloat const kDynamicsSectionViewHeight = 8;
-
-//static CGFloat const kDynamicsPortraitWidthAndHeight = 40;
+static CGFloat const kDynamicsSectionViewHeight = 6;
 
 
 typedef void(^ClickUserBlock)(NSString * user_Id);

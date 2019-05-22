@@ -18,7 +18,7 @@
 		//每隔多少米定位一次（这里的设置为500米）
 	_locationManager.distanceFilter = 500;
 		//设置定位的精准度，一般精准度越高，越耗电
-	_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+	_locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
     // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
     if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         

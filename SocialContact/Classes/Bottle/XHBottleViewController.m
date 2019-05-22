@@ -7,7 +7,7 @@
 //
 
 #import "XHBottleViewController.h"
-
+#import "VipVC.h"
 #import "MyBottlesVC.h"
 
 #import "XHInputView.h"
@@ -39,12 +39,21 @@
      1. 发个文本
      */
     if ([sender isEqual:self.throwButton]) {
+        if ([self bottleSendCountJudge]) {
+            [self send];
+        }else{
+            [self goVip];
+        }
         
-        [self send];
         
     }else if ([sender isEqual:self.fishButton]) {
         
-        [self pickBottle];
+        if ([self bottlePickCountJudge]) {
+            [self pickBottle];
+        }else{
+            [self goVip];
+        }
+        
         
     }else if ([sender isEqual:self.mineButton]) {
         
@@ -54,6 +63,54 @@
     }
     
 }
+
+- (void)goVip{
+    [SVProgressHUD showImage:AlertErrorImage status:@"充值会员，无限制漂流瓶次数"];
+    [SVProgressHUD dismissWithDelay:3];
+    VipVC *vc = [VipVC new];
+    vc.type = 1;
+    vc.userId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (BOOL)bottlePickCountJudge{
+
+    NSString *expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
+    if (expired_at) {
+        NSDate *date = [expired_at sc_dateWithUTCString];
+        NSTimeInterval interval = [date timeIntervalSinceNow];
+        if (interval > 0) {
+            return YES;
+        }
+    }
+    
+    NSInteger bottlePickCount = [[[NSUserDefaults standardUserDefaults]objectForKey:kPickBottleCount]integerValue];
+    
+    if (bottlePickCount <= 0) {
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)bottleSendCountJudge{
+    
+    NSString *expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
+    if (expired_at) {
+        NSDate *date = [expired_at sc_dateWithUTCString];
+        NSTimeInterval interval = [date timeIntervalSinceNow];
+        if (interval > 0) {
+            return YES;
+        }
+    }
+    
+    NSInteger bottleSendCount = [[[NSUserDefaults standardUserDefaults]objectForKey:kSendBottleCount]integerValue];
+    
+    if (bottleSendCount <= 0) {
+        return NO;
+    }
+    return YES;
+}
+
 
 - (void)send{
     
@@ -142,7 +199,7 @@
     [alert alertIsDismissed:^{
         
         if (!weakSelf.pickedBottleModel.isAbandon) {
-            [[AppDelegate sharedDelegate].isBottleCharts addObject:[NSString stringWithFormat:@"%ld",weakSelf.pickedBottleModel.customer.user_id]];
+            [[AppDelegate sharedDelegate].isBottleCharts addObject:[NSString stringWithFormat:@"%ld",weakSelf.pickedBottleModel.customer.iD]];
         }
         
     }];
@@ -162,7 +219,7 @@
 //    /api/chatrecord/upload_record/
     
     NSDictionary *dic = @{
-                    @"user_id":@(self.pickedBottleModel.customer.user_id),
+                    @"user_id":@(self.pickedBottleModel.customer.iD),
                           };
     POSTRequest *request = [POSTRequest requestWithPath:@"/api/chatrecord/upload_record/" parameters:dic completionHandler:^(InsRequest *request) {
         
@@ -327,7 +384,7 @@
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents *components = [calendar components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit fromDate:now];
     
-    UIImage *backgroundImage = [UIImage imageNamed:@"bg_piaoliu"];
+    UIImage *backgroundImage = [UIImage imageNamed:@"bottleBkg"];
 //    if(components.hour > 12) {
 //        backgroundImage = [UIImage imageNamed:@"bottleNightBkg"];
 //    } else {
@@ -339,7 +396,7 @@
     if (!_boardImageView) {
         UIImageView *boardImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.bounds) - 46, CGRectGetWidth(self.view.bounds), 46)];
         boardImageView.image = [UIImage imageNamed:@"bottleBoard"];
-        [self.view addSubview:boardImageView];
+//        [self.view addSubview:boardImageView];
         self.boardImageView = boardImageView;
     }
     

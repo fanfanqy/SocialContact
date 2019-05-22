@@ -101,8 +101,8 @@ INS_P_STRONG(InviteInfoModel *, inviteInfoModel);
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = [SCUserCenter sharedCenter].currentUser.userInfo.invitecode;
         
-        [SVProgressHUD showImage:AlertSuccessImage status:@"邀请码已复制"];
-        [SVProgressHUD dismissWithDelay:2];
+//        [SVProgressHUD showImage:AlertSuccessImage status:@"邀请码已复制"];
+//        [SVProgressHUD dismissWithDelay:2];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self fenXiangRuanJian:[SCUserCenter sharedCenter].currentUser.userInfo.invitecode];
@@ -121,8 +121,8 @@ INS_P_STRONG(InviteInfoModel *, inviteInfoModel);
                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                 pasteboard.string = request.responseObject[@"data"][@"invitecode"];
                 
-                [SVProgressHUD showImage:AlertSuccessImage status:@"邀请码已复制"];
-                [SVProgressHUD dismissWithDelay:2];
+//                [SVProgressHUD showImage:AlertSuccessImage status:@"邀请码已复制"];
+//                [SVProgressHUD dismissWithDelay:2];
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [weakSelf fenXiangRuanJian:request.responseObject[@"data"][@"invitecode"]];
@@ -138,17 +138,21 @@ INS_P_STRONG(InviteInfoModel *, inviteInfoModel);
 
 - (void)fenXiangRuanJian:(NSString *)invitecode{
     
+    
+    //    https://www.handanxiaohongniang.com/?invitecode=PQXWVFUR&from=groupmessage
+    NSString *shareUrl = [NSString stringWithFormat:@"%@?invitecode=%@&from=groupmessage",kSCShareLinkURL,invitecode];
+    
     LCActionSheet *sheet = [LCActionSheet sheetWithTitle:@"邀请好友注册领取现金奖励" cancelButtonTitle:@"取消" clicked:^(LCActionSheet * _Nonnull actionSheet, NSInteger buttonIndex) {
-
+        
         if (buttonIndex == 1) {
             
-            [WXApiRequestHandler sendLinkURL:kSCShareLinkURL TagName:@"邯郸小红娘" Title:kSCShareDes Description:[NSString stringWithFormat:@"输入邀请码【%@】开通",invitecode] ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneSession];
+            [WXApiRequestHandler sendLinkURL:shareUrl TagName:@"邯郸小红娘" Title:kSCShareTitle Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneSession];
         }else if (buttonIndex == 2) {
             
-            [WXApiRequestHandler sendLinkURL:kSCShareLinkURL TagName:@"邯郸小红娘" Title:kSCShareDes Description:[NSString stringWithFormat:@"输入邀请码【%@】开通",invitecode] ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneTimeline];
+            [WXApiRequestHandler sendLinkURL:shareUrl TagName:@"邯郸小红娘" Title:kSCShareTitle Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneTimeline];
         }else if (buttonIndex == 3) {
             
-            [WXApiRequestHandler sendLinkURL:kSCShareLinkURL TagName:@"邯郸小红娘" Title:kSCShareDes Description:[NSString stringWithFormat:@"输入邀请码【%@】开通",invitecode] ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneFavorite];
+            [WXApiRequestHandler sendLinkURL:shareUrl TagName:@"邯郸小红娘" Title:kSCShareTitle Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneFavorite];
         }
         
         

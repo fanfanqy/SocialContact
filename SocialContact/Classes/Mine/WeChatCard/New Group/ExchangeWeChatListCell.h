@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
  1:我收到的微信请求
  2:我发出的线上线下约
  3:我收到的线上线下约
+ 4:微信名片
  */
 @property (assign, nonatomic) NSInteger type;
 

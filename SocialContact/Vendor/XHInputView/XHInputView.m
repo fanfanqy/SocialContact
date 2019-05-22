@@ -123,11 +123,11 @@ static CGFloat keyboardAnimationDuration = 0.5;
             _sendButton.layer.borderColor = YD_Color666.CGColor;
             _sendButton.layer.borderWidth = .5f;
             [_sendButton addTarget:self action:@selector(sendButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            _sendButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+            _sendButton.titleLabel.font = [UIFont systemFontOfSize:15];
             [_inputView addSubview:_sendButton];
             
             _textView = [[UITextView alloc] initWithFrame:CGRectMake(XHInputView_StyleDefault_LRSpace, XHInputView_StyleDefault_TBSpace, XHInputView_ScreenW - 3*XHInputView_StyleDefault_LRSpace - sendButtonWidth, self.inputView.bounds.size.height-2*XHInputView_StyleDefault_TBSpace)];
-            _textView.font = [UIFont fontWithName:@"Heiti SC" size:15];
+            _textView.font = [UIFont systemFontOfSize:15];
             _textView.backgroundColor = [UIColor whiteColor];
             _textView.delegate = self;
             [_inputView addSubview:_textView];
@@ -165,7 +165,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
             _sendButton.layer.cornerRadius = 6;
             _sendButton.layer.masksToBounds = YES;
             [_sendButton setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
-            _sendButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+            _sendButton.titleLabel.font = [UIFont systemFontOfSize:15];
 
             [_sendButton addTarget:self action:@selector(sendButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             [_inputView addSubview:_sendButton];
@@ -176,7 +176,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
             
             _textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, _textBgView.bounds.size.width, _textBgView.bounds.size.height-XHInputView_CountLabHeight)];
             _textView.backgroundColor = [UIColor clearColor];
-            _textView.font = [UIFont fontWithName:@"Heiti SC" size:15];
+            _textView.font = [UIFont systemFontOfSize:15];
             _textView.delegate = self;
             [_textBgView addSubview:_textView];
             
@@ -187,7 +187,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
             [_textView addSubview:_placeholderLab];
             
             _countLab = [[UILabel alloc] initWithFrame:CGRectMake(0,_textView.bounds.size.height, _textBgView.bounds.size.width-5, XHInputView_CountLabHeight)];
-            _countLab.font = [UIFont fontWithName:@"Heiti SC" size:14];
+            _countLab.font = [UIFont systemFontOfSize:14];
             _countLab.textColor =  YD_Color999;
             _countLab.textAlignment = NSTextAlignmentRight;
             _countLab.backgroundColor = _textView.backgroundColor;

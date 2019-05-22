@@ -34,8 +34,12 @@ INS_P_ASSIGN(NSInteger, status);
 
 INS_P_STRONG(SCUserInfo *,customer);
 INS_P_STRONG(SCUserInfo *,to_customer);
+INS_P_STRONG(SCUserInfo *,accepted_customer);
+INS_P_STRONG(NSString *, wechat);
 
-INS_P_STRONG(NSString *, create_at); 
+INS_P_STRONG(NSString *, create_at);
+
+
 
 @end
 

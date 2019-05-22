@@ -17,8 +17,8 @@
     self.avatar.layer.cornerRadius = 45.f;
     self.avatar.layer.masksToBounds = YES;
     
-    self.name.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
-    self.jifen.font =  [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
+    self.name.font = [[UIFont systemFontOfSize:20]fontWithBold];
+    self.jifen.font =  [[UIFont systemFontOfSize:20]fontWithBold];
     
     if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
         

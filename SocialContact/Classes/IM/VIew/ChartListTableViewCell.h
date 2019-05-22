@@ -10,4 +10,10 @@
 
 @interface ChartListTableViewCell : RCConversationCell
 
+@property(nonatomic,strong)UIImageView       *genderImg;
+
+@property (strong, nonatomic) UIImageView *huiYuan;
+
+@property(nonatomic,strong)UIImageView       *renzhengImg;
+
 @end

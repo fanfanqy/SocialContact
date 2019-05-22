@@ -13,7 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *nearbyBtn;
 @property (weak, nonatomic) IBOutlet UIButton *driftingBottleBtn;
 @property (weak, nonatomic) IBOutlet UIButton *loveSkillBtn;
-@property (weak, nonatomic) IBOutlet UIButton *inviteFriendBtn;
+
 
 @end
 
@@ -21,26 +21,26 @@
 
 - (void)layoutSubviews{
     
-    self.nearbyBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
-    self.nearbyBtn.layer.masksToBounds = YES;
-    
-    self.driftingBottleBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
-    self.driftingBottleBtn.layer.masksToBounds = YES;
-    
-    self.loveSkillBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
-    self.loveSkillBtn.layer.masksToBounds = YES;
-    
-    self.inviteFriendBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
-    self.inviteFriendBtn.layer.masksToBounds = YES;
-    
-    
-    [self.nearbyBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMNearByBtnBackgroundColor]] forState:UIControlStateNormal];
-    
-    [self.driftingBottleBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMDriftingBottleBtnBackgroundColor]] forState:UIControlStateNormal];
-    
-    [self.loveSkillBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMLoveSkillBtnBackgroundColor]] forState:UIControlStateNormal];
-    
-    [self.inviteFriendBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMInviteFriendBtnBackgroundColor]] forState:UIControlStateNormal];
+//    self.nearbyBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
+//    self.nearbyBtn.layer.masksToBounds = YES;
+//    
+//    self.driftingBottleBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
+//    self.driftingBottleBtn.layer.masksToBounds = YES;
+//    
+//    self.loveSkillBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
+//    self.loveSkillBtn.layer.masksToBounds = YES;
+//    
+//    self.inviteFriendBtn.layer.cornerRadius = self.nearbyBtn.width/2.0;
+//    self.inviteFriendBtn.layer.masksToBounds = YES;
+//    
+//    
+//    [self.nearbyBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMNearByBtnBackgroundColor]] forState:UIControlStateNormal];
+//    
+//    [self.driftingBottleBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMDriftingBottleBtnBackgroundColor]] forState:UIControlStateNormal];
+//    
+//    [self.loveSkillBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMLoveSkillBtnBackgroundColor]] forState:UIControlStateNormal];
+//    
+//    [self.inviteFriendBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:kIMInviteFriendBtnBackgroundColor]] forState:UIControlStateNormal];
 }
 
 

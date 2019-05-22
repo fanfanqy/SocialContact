@@ -28,6 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign)id <IMHeaderViewDelegate> delegate;
 
+@property (weak, nonatomic) IBOutlet UIButton *inviteFriendBtn;
+@property (weak, nonatomic) IBOutlet UILabel *yueL;
+@property (weak, nonatomic) IBOutlet UIView *yueUnread;
+
 @end
 
 NS_ASSUME_NONNULL_END

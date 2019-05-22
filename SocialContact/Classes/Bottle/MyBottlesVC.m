@@ -54,7 +54,7 @@
         self.categoryView.titleSelectedColor = m1;
         
 //        self.categoryView.titleSelectedFont = [UIFont systemFontOfSize:25];
-        self.categoryView.titleFont = [UIFont fontWithName:@"Heiti SC" size:15];
+        self.categoryView.titleFont = [UIFont systemFontOfSize:15];
         
     }
     return _categoryView;

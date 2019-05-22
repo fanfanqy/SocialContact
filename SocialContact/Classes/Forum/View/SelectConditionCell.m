@@ -14,22 +14,22 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.conditionT.font = [UIFont fontWithName:@"Heiti SC" size:16];
-    self.height.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.heightT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.age.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.ageT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.profession.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.professionT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.marital_status.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.marital_statusT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.income.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.incomeT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    
-    self.child_status.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.child_statusT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.years_to_marry.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.years_to_marryT.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+//    self.conditionT.font = [UIFont systemFontOfSize:17];
+//    self.height.font = [UIFont systemFontOf size:14];
+//    self.heightT.font =  [UIFont systemFontOf size:14];
+//    self.age.font = [UIFont systemFontOf size:14];
+//    self.ageT.font =  [UIFont systemFontOf size:14];
+//    self.profession.font = [UIFont systemFontOf size:14];
+//    self.professionT.font =  [UIFont systemFontOf size:14];
+//    self.marital_status.font = [UIFont systemFontOf size:14];
+//    self.marital_statusT.font =  [UIFont systemFontOf size:14];
+//    self.income.font = [UIFont systemFontOf size:14];
+//    self.incomeT.font =  [UIFont systemFontOf size:14];
+//    
+//    self.child_status.font = [UIFont systemFontOf size:14];
+//    self.child_statusT.font =  [UIFont systemFontOf size:14];
+//    self.years_to_marry.font = [UIFont systemFontOf size:14];
+//    self.years_to_marryT.font =  [UIFont systemFontOf size:14];
 }
 
 - (void)setUserInfo:(SCUserInfo *)userInfo{
@@ -37,15 +37,15 @@
 #pragma mark TODO 择偶标准
     _userInfo = userInfo;
     
-    self.height.text = [Help height:userInfo.height];
-    self.age.text = [Help age:userInfo.age];
-    
-    self.profession.text = [Help profession:userInfo.profession];
-    self.income.text = [Help income:userInfo.income];
-    
-    self.marital_status.text = [Help marital_status:userInfo.marital_status];
-    self.child_status.text = [Help child_status:userInfo.child_status];
-    self.years_to_marry.text = [Help yearsToMarial:userInfo.years_to_marry];
+//    self.height.text = [Help height:userInfo.height];
+//    self.age.text = [Help age:userInfo.age];
+//
+//    self.profession.text = [Help profession:userInfo.profession];
+//    self.income.text = [Help income:userInfo.income];
+//
+//    self.marital_status.text = [Help marital_status:userInfo.marital_status];
+//    self.child_status.text = [Help child_status:userInfo.child_status];
+//    self.years_to_marry.text = [Help yearsToMarial:userInfo.years_to_marry];
  
     
     
@@ -53,7 +53,11 @@
   
     NSArray *ageRange = dic[@"age_range"];
     if (ageRange.count == 2) {
-        self.age.text = [NSString stringWithFormat:@"%ld岁—%ld岁",[ageRange[0] integerValue],[ageRange[1] integerValue]];
+        if ([ageRange[0] integerValue]== 0 || [ageRange[1] integerValue]) {
+            self.age.text  = @"不限";
+        }else{
+            self.age.text = [NSString stringWithFormat:@"%ld岁—%ld岁",[ageRange[0] integerValue],[ageRange[1] integerValue]];
+        }
     }else{
         self.age.text = @"不限";
         
@@ -69,6 +73,14 @@
     }else{
         self.height.text  = @"不限";
     }
+    
+    NSInteger education = [dic[@"education"] integerValue];
+    if (education == 0) {
+        self.education.text = @"不限";
+    }else{
+        self.education.text = [Help education:education];
+    }
+    
     
     NSInteger profession = [dic[@"profession"] integerValue];
     if (profession == 0) {
@@ -110,6 +122,21 @@
     }else{
         self.years_to_marry.text = [Help yearsToMarial:years_to_marry];
     }
+    
+    NSInteger house_status = [dic[@"house_status"] integerValue];
+    if (house_status == 0) {
+        self.house.text = @"不限";
+    }else{
+        self.house.text = [Help house:house_status];
+    }
+    
+    NSInteger car_status = [dic[@"car_status"] integerValue];
+    if (car_status == 0) {
+        self.car.text = @"不限";
+    }else{
+        self.car.text = [Help car:car_status];
+    }
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

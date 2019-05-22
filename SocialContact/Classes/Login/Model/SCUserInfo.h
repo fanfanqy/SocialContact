@@ -123,6 +123,28 @@ typedef NS_ENUM(NSInteger,CHILD_STATUS_CHOICE){
     CHILD_STATUS_CHOICE_YouUnWithMe = 3,
 };
 
+/*
+ (0, '保密'),
+ (1, '已购房'),
+ (2, '未购房'),
+ */
+typedef NS_ENUM(NSInteger,HOUSE_STATUS){
+    HOUSE_STATUS_Unknow = 0,
+    HOUSE_STATUS_Wu = 1,
+    HOUSE_STATUS_You = 2,
+};
+
+/*
+ (0, '保密'),
+ (1, '已购车'),
+ (2, '未购车'),
+ */
+typedef NS_ENUM(NSInteger,CAR_STATUS){
+    CAR_STATUS_Unknow = 0,
+    CAR_STATUS_Wu = 1,
+    CAR_STATUS_You = 2,
+};
+
 
 @interface SCUserInfo : NSObject
 
@@ -202,6 +224,9 @@ INS_P_ASSIGN(NSInteger,income);  // int        收入
 INS_P_ASSIGN(NSInteger,marital_status);  //  int        婚姻状况
 INS_P_ASSIGN(NSInteger,child_status); //   int        有无小孩
 INS_P_ASSIGN(NSInteger,years_to_marry);  //  int        几年内结婚
+INS_P_ASSIGN(NSInteger,house_status); // 房产信息
+INS_P_ASSIGN(NSInteger,car_status); // 购车信息
+
 INS_P_ASSIGN(NSInteger,score);   // int        自评分数 0~10
 INS_P_STRONG(NSDictionary *,condition);   // dict        择偶标准
 INS_P_STRONG(NSArray *,images);   //  list        相册
@@ -227,6 +252,34 @@ INS_P_ASSIGN(BOOL,isSelectedSayHi);
 
 // 是否上线开关标识
 INS_P_ASSIGN(BOOL,isOnlineSwitch);
+
+// 是否进行了身份认证
+INS_P_ASSIGN(BOOL,is_idcard_verified);
+
+//相互关注个数
+INS_P_ASSIGN(NSInteger,following_both_count);
+
+//查看我的人个数
+INS_P_ASSIGN(NSInteger,count_view_me);
+
+// 申请微信消息个数
+INS_P_ASSIGN(NSInteger,count_demand_wechat);
+
+// 线上约未读消息个数
+INS_P_ASSIGN(NSInteger,count_demand_date_online);
+
+// 审核中，成功，审核失败，
+INS_P_ASSIGN(NSInteger,avatar_status);
+
+INS_P_STRONG(NSDictionary *, extra);
+
+/*
+"extra": {
+    "count_view_me": 1,
+    "count_demand_wechat": 0,
+    "count_demand_date_online": 0
+}
+*/
 
 @end
 

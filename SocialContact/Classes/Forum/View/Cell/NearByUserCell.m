@@ -24,15 +24,15 @@
     self.avatarImg.layer.cornerRadius = 30;
     self.avatarImg.layer.masksToBounds = YES;
     
-    self.address.layer.borderColor = YD_Color999.CGColor;
-    self.address.layer.borderWidth = .5;
-    self.address.layer.cornerRadius = 10.f;
+//    self.address.layer.borderColor = YD_Color999.CGColor;
+//    self.address.layer.borderWidth = .3;
+//    self.address.layer.cornerRadius = 8.f;
     
-    self.nickName.font = [UIFont fontWithName:@"Heiti SC" size:14];
-    self.last_RequestTime.font = [UIFont fontWithName:@"Heiti SC" size:14];
-    self.personalSignature.font = [UIFont fontWithName:@"Heiti SC" size:13];
-    self.address.font = [UIFont fontWithName:@"Heiti SC" size:12];
-    self.distance.font = [UIFont fontWithName:@"Heiti SC" size:14];
+    self.nickName.font = [UIFont systemFontOfSize:14];
+    self.last_RequestTime.font = [UIFont systemFontOfSize:14];
+    self.personalSignature.font = [UIFont systemFontOfSize:13];
+    self.address.font = [UIFont systemFontOfSize:12];
+    self.distance.font = [UIFont systemFontOfSize:14];
 }
 
 - (void)setNotice:(Notice *)notice{
@@ -52,29 +52,58 @@
         self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
     }
     
+
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:notice.from_customer.name?:@""];
+    attString.font = [UIFont systemFontOfSize:16];
+    attString.color = [UIColor colorWithHexString:@"3B3B3B"];
+    attString.alignment = NSTextAlignmentLeft;
+    NSMutableAttributedString * attKongString = [[NSMutableAttributedString alloc] initWithString:@" "];
+    
+    UIImage *image;
+    if (notice.from_customer.gender == 1) {
+        image = [UIImage imageNamed:@"ic_male"];
+    }else{
+        image = [UIImage imageNamed:@"ic_women"];
+    }
+    if (image) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+    }
+    
+    UIImage *vipImage;
     if (notice.from_customer.service_vip_expired_at) {
         NSDate *date = [notice.from_customer.service_vip_expired_at sc_dateWithUTCString];
         NSTimeInterval interval = [date timeIntervalSinceNow];
-        if (interval <= 0) {
-            self.vipFlagV.hidden = YES;
-        }else{
-            self.vipFlagV.hidden = NO;
+        if (interval > 0) {
+            vipImage = [UIImage imageNamed:@"ic_huiyuan"];
         }
-    }else{
-        self.vipFlagV.hidden = YES;
+    }
+    if (vipImage) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
     }
     
-    self.nickName.text = notice.from_customer.name;
     
-//    NSDate *date = [NSDate dateWithISOFormatString:notice.create_at];
-//    NSString *formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
-//    self.last_RequestTime.text = formatedTimeString;
+    if (notice.from_customer.is_idcard_verified) {
+        UIImage *renzhenImage = [UIImage imageNamed:@"icon_shen_renzhen"];
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:renzhenImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(44, 14) alignToFont:[UIFont systemFontOfSize:16] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+        
+    }
+    
+    self.nickName.attributedText = attString;
+    
+    
+    
     
     self.last_RequestTime.text = [notice.create_at sc_timeAgoWithUTCString];
     
     self.personalSignature.text = notice.text;
     
-    self.address.layer.borderWidth = 0.f;
+//    self.address.layer.borderWidth = 0.f;
     self.address.text = @"";
     self.distance.text = @"";
 }
@@ -97,7 +126,12 @@
         self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
     }
     
-    self.nickName.text = userInfo.name;
+    
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:userInfo.name?:@""];
+    attString.font = [UIFont systemFontOfSize:16];
+    attString.color = [UIColor colorWithHexString:@"3B3B3B"];
+    attString.alignment = NSTextAlignmentLeft;
+    NSMutableAttributedString * attKongString = [[NSMutableAttributedString alloc] initWithString:@" "];
     
     UIImage *image;
     if (userInfo.gender == 1) {
@@ -105,34 +139,47 @@
     }else{
         image = [UIImage imageNamed:@"ic_women"];
     }
-    self.genderImg.image = image;
+    if (image) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+    }
     
+    UIImage *vipImage;
     if (userInfo.service_vip_expired_at) {
         NSDate *date = [userInfo.service_vip_expired_at sc_dateWithUTCString];
         NSTimeInterval interval = [date timeIntervalSinceNow];
-        if (interval < 0) {
-            self.vipFlagV.hidden = YES;
-        }else{
-            self.vipFlagV.hidden = NO;
+        if (interval > 0) {
+            vipImage = [UIImage imageNamed:@"ic_huiyuan"];
         }
-    }else{
-        self.vipFlagV.hidden = YES;
+    }
+    if (vipImage) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
     }
     
-//    NSDate *date = [NSDate dateWithISOFormatString:userInfo.last_request_at];
-//    NSString *formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
-//    self.last_RequestTime.text = formatedTimeString;
+    
+    if (userInfo.is_idcard_verified) {
+        UIImage *renzhenImage = [UIImage imageNamed:@"icon_shen_renzhen"];
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:renzhenImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(44, 14) alignToFont:[UIFont systemFontOfSize:16] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+        
+    }
+    
+    self.nickName.attributedText = attString;
     
     self.last_RequestTime.text = [userInfo.last_request_at sc_timeAgoWithUTCString];
     
     self.personalSignature.text = [NSString stringWithFormat:@"%ld岁，%@",userInfo.age,[Help height:userInfo.height]];
     
     if ([NSString ins_String:userInfo.address_home]) {
-        self.address.layer.borderWidth = 1.f;
+//        self.address.layer.borderWidth = 1.f;
         self.address.text =  [NSString stringWithFormat:@"  %@  ",userInfo.address_home];
         
     }else{
-        self.address.layer.borderWidth = 0.f;
+//        self.address.layer.borderWidth = 0.f;
         self.address.text =  nil;
     }
     [self.address sizeToFit];
@@ -160,19 +207,11 @@
         self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
     }
     
-    if (lookMeModel.customer.service_vip_expired_at) {
-        NSDate *date = [lookMeModel.customer.service_vip_expired_at sc_dateWithUTCString];
-        NSTimeInterval interval = [date timeIntervalSinceNow];
-        if (interval < 0) {
-            self.vipFlagV.hidden = YES;
-        }else{
-            self.vipFlagV.hidden = NO;
-        }
-    }else{
-        self.vipFlagV.hidden = YES;
-    }
-    
-    self.nickName.text = lookMeModel.customer.name;
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:lookMeModel.customer.name?:@""];
+    attString.font = [UIFont systemFontOfSize:16];
+    attString.color = [UIColor colorWithHexString:@"3B3B3B"];
+    attString.alignment = NSTextAlignmentLeft;
+    NSMutableAttributedString * attKongString = [[NSMutableAttributedString alloc] initWithString:@" "];
     
     UIImage *image;
     if (lookMeModel.customer.gender == 1) {
@@ -180,22 +219,47 @@
     }else{
         image = [UIImage imageNamed:@"ic_women"];
     }
-    self.genderImg.image = image;
+    if (image) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+    }
     
-//    NSDate *date = [NSDate dateWithISOFormatString:lookMeModel.create_at];
-//    NSString *formatedTimeString = [WBStatusHelper stringWithTimelineDate:date];
-//    self.last_RequestTime.text = formatedTimeString;
-//
+    UIImage *vipImage;
+    if (lookMeModel.customer.service_vip_expired_at) {
+        NSDate *date = [lookMeModel.customer.service_vip_expired_at sc_dateWithUTCString];
+        NSTimeInterval interval = [date timeIntervalSinceNow];
+        if (interval > 0) {
+            vipImage = [UIImage imageNamed:@"ic_huiyuan"];
+        }
+    }
+    if (vipImage) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+    }
+    
+    
+    if (lookMeModel.customer.is_idcard_verified) {
+        UIImage *renzhenImage = [UIImage imageNamed:@"icon_shen_renzhen"];
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:renzhenImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(44, 14) alignToFont:[UIFont systemFontOfSize:16] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+        
+    }
+    
+    self.nickName.attributedText = attString;
+    
     self.last_RequestTime.text = [lookMeModel.create_at sc_timeAgoWithUTCString];
     
     self.personalSignature.text = lookMeModel.customer.intro;
     
     if ([NSString ins_String:lookMeModel.customer.address_home]) {
-        self.address.layer.borderWidth = 1.f;
+//        self.address.layer.borderWidth = 1.f;
         self.address.text =  [NSString stringWithFormat:@"  %@  ",lookMeModel.customer.address_home];
         
     }else{
-        self.address.layer.borderWidth = 0.f;
+//        self.address.layer.borderWidth = 0.f;
         self.address.text =  nil;
     }
     [self.address sizeToFit];
@@ -211,17 +275,13 @@
     
     self.avatarImg.hidden = YES;
     
-    
-    
     self.nickName.text = userPointsModel.desc;
-    
-    
     
     self.last_RequestTime.text = [NSString stringWithFormat:@"%ld",userPointsModel.amount];
     
     self.personalSignature.text = @"";
     
-    self.address.layer.borderWidth = 0.f;
+//    self.address.layer.borderWidth = 0.f;
     self.address.text = @"";
     
     self.distance.text = [userPointsModel.create_at sc_timeAgoWithUTCString];
@@ -244,30 +304,59 @@
         self.avatarImg.image = [UIImage imageNamed:@"icon_default_person"];
     }
     
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:followsModel.customer.name?:@""];
+    attString.font = [UIFont systemFontOfSize:16];
+    attString.color = [UIColor colorWithHexString:@"3B3B3B"];
+    attString.alignment = NSTextAlignmentLeft;
+    NSMutableAttributedString * attKongString = [[NSMutableAttributedString alloc] initWithString:@" "];
+    
+    UIImage *image;
+    if (followsModel.customer.gender == 1) {
+        image = [UIImage imageNamed:@"ic_male"];
+    }else{
+        image = [UIImage imageNamed:@"ic_women"];
+    }
+    if (image) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+    }
+    
+    UIImage *vipImage;
     if (followsModel.customer.service_vip_expired_at) {
         NSDate *date = [followsModel.customer.service_vip_expired_at sc_dateWithUTCString];
         NSTimeInterval interval = [date timeIntervalSinceNow];
-        if (interval < 0) {
-            self.vipFlagV.hidden = YES;
-        }else{
-            self.vipFlagV.hidden = NO;
+        if (interval > 0) {
+            vipImage = [UIImage imageNamed:@"ic_huiyuan"];
         }
-    }else{
-        self.vipFlagV.hidden = YES;
+    }
+    if (vipImage) {
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:14] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
     }
     
-    self.nickName.text = followsModel.customer.name;
+    
+    if (followsModel.customer.is_idcard_verified) {
+        UIImage *renzhenImage = [UIImage imageNamed:@"icon_shen_renzhen"];
+        NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:renzhenImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(44, 14) alignToFont:[UIFont systemFontOfSize:16] alignment:YYTextVerticalAlignmentCenter];
+        [attString appendAttributedString:attKongString];
+        [attString appendAttributedString:attachText];
+        
+    }
+    
+    self.nickName.attributedText = attString;
 
     self.last_RequestTime.text = [followsModel.create_at sc_timeAgoWithUTCString];
     
     self.personalSignature.text = followsModel.customer.intro;
     
     if ([NSString ins_String:followsModel.customer.address_home]) {
-        self.address.layer.borderWidth = 1.f;
+//        self.address.layer.borderWidth = 1.f;
         self.address.text =  [NSString stringWithFormat:@"  %@  ",followsModel.customer.address_home];
         
     }else{
-        self.address.layer.borderWidth = 0.f;
+//        self.address.layer.borderWidth = 0.f;
         self.address.text =  nil;
     }
     [self.address sizeToFit];

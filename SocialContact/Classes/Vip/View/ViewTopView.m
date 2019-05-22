@@ -8,13 +8,11 @@
 
 #import "ViewTopView.h"
 
-static  CGFloat borderWidth = 1.5f;
+static  CGFloat borderWidth = 1.f;
 
 static  CGFloat btnCornerRadius = 8.f;
 
 @interface ViewTopView ()
-
-
 
 @end
 
@@ -30,25 +28,25 @@ static  CGFloat btnCornerRadius = 8.f;
 - (void)setServiceModel:(ServiceModel *)serviceModel{
     _serviceModel = serviceModel;
     
-    self.title1.font = [UIFont fontWithName:@"Heiti SC" size:17];
-    self.price1.font = [UIFont fontWithName:@"Heiti SC" size:17];
-    self.title2.font = [UIFont fontWithName:@"Heiti SC" size:17];
-    self.price2.font = [UIFont fontWithName:@"Heiti SC" size:17];
-    self.title3.font = [UIFont fontWithName:@"Heiti SC" size:17];
-    self.price3.font = [UIFont fontWithName:@"Heiti SC" size:17];
+    self.title1.font = [UIFont systemFontOfSize:17];
+    self.price1.font = [UIFont systemFontOfSize:20];
+    self.title2.font = [UIFont systemFontOfSize:17];
+    self.price2.font = [UIFont systemFontOfSize:20];
+    self.title3.font = [UIFont systemFontOfSize:17];
+    self.price3.font = [UIFont systemFontOfSize:20];
     
     
     for (NSInteger i=0; i<serviceModel.pricelist.count; i++) {
         ProductInfoModel *model = serviceModel.pricelist[i];
         if (i == 0) {
             self.title1.text = model.name;
-            self.price1.text = [NSString stringWithFormat:@"¥ %.2lf",model.price];
+            self.price1.text = [NSString stringWithFormat:@"¥ %.1lf",model.price];
         }else if (i == 1) {
             self.title2.text = model.name;
-            self.price2.text = [NSString stringWithFormat:@"¥ %.2lf",model.price];
+            self.price2.text = [NSString stringWithFormat:@"¥ %.1lf",model.price];
         }else if (i == 2) {
             self.title3.text = model.name;
-            self.price3.text = [NSString stringWithFormat:@"¥ %.2lf",model.price];
+            self.price3.text = [NSString stringWithFormat:@"¥ %.1lf",model.price];
         }
     }
     

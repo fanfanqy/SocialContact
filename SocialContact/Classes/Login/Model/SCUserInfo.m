@@ -20,4 +20,8 @@
              };
 }
 
+- (BOOL)isOnlineSwitch{
+    return YES;
+}
+
 @end

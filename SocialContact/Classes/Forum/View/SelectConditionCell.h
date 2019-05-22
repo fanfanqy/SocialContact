@@ -52,6 +52,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *years_to_marry;
 @property (weak, nonatomic) IBOutlet UILabel *years_to_marryT;
 
+@property (weak, nonatomic) IBOutlet UILabel *house;
+@property (weak, nonatomic) IBOutlet UILabel *car;
+
+@property (weak, nonatomic) IBOutlet UILabel *education;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -91,7 +91,7 @@
 #import "UIView+DLExtension.h"
 #import "Help.h"
 #import "UIImageView+SCImgRequest.h"
-
+#import "CAGradientLayer+GuaGradientLayer.h"
 
 #import "SCUserCenter.h"
 #import "SCIM.h"

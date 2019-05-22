@@ -16,7 +16,12 @@
         if (![url containsString:@"http"]) {
             url = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,url];
         }
-        [self sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:imgName]];
+        if ([NSString ins_String:imgName]) {
+            [self sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:imgName]];
+        }else{
+            [self sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil];
+        }
+        
     }else{
         self.image = [UIImage imageNamed:imgName];
     }

@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *heartBeatBtn;
 @property (weak, nonatomic) IBOutlet UIButton *chatBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *vipImg;
+@property (weak, nonatomic) IBOutlet UIImageView *renzhengImg;
 
 @property (strong, nonatomic) SCUserInfo *model;
 @property (strong, nonatomic) NSIndexPath *indexPath;

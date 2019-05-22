@@ -60,7 +60,7 @@
     for (int i = 0; i < maxCount; i++) {
         UIImageView *imageView = [UIImageView new];
         [self addSubview:imageView];
-		imageView.layer.cornerRadius = 4.0;
+//        imageView.layer.cornerRadius = 4.0;
         imageView.userInteractionEnabled = YES;
         imageView.tag = i;
         imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -95,9 +95,8 @@
         return;
     }
     
-
     WEAKSELF
-    [picsArray enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [picsArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 		
         long columnIndex = idx % weakSelf.perRowItemCount;
         long rowIndex = idx / weakSelf.perRowItemCount;
@@ -168,7 +167,11 @@
 {
     CGFloat margin = UnevenNumberPadding;
     NSInteger perRowItemCount = 3;
+
     if (array.count < 3) {
+        if (array.count == 1) {
+            return 222;
+        }
         perRowItemCount = array.count;
         return (self.width - margin)/2.0;
     }else if(array.count == 4){
@@ -178,7 +181,7 @@
         perRowItemCount = 3;
         return (self.width - 2*margin)/3.0;
     }
-    return (self.width - margin)/2.0;
+    return 222;
 }
 
 + (NSInteger)perRowItemCountForPicPathArray:(NSArray *)array
@@ -188,7 +191,7 @@
     if (array.count < 3) {
         perRowItemCount = array.count;
         
-    }else if(array.count == 4){
+    }else if(array.count == 3 || array.count == 4){
         perRowItemCount = 2;
         
     }else{
@@ -201,12 +204,20 @@
 + (CGSize)getContainerSize:(NSArray *)picsArray width:(CGFloat)width{
     
     CGFloat margin = UnevenNumberPadding;
-    NSInteger perRowItemCount = 2;
+    NSInteger perRowItemCount = 1;
     NSInteger columnCount = 1;
-    if (picsArray.count > 4) {
+    
+    if (picsArray.count < 3 ) {
+        perRowItemCount = picsArray.count;
+    }else if(picsArray.count == 3){
+        perRowItemCount = 2;
+    }else if(picsArray.count == 4){
+        perRowItemCount = 2;
+    }else if(picsArray.count>4){
         perRowItemCount = 3;
     }
-    if (picsArray.count <= 3) {
+    
+    if (picsArray.count < 3) {
         columnCount = 1;
     }else if (picsArray.count <= 6) {
         columnCount = 2;
@@ -215,6 +226,9 @@
     }
     CGFloat itemW = (width - (perRowItemCount-1)*margin) / perRowItemCount;
     
+    if (picsArray.count == 1) {
+        itemW = 222;
+    }
     CGFloat w = perRowItemCount * itemW + (perRowItemCount - 1) * margin;
     
     CGFloat h = columnCount * itemW + (columnCount - 1) * margin;
@@ -225,17 +239,21 @@
 + (CGFloat)itemWidth:(NSArray *)array width:(CGFloat)width{
     CGFloat margin = UnevenNumberPadding;
     NSInteger perRowItemCount = 3;
-    if (array.count < 3) {
+    if (array.count < 3 ) {
+        if (array.count == 1) {
+            return 222;
+        }
         perRowItemCount = array.count;
-        return (width - margin)/2.0;
-    }else if(array.count == 4){
+        return (width - (perRowItemCount-1)*margin)/perRowItemCount;
+    }else if(array.count == 3 || array.count == 4){
         perRowItemCount = 2;
         return (width - margin)/2.0;
-    }else{
+    }else if(array.count>4){
         perRowItemCount = 3;
         return (width - 2*margin)/3.0;
     }
-    return (width - margin)/2.0;
+
+    return 222;
 }
 
 @end

@@ -138,7 +138,7 @@ static DCIMDataSource * _SOURCES;
                 SCUserInfo *userInfo = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
                 [userInfo updateToDB];
                 
-                RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",userInfo.user_id] name:userInfo.name portrait:userInfo.avatar_url] ;
+                RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",userInfo.iD] name:userInfo.name portrait:userInfo.avatar_url] ;
                 [rcUserInfo updateToDB];
                 [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];
                 completion(rcUserInfo);

@@ -10,9 +10,9 @@
 /*
  将每行的 baseline 位置固定下来，不受不同字体的 ascent/descent 影响。
  
- 注意，Heiti SC 中，    ascent + descent = font size，
+ 注意，PingFang SC 中，    ascent + descent = font size，
  但是在 PingFang SC 中，ascent + descent > font size。
- 所以这里统一用 Heiti SC (0.86 ascent, 0.14 descent) 作为顶部和底部标准，保证不同系统下的显示一致性。
+ 所以这里统一用 PingFang SC (0.86 ascent, 0.14 descent) 作为顶部和底部标准，保证不同系统下的显示一致性。
  间距仍然用字体默认
  */
 @implementation TextLinePositionModifier
@@ -22,7 +22,7 @@
 	if (kiOS9Later) {
 		_lineHeightMultiple = 1.34;   // for PingFang SC
 	} else {
-		_lineHeightMultiple = 1.3125; // for Heiti SC
+		_lineHeightMultiple = 1.3125; // for PingFang SC
 	}
 	
 	return self;

@@ -21,7 +21,7 @@
 
 @property(nonatomic,strong) UIButton *publishBtn;
 
-@property(nonatomic,strong) UIView *topBarView;
+@property(nonatomic,strong) UIImageView *topBarView;
 
 @end
 
@@ -52,11 +52,14 @@
 }
 
 
-- (UIView *)topBarView{
+- (UIImageView *)topBarView{
     if (!_topBarView) {
-        _topBarView = [UIView new];
+        _topBarView = [UIImageView new];
         _topBarView.backgroundColor = Font_color333;
-        _topBarView.frame = CGRectMake(0, 0, self.view.width, StatusBarHeight+55);
+        _topBarView.frame = CGRectMake(0, 0, self.view.width, StatusBarHeight+50);
+        _topBarView.contentMode = UIViewContentModeScaleAspectFill;
+        _topBarView.image = [UIImage imageNamed:@"navbg"];
+        _topBarView.layer.masksToBounds = YES;
     }
     return _topBarView;
 }
@@ -65,27 +68,27 @@
     if (!_categoryView) {
        
         //1、初始化JXCategoryTitleView
-        _categoryView = [[JXCategoryTitleView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, 230, 50)];
+        _categoryView = [[JXCategoryTitleView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, 230, 48)];
         _categoryView.delegate = self;
 //        _categoryView.titles = @[@"话题",@"最新",@"关注",@"技能"];
         _categoryView.titles = @[@"朋友圈",@"话题",@"活动"];
         //2、添加并配置指示器
         //lineView
         JXCategoryIndicatorLineView *lineView = [[JXCategoryIndicatorLineView alloc] init];
-        lineView.indicatorLineViewColor = m1;
-        lineView.indicatorLineWidth = 10;
-        lineView.indicatorLineViewHeight = 4;
+        lineView.indicatorLineViewColor = [UIColor whiteColor];
+        lineView.indicatorLineWidth = 14;
+        lineView.indicatorLineViewHeight = 2;
         //backgroundView
 //        JXCategoryIndicatorBackgroundView *backgroundView = [[JXCategoryIndicatorBackgroundView alloc] init];
 //        backgroundView.backgroundViewColor = [UIColor redColor];
 //        backgroundView.backgroundViewWidth = JXCategoryViewAutomaticDimension;
         self.categoryView.indicators = @[lineView];
         
-        self.categoryView.titleColor = m2;
-        self.categoryView.titleSelectedColor = m1;
+        self.categoryView.titleColor = [UIColor whiteColor];
+        self.categoryView.titleSelectedColor = [UIColor whiteColor];
         
-        self.categoryView.titleSelectedFont = [UIFont fontWithName:@"Heiti SC" size:25];
-        self.categoryView.titleFont = [UIFont fontWithName:@"Heiti SC" size:17];
+        self.categoryView.titleSelectedFont = [[UIFont systemFontOfSize:22]fontWithBold];
+        self.categoryView.titleFont = [UIFont systemFontOfSize:18];
         
     }
     return _categoryView;

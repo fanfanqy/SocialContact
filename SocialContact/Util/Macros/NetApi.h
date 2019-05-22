@@ -13,7 +13,7 @@
 
 //https://www.handanxiaohongniang.com/
 //https://test.lhxq.top/
-#define APP_HOST  @"https://www.handanxiaohongniang.com/" //正式
+#define APP_HOST  @"https://test.lhxq.top/" //正式
 #define Referer   APP_HOST
 
 

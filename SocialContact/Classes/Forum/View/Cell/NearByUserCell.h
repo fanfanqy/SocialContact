@@ -24,13 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NearByUserCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImg;
-@property (weak, nonatomic) IBOutlet UILabel *nickName;
+@property (weak, nonatomic) IBOutlet YYLabel *nickName;
 @property (weak, nonatomic) IBOutlet UILabel *last_RequestTime;
 @property (weak, nonatomic) IBOutlet UILabel *address;
 @property (weak, nonatomic) IBOutlet UILabel *personalSignature;
 @property (weak, nonatomic) IBOutlet UILabel *distance;
-@property (weak, nonatomic) IBOutlet UIImageView *vipFlagV;
-@property (weak, nonatomic) IBOutlet UIImageView *genderImg;
+
 
 
 /**

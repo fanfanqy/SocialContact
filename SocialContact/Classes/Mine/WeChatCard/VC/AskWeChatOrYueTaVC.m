@@ -25,6 +25,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.fd_prefersNavigationBarHidden = NO;
+    
     if (_type == 1) {
         self.title = @"交换微信";
     }else if (_type == 2) {
@@ -40,6 +42,14 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+     [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
+    
+    
+    
+}
+
 - (JXCategoryTitleView *)categoryView{
     if (!_categoryView) {
         
@@ -47,9 +57,9 @@
         _categoryView = [[JXCategoryTitleView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
         _categoryView.delegate = self;
         if (_type == 1) {
-            _categoryView.titles = @[@"我发出的",@"我收到的"];
+            _categoryView.titles = @[@"微信名片",@"我发出的",@"我收到的"];
         }else if (_type == 2) {
-            _categoryView.titles = @[@"我约的",@"约我的"];
+            _categoryView.titles = @[@"约我的",@"我约的"];
         }else if (_type == 3) {
             _categoryView.titles = @[@"商品列表",@"兑换记录"];
         }
@@ -64,11 +74,11 @@
         lineView.indicatorLineViewHeight = 2;
         self.categoryView.indicators = @[lineView];
         
-        self.categoryView.titleColor = m2;
+        self.categoryView.titleColor = Black;
         self.categoryView.titleSelectedColor = m1;
         
-        self.categoryView.titleFont = [UIFont fontWithName:@"Heiti SC" size:15];
-        
+        self.categoryView.titleFont = [UIFont systemFontOfSize:15];
+        self.categoryView.titleSelectedFont = [[UIFont systemFontOfSize:15] fontWithBold];
     }
     return _categoryView;
 }
@@ -129,9 +139,32 @@
      2: 约人
      */
     
+    if (_type == 1) {
+        
+        ForumVC *vc0 = [[ForumVC alloc]init];
+        vc0.forumVCType = ForumVCTypeAskWeChatOrYueTa;
+        vc0.momentRequestType = MomentRequestTypeAskWeChatCard;
+        vc0.height = kScreenHeight-GuaTopHeight-44;
+        [_vcItem addObject:vc0];
+        
+        ForumVC *vc1 = [[ForumVC alloc]init];
+        vc1.forumVCType = ForumVCTypeAskWeChatOrYueTa;
+        vc1.momentRequestType = MomentRequestTypeAskWeChatSend;
+        vc1.height = kScreenHeight-GuaTopHeight-44;
+        [_vcItem addObject:vc1];
+        
+        ForumVC *vc2 = [[ForumVC alloc]init];
+        vc2.forumVCType = ForumVCTypeAskWeChatOrYueTa;
+        vc2.momentRequestType = MomentRequestTypeAskWeChatReceived;
+        vc2.height = kScreenHeight-GuaTopHeight-44;
+        [_vcItem addObject:vc2];
+        
+        
+    }else {
+    
     ForumVC *vc1 = [[ForumVC alloc]init];
     vc1.fatherVC = self;
-    if (_type == 1 || _type == 2) {
+    if (_type == 2) {
         vc1.forumVCType = ForumVCTypeAskWeChatOrYueTa;
         vc1.momentUIType = MomentUITypeAskWeChatOrYueTa;
     }else if (_type == 3) {
@@ -139,11 +172,8 @@
         vc1.momentUIType = MomentUITypePointsStore;
     }
     
-    
-    if (_type == 1) {
-        vc1.momentRequestType = MomentRequestTypeAskWeChatSend;
-    }else if (_type == 2) {
-        vc1.momentRequestType = MomentRequestTypeYueTaSend;
+    if (_type == 2) {
+        vc1.momentRequestType = MomentRequestTypeYueTaReceived;
     }else if (_type == 3) {
         vc1.momentRequestType = MomentRequestTypePointSkus;
     }
@@ -153,24 +183,22 @@
     
     ForumVC *vc2 = [[ForumVC alloc]init];
     vc2.fatherVC = self;
-    if (_type == 1 || _type == 2) {
+    if (_type == 2) {
         vc2.forumVCType = ForumVCTypeAskWeChatOrYueTa;
         vc2.momentUIType = MomentUITypeAskWeChatOrYueTa;
     }else if (_type == 3) {
         vc2.forumVCType = ForumVCTypePointsStore;
         vc2.momentUIType = MomentUITypePointsStore;
     }
-    if (_type == 1) {
-        vc2.momentRequestType = MomentRequestTypeAskWeChatReceived;
-    }else if (_type == 2) {
-        vc2.momentRequestType = MomentRequestTypeYueTaReceived;
+    if (_type == 2) {
+        vc2.momentRequestType = MomentRequestTypeYueTaSend;
     }else if (_type == 3) {
         vc2.momentRequestType = MomentRequestTypePointSkusExchages;
     }
     vc2.height = kScreenHeight-GuaTopHeight-44;
     [_vcItem addObject:vc2];
     
-    
+    }
 }
 
 /*

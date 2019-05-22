@@ -129,7 +129,7 @@
     
     _userModel = userModel;
     
-    [self.avatar sc_setImgWithUrl:userModel.avatar_url placeholderImg:@""];
+    [self.avatar sc_setImgWithUrl:userModel.avatar_url placeholderImg:@"icon_default_person"];
     self.nick.text = userModel.name;
     
     if (userModel.service_vip_expired_at) {

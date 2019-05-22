@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *titleLB;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLBLeading;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLB;
+@property (weak, nonatomic) IBOutlet UIImageView *rightImg;
 
 @end
 

@@ -27,12 +27,12 @@
     [self.agreeBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
     
     
-    self.title.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.des.font =  [UIFont fontWithName:@"Heiti SC" size:14];
-    self.shifouTongYi.font =  [UIFont fontWithName:@"Heiti SC" size:14];
-    self.refuseBtn.titleLabel.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.agreeBtn.titleLabel.font =  [UIFont fontWithName:@"Heiti SC" size:15];
-    self.dateL.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+    self.title.font =  [UIFont systemFontOfSize:15];
+    self.des.font =  [UIFont systemFontOfSize:14];
+    self.shifouTongYi.font =  [UIFont systemFontOfSize:14];
+    self.refuseBtn.titleLabel.font =  [UIFont systemFontOfSize:15];
+    self.agreeBtn.titleLabel.font =  [UIFont systemFontOfSize:15];
+    self.dateL.font =  [UIFont systemFontOfSize:15];
     
 }
 
@@ -40,12 +40,23 @@
     
     _model = model;
     
-    NSDate *date = [model.create_at sc_dateWithUTCString];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"M-d HH:mm"];
-    NSString* dateStr = [[NSString alloc]initWithString:[formatter stringFromDate:date]];
-    self.dateL.text = dateStr;
     
+    
+    
+    if (_type == 4) {
+        [_img sc_setImgWithUrl:_model.accepted_customer.avatar_url placeholderImg:@"icon_default_person"];
+        _title.text = _model.accepted_customer.name;
+        self.dateL.text = [NSString stringWithFormat:@"微信：%@",model.wechat ?:@""];
+        self.refuseBtn.hidden = YES;
+        self.agreeBtn.hidden = YES;
+        self.shifouTongYi.text = @"";
+    }else{
+    
+        NSDate *date = [model.create_at sc_dateWithUTCString];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"M-d HH:mm"];
+        NSString* dateStr = [[NSString alloc]initWithString:[formatter stringFromDate:date]];
+        self.dateL.text = dateStr;
     // 我发出去的
     if (_model.to_customer) {
         
@@ -54,7 +65,7 @@
             self.refuseBtn.hidden = YES;
             self.agreeBtn.hidden = YES;
             
-            [_img sc_setImgWithUrl:_model.to_customer.avatar_url placeholderImg:@""];
+            [_img sc_setImgWithUrl:_model.to_customer.avatar_url placeholderImg:@"icon_default_person"];
             _title.text = _model.to_customer.name;
             
             if (_type == 0 || _type == 1) {
@@ -74,7 +85,8 @@
             }else if (_model.status == 1) {
                 
                 if (_type == 0 || _type == 1) {
-                    self.shifouTongYi.text =[NSString stringWithFormat:@"已同意，对方微信：%@",_model.to_customer.wechat_id?:@""];
+                    self.shifouTongYi.text = @"已同意，在微信名片查看";
+//                    [NSString stringWithFormat:@"已同意，对方微信：%@",_model.to_customer.wechat_id?:@""];
                 }else if (_type == 2 || _type == 3) {
                     self.shifouTongYi.text = @"已同意";
                 }
@@ -90,7 +102,7 @@
             self.refuseBtn.hidden = YES;
             self.agreeBtn.hidden = YES;
             
-            [_img sc_setImgWithUrl:_model.to_customer.avatar_url placeholderImg:@""];
+            [_img sc_setImgWithUrl:_model.to_customer.avatar_url placeholderImg:@"icon_default_person"];
             _title.text = _model.to_customer.name;
             if (_type == 0 || _type == 1) {
                 _des.text = @"请求交换微信";
@@ -109,7 +121,8 @@
             
                 
                 if (_type == 0 || _type == 1) {
-                    self.shifouTongYi.text =[NSString stringWithFormat:@"已同意，对方微信：%@",_model.to_customer.wechat_id?:@""];
+                    self.shifouTongYi.text = @"已同意，在微信名片查看";
+//                    [NSString stringWithFormat:@"已同意，对方微信：%@",_model.to_customer.wechat_id?:@""];
                 }else if (_type == 2 || _type == 3) {
                     self.shifouTongYi.text = @"已同意";
                 }
@@ -129,7 +142,7 @@
         self.refuseBtn.hidden = YES;
         self.agreeBtn.hidden = YES;
         
-        [_img sc_setImgWithUrl:_model.customer.avatar_url placeholderImg:@""];
+        [_img sc_setImgWithUrl:_model.customer.avatar_url placeholderImg:@"icon_default_person"];
         _title.text = _model.customer.name;
         if (_type == 0 || _type == 1) {
             _des.text = @"请求交换微信";
@@ -148,7 +161,8 @@
         }else if (_model.status == 1) {
             
             if (_type == 0 || _type == 1) {
-                self.shifouTongYi.text =[NSString stringWithFormat:@"已同意，对方微信：%@",_model.customer.wechat_id?:@""];
+                self.shifouTongYi.text = @"已同意，在微信名片查看";
+//                [NSString stringWithFormat:@"已同意，对方微信：%@",_model.customer.wechat_id?:@""];
             }else if (_type == 2 || _type == 3) {
                 self.shifouTongYi.text = @"已同意";
             }
@@ -159,6 +173,7 @@
         }
         
         
+    }
     }
 }
 - (IBAction)refuseBtnClick:(id)sender {

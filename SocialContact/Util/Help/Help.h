@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "SCUserInfo.h"
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^VipIsExpired)(BOOL expired);
@@ -73,6 +73,10 @@ typedef void(^VipIsExpired)(BOOL expired);
 + (NSString *)gender:(NSInteger)gender;
 
 + (NSString *)height:(CGFloat)height;
+
++ (NSString *)car:(NSInteger)car;
+
++ (NSString *)house:(NSInteger)house;
  
 + (NSString *)age:(NSInteger)age;
  
@@ -93,6 +97,10 @@ typedef void(^VipIsExpired)(BOOL expired);
 
 // 几年内结婚
 + (NSString *)yearsToMarial:(NSInteger)yearsToMarialType;
+
++ (BOOL)checkFillAllInfo:(SCUserInfo *)userModel ignoreAvatar:(BOOL)ignoreAvatar;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

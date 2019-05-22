@@ -37,9 +37,8 @@
     UICollectionViewFlowLayout *horizontalCellLayout = [UICollectionViewFlowLayout new];
     horizontalCellLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     horizontalCellLayout.minimumLineSpacing = 2;
-    horizontalCellLayout.sectionInset = UIEdgeInsetsMake(25, 10, 5, 10);
+    horizontalCellLayout.sectionInset = UIEdgeInsetsMake(30, 15, 5, 15);
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:horizontalCellLayout];
-//    _collectionView.bounces = NO;
     [_collectionView registerClass:[HorzonItemCell class] forCellWithReuseIdentifier:@"HorzonItemCell"];
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.showsHorizontalScrollIndicator = NO;
@@ -48,12 +47,10 @@
     [_collectionView registerClass:[HorzonItemCell class] forCellWithReuseIdentifier:@"HorzonItemCell"];
     [self.contentView addSubview:_collectionView];
     
-    
     UIView *superView = self.contentView;
     
     // 添加相对布局
     _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    
     
     NSArray *constrainArray = @[@(NSLayoutAttributeTop),@(NSLayoutAttributeBottom),@(NSLayoutAttributeLeading),@(NSLayoutAttributeTrailing),@(NSLayoutAttributeWidth)];
     WEAKSELF;
@@ -68,10 +65,10 @@
     }];
     
     UILabel *label = [UILabel new];
-    label.frame = CGRectMake(15, 10, 100, 20);
+    label.frame = CGRectMake(15, 10, 140, 20);
     label.text = @"我的相册";
-    label.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    label.textColor = Black;
+    label.font = [UIFont systemFontOfSize:15];
+    label.textColor = Font_color333;
     _labelT = label;
     [self.contentView addSubview:_labelT];
     
@@ -98,7 +95,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(([UIScreen mainScreen].bounds.size.width-20-6.0)/4.0, ([UIScreen mainScreen].bounds.size.width-20-6.0)/4.0);
+    return CGSizeMake(([UIScreen mainScreen].bounds.size.width-30-6.0)/4.0, ([UIScreen mainScreen].bounds.size.width-30-6.0)/4.0);
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

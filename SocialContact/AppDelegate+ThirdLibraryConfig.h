@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)thirdLibraryApplication:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                otherOptions:(InitialOption *)initialOption;
+
+- (void)mapManagerConfig;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

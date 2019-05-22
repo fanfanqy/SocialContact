@@ -98,7 +98,8 @@ static SCUserCenter *CENTER = nil;
             [SCUserCenter sharedCenter].currentUser.userInfo = userInfo;
             [[SCUserCenter sharedCenter].currentUser updateToDB];
             
-            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",[SCUserCenter sharedCenter].currentUser.user_id] name:[SCUserCenter sharedCenter].currentUser.name portrait:userInfo.avatar_url] ;
+            // [SCUserCenter sharedCenter].currentUser.user_id
+            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",userInfo.iD] name:[SCUserCenter sharedCenter].currentUser.name portrait:userInfo.avatar_url] ;
             [rcUserInfo updateToDB];
             [RCIM sharedRCIM].currentUserInfo = rcUserInfo;
             [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];

@@ -25,7 +25,7 @@
 - (void)setUserModel:(SCUserInfo *)userModel{
     
     _userModel = userModel;
-    [self.avatar sc_setImgWithUrl:userModel.avatar_url placeholderImg:@""];
+    [self.avatar sc_setImgWithUrl:userModel.avatar_url placeholderImg:@"icon_default_person"];
     self.nick.text = userModel.name;
     
     self.selectBtn.selected = userModel.isSelectedSayHi;

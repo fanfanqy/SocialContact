@@ -88,7 +88,8 @@ extern NSString *const kWeChatPartnerId;
 extern NSString *const kWeChatAppId;
 extern NSString *const kWeChatAppS;
 
-
+extern NSString *const kFaceIDKey;
+extern NSString *const kFaceIDSecret;
 
 // 色值
 extern NSString *const kIMNearByBtnBackgroundColor;
@@ -106,7 +107,13 @@ extern NSInteger const kConstChatCount; //3
 // 一键打招呼 每天个数
 extern NSInteger const kConstSayHiCount; //1
 
-// 分享的URL
-static NSString *kSCShareLinkURL = @"http://tech.qq.com/zt2012/tmtdecode/252.htm";
+extern NSInteger const kConstPickBottleCount; //1
 
-static NSString *kSCShareDes = @"真实高效同城婚恋平台脱单神器，【实名制】【成功率高】【高效专业】，拒绝婚托婚骗，真诚征婚交友";
+extern NSInteger const kConstSendBottleCount;
+
+// 分享的URL
+static NSString *kSCShareLinkURL = @"https://www.handanxiaohongniang.com/enroll";
+
+static NSString *kSCShareTitle = @"邯郸小红娘|谈恋爱，我们是认真的！";
+
+static NSString *kSCShareDes = @"精准会员|实名认证|杜绝婚托";

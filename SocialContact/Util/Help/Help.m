@@ -99,7 +99,7 @@
 }
 
 + (NSString *)gender:(NSInteger)gender{
-    NSString *str = @"未知";
+    NSString *str = @"未填写";
     if (gender == 1) {
         str = @"男";
     }else if (gender == 2) {
@@ -109,7 +109,7 @@
 }
 
 + (NSString *)height:(CGFloat)height{
-    NSString *str = @"165cm";
+    NSString *str = @"未填写";
     if (height<1) {
         return str;
     }else{
@@ -118,43 +118,76 @@
     return str;
 }
 
-+ (NSString *)age:(NSInteger)age{
-    NSString *str = @"-";
-    if (age<1) {
-        return str;
-    }else{
-        return [NSString stringWithFormat:@"%ld岁",age];
++ (NSString *)car:(NSInteger)car{
+    NSString *str = @"保密";
+    if (car == 1) {
+        str = @"已购车辆";
+    }else if (car == 2) {
+        str = @"未购车辆";
     }
     return str;
 }
+
++ (NSString *)house:(NSInteger)house{
+    NSString *str = @"保密";
+    if (house == 1) {
+        str = @"已购车辆";
+    }else if (house == 2) {
+        str = @"未购车辆";
+    }
+    return str;
+}
+
+
+
++ (NSString *)age:(NSInteger)age{
+    NSString *str = @"未知";
+    if (age<1) {
+        return str;
+    }else{
+        return [NSString stringWithFormat:@"%ld岁",(long)age];
+    }
+    return str;
+}
+/*
+PROFESSION_CHOICE = (
+                     (0, '未知'),
+                     (1, '白领/一般职业'),
+                     (2, '公务员/事业单位'),
+                     (3, '自由职业/个体户/私营业主'),
+                     (4, '暂时无业'),
+                     (5, '退休'),
+                     (6, '学生'),
+                     )
+*/
 
 + (NSString *)profession:(NSInteger)professionType{
     
     NSString *str = @"";
     switch (professionType) {
         case 0:
-            str = @"未知";
+            str = @"未填写";
             break;
         case 1:
-            str = @"学生";
+            str = @"白领/一般职业";
             break;
         case 2:
-            str = @"一般私有企业";
+            str = @"公务员/事业单位";
             break;
         case 3:
-            str = @"个体户私有业主";
+            str = @"自由职业/私营业主";
             break;
         case 4:
-            str = @"事业单位";
+            str = @"暂时无业";
             break;
         case 5:
             str = @"公务员";
             break;
         case 6:
-            str = @"医疗机构";
+            str = @"退休";
             break;
         case 7:
-            str = @"暂时无业";
+            str = @"学生";
             break;
         default:
             break;
@@ -167,7 +200,7 @@
     NSString *str = @"";
     switch (educationType) {
         case 0:
-            str = @"未知";
+            str = @"未填写";
             break;
         case 1:
             str = @"初中";
@@ -210,19 +243,19 @@
     NSString *str = @"";
     switch (incomeType) {
         case 0:
-            str = @"未知";
+            str = @"未填写";
             break;
         case 1:
-            str = @"5000以下/月";
+            str = @"5000以下";
             break;
         case 2:
-            str = @"5000-10000/月";
+            str = @"5000-1万";
             break;
         case 3:
-            str = @"10000-15000/月";
+            str = @"1万-15000";
             break;
         case 4:
-            str = @"15000以上/月";
+            str = @"2万以上";
             break;
         default:
             break;
@@ -242,7 +275,7 @@
     NSString *str = @"";
     switch (marital_statusType) {
         case 0:
-            str = @"未知";
+            str = @"未填写";
             break;
         case 1:
             str = @"未婚";
@@ -271,16 +304,16 @@
     NSString *str=@"";
     switch (child_statusType) {
         case 0:
-            str = @"未知";
+            str = @"未填写";
             break;
         case 1:
             str = @"无子女";
             break;
         case 2:
-            str = @"有，和我在一起";
+            str = @"有子女，和我在一起";
             break;
         case 3:
-            str = @"有，不和我在一起";
+            str = @"有子女，不和我在一起";
             break;
         default:
             break;
@@ -294,7 +327,7 @@
     NSString *str = @"";
     switch (yearsToMarialType) {
         case 0:
-            str = @"未知";
+            str = @"未填写";
             break;
         case 1:
             str = @"1年内结婚";
@@ -306,12 +339,129 @@
             str = @"2-3年内结婚";
             break;
         case 4:
-            str = @"3年以上结婚";
+            str = @"3年以后结婚";
             break;
         default:
             break;
     }
     return str;
+}
+
++ (BOOL)checkFillAllInfo:(SCUserInfo *)userModel ignoreAvatar:(BOOL)ignoreAvatar{
+    
+    if (![NSString ins_String:userModel.avatar_url] && !ignoreAvatar) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"头像未设置，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (![NSString ins_String:userModel.name]) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"昵称未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (![NSString ins_String:userModel.intro]) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"自我介绍未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (userModel.gender == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"性别未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (![NSString ins_String:userModel.birthday]) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"选择出生日期，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (userModel.height == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"身高未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (![NSString ins_String:userModel.address_home]) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"家庭地址未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (![NSString ins_String:userModel.address_company]) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"工作地址未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    
+    if (userModel.education == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"学历未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    if (userModel.profession == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"工作职业未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (userModel.income == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"月收入未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (userModel.marital_status == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"婚姻状况未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (userModel.child_status == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"有无子女未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    if (userModel.years_to_marry == 0) {
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"几年内结婚未填写，\n谈恋爱我们是认真的"];
+        [SVProgressHUD dismissWithDelay:2];
+        return NO;
+    }
+    
+    //    if (userModel.house_status == 0) {
+    //
+    //        [SVProgressHUD showImage:AlertErrorImage status:@"有无房产未填写，\n谈恋爱我们是认真的"];
+    //        [SVProgressHUD dismissWithDelay:2];
+    //        return NO;
+    //    }
+    //
+    //    if (userModel.car_status == 0) {
+    //
+    //        [SVProgressHUD showImage:AlertErrorImage status:@"有无车辆未填写，\n谈恋爱我们是认真的"];
+    //        [SVProgressHUD dismissWithDelay:2];
+    //        return NO;
+    //    }
+    
+    return YES;
 }
 
 @end

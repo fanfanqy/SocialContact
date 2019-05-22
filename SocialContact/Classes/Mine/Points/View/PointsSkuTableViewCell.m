@@ -14,10 +14,10 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.title.font = [UIFont fontWithName:@"Heiti SC" size:16];
-    self.price.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
-    self.des.font =  [UIFont fontWithName:@"Heiti SC" size:16];
-    self.exchangeBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    self.title.font = [UIFont systemFontOfSize:16];
+    self.price.font = [[UIFont systemFontOfSize:20]fontWithBold];
+    self.des.font =  [UIFont systemFontOfSize:16];
+    self.exchangeBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     
     self.exchangeBtn.layer.cornerRadius = 5;
     self.exchangeBtn.layer.masksToBounds = YES;
@@ -45,7 +45,7 @@
     _pointsSkuExchangeModel = pointsSkuExchangeModel;
     
     [self.exchangeBtn setTitleColor:Black forState:UIControlStateNormal];
-    self.exchangeBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:13];
+    self.exchangeBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [self.exchangeBtn setBackgroundImage:nil forState:UIControlStateNormal];
     
     PointsSkuModel *pointsSkuModel = pointsSkuExchangeModel.sku;

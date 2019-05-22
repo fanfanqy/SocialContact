@@ -30,11 +30,8 @@
     _commentHeight = 0;
     
     if (_momentRequestType == MomentRequestTypeSkill) {
-        
        _formatedTimeString = [_model.last_request_at sc_timeAgoWithUTCString];
-        
     }else{
-
         _formatedTimeString = [_model.create_at sc_timeAgoWithUTCString];
     }
     
@@ -48,12 +45,7 @@
         _height += _contentLayout.textBoundingSize.height;
         _height += kMomentContentBottomPhotoContainTop;
     }
-    if (_momentRequestType == MomentRequestTypeSkill) {
-        // 底部间隙
-        _height += 16;
-        return;
-    }
-
+    
 //		照片
     if (_model.images.count != 0) {
         [self layoutPicture];
@@ -61,18 +53,17 @@
         _height += kMomentPhotoContainBottomTopicTop;
     }
 		
-// 时间的高度
+// 内容到点赞、评论的高度，或者图片到点赞、评论的高度
     _height += 20;
+    
+// 底部间隙
+    _height += 16;
     
 //  分割灰色视图
     if (self.momentRequestType == MomentRequestTypeNewest || self.momentRequestType == MomentRequestTypeTopicList ) {
         _height += kDynamicsSectionViewHeight;
     }
-    
-// 底部间隙
-    _height += 16;
-	
-    
+
     if (self.commentLayoutArr.count > 0 || _zanUsers.count > 0) {
         [self layoutComment];
         _commentHeight += 45; // 最新评论
@@ -107,12 +98,12 @@
     
     NSMutableAttributedString * attString = [[NSMutableAttributedString alloc] initWithString:convertToSystemEmoticonsText];
 	
-    attString.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    attString.font = [UIFont systemFontOfSize:15];
 	attString.lineSpacing = 6;
 	attString.color = Font_color333;
 	attString.alignment = NSTextAlignmentJustified;
 	
-	YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(kScreenWidth - 2*kMomentContentInsetLeft , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont fontWithName:@"Heiti SC" size:15] withWidth:(kScreenWidth - 2*kMomentContentInsetLeft)]) ];//3是特殊标点或者表情会多占用的空间
+	YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(kScreenWidth - 2*kMomentContentInsetLeft , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont systemFontOfSize:15] withWidth:(kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetLeft -  kMomentPortraitWH)]) ];//3是特殊标点或者表情会多占用的空间
     container.truncationType = YYTextTruncationTypeEnd;
     _contentLayout = [YYTextLayout layoutWithContainer:container text:attString];
     _contentHeight = _contentLayout.textBoundingSize.height;
@@ -122,14 +113,14 @@
 - (void)layoutPicture
 {
     self.photoContainerSize = CGSizeZero;
-    self.photoContainerSize = [SDWeiXinPhotoContainerView getContainerSize:_model.images width:kScreenWidth-2*kMomentContentInsetLeft];
+    self.photoContainerSize = [SDWeiXinPhotoContainerView getContainerSize:_model.images width:kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetRight - kMomentPortraitWH];
     
     self.photosUrlsArray = [NSMutableArray array];
     for (MomentImageModel *model in _model.images) {
         [self.photosUrlsArray addObject:model.url?:@""];
     }
     self.perRowItemCount = [SDWeiXinPhotoContainerView perRowItemCountForPicPathArray:_model.images];
-    self.itemWidth = [SDWeiXinPhotoContainerView itemWidth:_model.images width:kScreenWidth-2*kMomentContentInsetLeft];
+    self.itemWidth = [SDWeiXinPhotoContainerView itemWidth:_model.images width:kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetRight - kMomentPortraitWH];
     self.itemHeight = self.itemWidth;
     
 }
@@ -162,7 +153,7 @@
     
     NSMutableAttributedString * attString = [[NSMutableAttributedString alloc] initWithString:text];
     
-    NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:[UIImage imageNamed:@"find_dianzhan"] contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(20, 20) alignToFont:[UIFont fontWithName:@"Heiti SC" size:15] alignment:YYTextVerticalAlignmentCenter];
+    NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:[UIImage imageNamed:@"find_dianzhan"] contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(20, 20) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
     [attString appendAttributedString:attachText];
     
     BOOL zan = NO;
@@ -174,7 +165,7 @@
         }
         
         NSMutableAttributedString * attStr = [[NSMutableAttributedString alloc] initWithString:model.customer.name];
-        attStr.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        attStr.font = [UIFont systemFontOfSize:15];
         attStr.lineSpacing = 6;
         attStr.color = BLUE;
         attStr.alignment = NSTextAlignmentJustified;
@@ -213,12 +204,12 @@
     
     self.model.isZan = zan;
     
-    attString.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    attString.font = [UIFont systemFontOfSize:15];
     attString.lineSpacing = 6;
 //    attString.color = BLUE;
     attString.alignment = NSTextAlignmentJustified;
     
-    YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(kScreenWidth - 2*kMomentContentInsetLeft , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont fontWithName:@"Heiti SC" size:15] withWidth:(kScreenWidth - 2*kMomentContentInsetLeft)]) ];//3是特殊标点或者表情会多占用的空间
+    YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(kScreenWidth - 2*kMomentContentInsetLeft , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont systemFontOfSize:15] withWidth:(kScreenWidth - 2*kMomentContentInsetLeft)]) ];//3是特殊标点或者表情会多占用的空间
     container.truncationType = YYTextTruncationTypeEnd;
     _zanUsersLayout = [YYTextLayout layoutWithContainer:container text:attString];
     _zanUsersHeight = container.size.height;
@@ -287,7 +278,7 @@
         nick.color = Font_color333;
         nick.alignment = NSTextAlignmentJustified;
         nick.lineSpacing = kDynamicsLineSpacing;
-        nick.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        nick.font = [UIFont systemFontOfSize:14];
         
         [text appendAttributedString:nick];
     }
@@ -296,21 +287,21 @@
         NSString *convertToSystemEmoticonsText = [EaseConvertToCommonEmoticonsHelper convertToSystemEmoticons:_model.to_customer.name];
     
         NSMutableAttributedString * tonick = [[NSMutableAttributedString alloc] initWithString:convertToSystemEmoticonsText];
-        tonick.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        tonick.font = [UIFont systemFontOfSize:14];
         [tonick setColor:Font_color333 range:tonick.rangeOfAll];
     
         NSMutableAttributedString * hfText = [[NSMutableAttributedString alloc] initWithString:@" 回复 "];
         hfText.alignment = NSTextAlignmentJustified;
         hfText.lineSpacing = kDynamicsLineSpacing;
         [hfText setColor:UIColorHex(666666) range:hfText.rangeOfAll];
-        hfText.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        hfText.font = [UIFont systemFontOfSize:14];
         [text appendAttributedString:hfText];
         [text appendAttributedString:tonick];
     
         NSMutableAttributedString * fhText = [[NSMutableAttributedString alloc] initWithString:@"："];
         fhText.lineSpacing = kDynamicsLineSpacing;
         fhText.alignment = NSTextAlignmentJustified;
-        fhText.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        fhText.font = [UIFont systemFontOfSize:14];
         [text appendAttributedString:fhText];
     }
     
@@ -327,7 +318,7 @@
         message.alignment = NSTextAlignmentJustified;
         message.lineSpacing = kDynamicsLineSpacing;
         message.color = Font_color333;
-        message.font = [UIFont fontWithName:@"Heiti SC" size:14];
+        message.font = [UIFont systemFontOfSize:14];
         [contentText appendAttributedString:message];
     }
         

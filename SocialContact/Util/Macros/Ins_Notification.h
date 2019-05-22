@@ -20,4 +20,8 @@
 // 一键打招呼 次数
 #define kSayHiCount @"SayHiCount"
 
+#define kPickBottleCount @"PickBottleCount"
+
+#define kSendBottleCount @"SendBottleCount"
+
 #endif /* Ins_Notification_h */

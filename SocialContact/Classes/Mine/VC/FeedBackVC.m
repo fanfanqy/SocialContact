@@ -92,7 +92,7 @@ static const CGFloat buttonHeight = 30;
 - (void)setNavigationIteam{
     
     self.submit = [[UIButton alloc]initWithFrame:CGRectMake((self.view.frame.size.width-40) / 2, self.textView.frame.origin.y + self.textView.frame.size.height + gap, buttonHeight * 2, buttonHeight)];
-    self.submit.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    self.submit.titleLabel.font = [UIFont systemFontOfSize:15];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.submit];
     [self.submit setTitle:NSLocalizedString(@"提交", nil) forState:UIControlStateNormal];
     [self.submit setTitleColor:Font_color333 forState:UIControlStateNormal];
@@ -106,13 +106,13 @@ static const CGFloat buttonHeight = 30;
     self.textView.textContainerInset = UIEdgeInsetsMake(20, 15, 20, 15);
     [self.view addSubview:self.textView];
 
-    self.textView.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    self.textView.font = [UIFont systemFontOfSize:15];
     
     NSString *placeholderPlainText = @"请写下您的反馈...";
     if (placeholderPlainText) {
         NSMutableAttributedString *atr = [[NSMutableAttributedString alloc] initWithString:placeholderPlainText];
         atr.color = UIColorHex(c4c4c4);
-        atr.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        atr.font = [UIFont systemFontOfSize:15];
         _textView.placeholderAttributedText = atr;
     }
     

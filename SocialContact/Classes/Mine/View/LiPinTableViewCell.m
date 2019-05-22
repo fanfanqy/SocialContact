@@ -14,10 +14,10 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.title.font = [UIFont fontWithName:@"Heiti SC" size:16];
-    self.desc.font =  [UIFont fontWithName:@"Heiti SC" size:20];
-    self.amount.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
-    self.date.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+    self.title.font = [UIFont systemFontOfSize:16];
+    self.desc.font =  [UIFont systemFontOfSize:20];
+    self.amount.font = [[UIFont systemFontOfSize:20]fontWithBold];
+    self.date.font =  [UIFont systemFontOfSize:15];
     
 }
 

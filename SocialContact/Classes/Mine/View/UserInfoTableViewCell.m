@@ -6,9 +6,9 @@
 //  Copyright © 2018 readyidu. All rights reserved.
 //
 
-#import "UserInfoTableViewCell.h"
+#import "UserInfoHomePageTableViewCell.h"
 
-@implementation UserInfoTableViewCell
+@implementation UserInfoHomePageTableViewCell
 
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -46,13 +46,18 @@
     }
     
     NSString *avatarUrlStr = userModel.avatar_url;
-    [self.avatarImg sc_setImgWithUrl:avatarUrlStr placeholderImg:@"icon_default_person"];
-
+    
+    if (userModel.avatar_status == 0) {
+        self.avatarImg.image = [UIImage imageNamed:@"verifing"];
+    }else if (userModel.avatar_status == 2) {
+        self.avatarImg.image = [UIImage imageNamed:@"verifyFailed"];
+    }else {
+        [self.avatarImg sc_setImgWithUrl:avatarUrlStr placeholderImg:@"icon_default_person"];
+    }
+    
     self.nickNameLB.text =  userModel.name ?:@"";
     
-    self.introduce.text = userModel.intro ? [NSString stringWithFormat:@"个性签名：%@",userModel.intro] :@"暂无个人介绍";
-//    self.follow.text = [NSString stringWithFormat:@"关注：%ld",userModel.following_count];
-//    self.followers.text = [NSString stringWithFormat:@"粉丝：%ld",userModel.followers_count];
+    self.introduce.text = userModel.intro.length>0 ? [NSString stringWithFormat:@"自我介绍：%@",userModel.intro] :@"暂无自我介绍";
 
 }
 
@@ -70,19 +75,22 @@
     _avatarImg = [UIImageView new];
     _avatarImg.backgroundColor = [UIColor clearColor];
     _avatarImg.layer.cornerRadius = 40;
-    _avatarImg.contentMode = UIViewContentModeScaleAspectFill;
+    _avatarImg.contentMode = UIViewContentModeScaleAspectFit;
 //    _avatarImg.layer.borderWidth = 1;
 //    _avatarImg.layer.borderColor = [UIColor colorWithHexString:@"eeeeee"].CGColor;
     _avatarImg.layer.masksToBounds = YES;
     
     _nickNameLB = [UILabel new];
-    _nickNameLB.font = [[UIFont fontWithName:@"Heiti SC" size:20]fontWithBold];
+    _nickNameLB.font = [[UIFont fontWithName:@"PingFang SC" size:20]fontWithBold];
     _nickNameLB.textColor = [UIColor colorWithHexString:@"1f2124"];
     
     
     _genderImg = [UIImageView new];
     _genderImg.contentMode = UIViewContentModeScaleAspectFit;
     
+    _renzhengImg = [UIImageView new];
+    _renzhengImg.contentMode = UIViewContentModeScaleAspectFit;
+    _renzhengImg.image = [UIImage imageNamed:@"icon_shen_renzhen"];
     
     _huiYuan = [UIImageView new];
     _huiYuan.image = [UIImage imageNamed:@"ic_huiyuan"];
@@ -91,14 +99,14 @@
     
     _introduce = [TTTAttributedLabel new];
     _introduce.lineSpacing = 5.f;
-    _introduce.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+    _introduce.font =  [UIFont fontWithName:@"PingFang SC" size:14];
     _introduce.textColor = Black;
     _introduce.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
     _introduce.textAlignment = NSTextAlignmentLeft;
     _introduce.numberOfLines = 0;
     
 //    _follow = [UILabel new];
-//    _follow.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+//    _follow.font =  [UIFont fontWithName:@"PingFang SC" size:15];
 //    _follow.textColor = RED;
 //    _follow.userInteractionEnabled = YES;
 //    WEAKSELF;
@@ -109,7 +117,7 @@
 //    }];
 //
 //    _followers = [UILabel new];
-//    _followers.font = [UIFont fontWithName:@"Heiti SC" size:15];
+//    _followers.font = [UIFont fontWithName:@"PingFang SC" size:15];
 //    _followers.textColor = RED;
 //    _followers.userInteractionEnabled = YES;
 //    [_followers jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
@@ -136,6 +144,7 @@
     [self.contentView addSubview:_nickNameLB];
     [self.contentView addSubview:_genderImg];
     [self.contentView addSubview:_huiYuan];
+    [self.contentView addSubview:_renzhengImg];
     [self.contentView addSubview:_introduce];
 //    [self.contentView addSubview:_follow];
 //    [self.contentView addSubview:_followers];
@@ -176,16 +185,23 @@
     
     [_genderImg mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.left.mas_equalTo(self.nickNameLB.mas_right).mas_offset(10);
+        make.left.mas_equalTo(self.nickNameLB.mas_right).mas_offset(5);
         make.centerY.mas_equalTo(self.nickNameLB.mas_centerY);
         make.width.height.mas_equalTo(22);
     }];
     
     [_huiYuan mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.left.mas_equalTo(self.genderImg.mas_right).mas_offset(10);
+        make.left.mas_equalTo(self.genderImg.mas_right).mas_offset(5);
         make.centerY.mas_equalTo(self.nickNameLB.mas_centerY);
         make.width.height.mas_equalTo(22);
+    }];
+    
+    [_renzhengImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.huiYuan.mas_right).mas_offset(5);
+        make.centerY.mas_equalTo(self.nickNameLB.mas_centerY);
+        make.width.mas_equalTo(38);
+        make.height.mas_equalTo(13);
     }];
     
     [_introduce mas_makeConstraints:^(MASConstraintMaker *make) {

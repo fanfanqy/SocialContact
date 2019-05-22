@@ -35,11 +35,12 @@
     {
         return @"1小时前";
     }
-    else if (delta < 24 * HOUR)
-    {
-        int hours = floor((double)delta/HOUR);
-        return [NSString stringWithFormat:@"%d小时前", hours];
-    }else if ([self isToday]) {
+//    else if (delta < 24 * HOUR)
+//    {
+//        int hours = floor((double)delta/HOUR);
+//        return [NSString stringWithFormat:@"%d小时前", hours];
+//    }
+    else if ([self isToday]) {
         
         [formatter setDateFormat:@"HH:mm"];
         NSString* date = [[NSString alloc]initWithString:[formatter stringFromDate:self]];

@@ -16,7 +16,7 @@
     
     [self applyTheme];
     
-    [self mapManagerConfig];
+//    [self mapManagerConfig];
 }
 
 - (void)mapManagerConfig{
@@ -52,7 +52,10 @@
 }
 
 - (void)mapManager:(MapManager *)manager didFailed:(NSError *)error{
-    [self.mapManager start];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5*60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.mapManager start];
+    });
+    
 }
 
 - (void)mapManagerServerClosed:(MapManager *)manager{
@@ -83,7 +86,7 @@
     [[UITableView appearance] setBackgroundColor:BackGroundColor];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                                            NSForegroundColorAttributeName :[UIColor colorWithHexString:@"1f2124"],
-                                                           NSFontAttributeName : [[UIFont fontWithName:@"Heiti SC" size:18]fontWithBold]
+                                                           NSFontAttributeName : [[UIFont systemFontOfSize:18]fontWithBold]
                                                            }];
     
     

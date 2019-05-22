@@ -13,7 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="YueServiceView">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="830"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="865"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="线上服务卡 0 张，线下服务卡 0 张" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8n-yE-dbL">
@@ -144,7 +144,7 @@ Cg
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yy-Fd-pf9">
-                    <rect key="frame" x="20" y="612" width="335" height="101.5"/>
+                    <rect key="frame" x="20" y="612" width="335" height="175"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="Eek-mu-0UP"/>
                     </constraints>
@@ -245,11 +245,54 @@ Cg
                                 <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
+                        <fragment>
+                            <string key="content">
+5.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="cellTitle"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="客服电话">
+                            <attributes>
+                                <color key="NSColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="12" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+0310-8168800
+18534615243</string>
+                            <attributes>
+                                <color key="NSColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="cellTitle"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="（微信同号）">
+                            <attributes>
+                                <color key="NSColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="12" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                            <attributes>
+                                <color key="NSColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="cellTitle"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NbA-yO-dP0">
-                    <rect key="frame" x="20" y="738.5" width="335" height="50"/>
+                    <rect key="frame" x="20" y="807" width="335" height="50"/>
                     <color key="backgroundColor" red="0.9137254901960784" green="0.16470588235294117" blue="0.20392156862745098" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="kLS-Sg-ooM"/>
@@ -335,7 +378,7 @@ Cg
                 <constraint firstItem="8Yc-NO-zvm" firstAttribute="leading" secondItem="7Ue-9w-4pA" secondAttribute="leading" id="Axi-Ml-k33"/>
                 <constraint firstItem="u8c-H0-bYO" firstAttribute="top" secondItem="U7o-B0-W0x" secondAttribute="bottom" constant="5" id="DgY-lX-Xlh"/>
                 <constraint firstItem="RGt-bu-Gtc" firstAttribute="centerX" secondItem="oXk-Pw-HHc" secondAttribute="centerX" id="EAI-sL-229"/>
-                <constraint firstItem="NbA-yO-dP0" firstAttribute="top" secondItem="1yy-Fd-pf9" secondAttribute="bottom" constant="25" id="EUr-YV-ovD"/>
+                <constraint firstItem="NbA-yO-dP0" firstAttribute="top" secondItem="1yy-Fd-pf9" secondAttribute="bottom" constant="20" id="EUr-YV-ovD"/>
                 <constraint firstItem="1yy-Fd-pf9" firstAttribute="leading" secondItem="7Ue-9w-4pA" secondAttribute="leading" id="Emx-rT-3aU"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="u8c-H0-bYO" secondAttribute="trailing" constant="20" id="F2s-qq-PnU"/>
                 <constraint firstItem="c8n-yE-dbL" firstAttribute="trailing" secondItem="7Ue-9w-4pA" secondAttribute="trailing" id="H3a-1f-epA"/>
@@ -390,7 +433,7 @@ Cg
                 <outlet property="xianXiaPrice" destination="RGt-bu-Gtc" id="wt4-NJ-EDc"/>
                 <outlet property="xianXiaYue" destination="oXk-Pw-HHc" id="Fhf-Z0-qqS"/>
             </connections>
-            <point key="canvasLocation" x="130.40000000000001" y="21.589205397301352"/>
+            <point key="canvasLocation" x="130.40000000000001" y="35.982008995502248"/>
         </view>
     </objects>
     <resources>

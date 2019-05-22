@@ -24,10 +24,10 @@
     if (model) {
         
         if (model.customer) {
-            [self.img sc_setImgWithUrl:_model.customer.avatar_url placeholderImg:@""];
+            [self.img sc_setImgWithUrl:_model.customer.avatar_url placeholderImg:@"icon_default_person"];
         }else{
             // 自己的
-            [self.img sc_setImgWithUrl:[SCUserCenter sharedCenter].currentUser.userInfo.avatar_url placeholderImg:@""];
+            [self.img sc_setImgWithUrl:[SCUserCenter sharedCenter].currentUser.userInfo.avatar_url placeholderImg:@"icon_default_person"];
         }
         self.nick.text = _model.customer.name;
         self.text.text = _model.text;

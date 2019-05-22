@@ -11,6 +11,7 @@
 #import "WBStatusComposeViewController.h"
 #import "UserHomepageVC.h"
 #import "ModifyUserInfoVC.h"
+#import "VipVC.h"
 
 #import "TopicCell.h"
 #import "TopicListsHeaderView.h"
@@ -130,10 +131,9 @@ INS_P_ASSIGN(NSInteger, showEmpty);
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    if (self.momentRequestType == MomentRequestTypeNearby || self.momentRequestType == MomentRequestTypeNotice || self.momentRequestType == MomentRequestTypeFollowMe || self.momentRequestType == MomentRequestTypeFollows ) {
+    if (self.momentRequestType == MomentRequestTypeNearby || self.momentRequestType == MomentRequestTypeNotice || self.momentRequestType == MomentRequestTypeFollowMe || self.momentRequestType == MomentRequestTypeFollows || self.momentRequestType == MomentRequestTypeBothFollowing ) {
         [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
     }
-    
     
 }
 
@@ -210,7 +210,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         _sendCommentLB.backgroundColor = [UIColor clearColor];
         _sendCommentLB.text = @"请输入评论文字...";
         _sendCommentLB.textColor = YD_Color999;
-        _sendCommentLB.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        _sendCommentLB.font = [UIFont systemFontOfSize:15];
         
         _sendCommentLB.userInteractionEnabled = YES;
         WEAKSELF;
@@ -371,7 +371,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
            _sendCommentButton.frame = CGRectMake(kScreenWidth-65, kScreenHeight-GuaTopHeight-35, 60, 30);
         }
         _sendCommentButton.backgroundColor = [UIColor clearColor];
-        _sendCommentButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        _sendCommentButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_sendCommentButton setTitle:@"发送" forState:UIControlStateNormal];
         [_sendCommentButton setTitleColor:YD_Color666 forState:UIControlStateNormal];
         _sendCommentButton.layer.cornerRadius = 4;
@@ -404,12 +404,12 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             if (self.momentModel) {
                 NewDynamicsLayout *layout = [[NewDynamicsLayout alloc]initWithModel:self.momentModel momentUIType:self.momentUIType momentRequestType:self.momentRequestType];
                 [self.array addObject:layout];
+                [self fetchCommentData:YES];
+                [self fetchLikeUserData];
+                [self.tableView endRefresh];
                 [self.tableView reloadData];
+                return;
             }
-            [self fetchCommentData:YES];
-            [self fetchLikeUserData];
-            [self.tableView endRefresh];
-            return;
         }
         
         /*
@@ -512,6 +512,11 @@ INS_P_ASSIGN(NSInteger, showEmpty);
                 param = @{@"page": [NSNumber numberWithInteger:_page]};
                 break;
                 
+            case MomentRequestTypeBothFollowing:
+                url = @"/customer/bothfolowinglist/";
+                param = @{@"page": [NSNumber numberWithInteger:_page]};
+                break;
+                
             case MomentRequestTypeNotice:
                 url = @"/notices/lists/";
                 param = @{@"page": [NSNumber numberWithInteger:_page]};
@@ -553,6 +558,11 @@ INS_P_ASSIGN(NSInteger, showEmpty);
 //                        @"demand_type":@(1),
                           @"demand_type":@(0),
                           };
+                break;
+                
+            case MomentRequestTypeAskWeChatCard:
+                url = @"/api/wechatcards/";
+                param = @{@"page": [NSNumber numberWithInteger:_page]};
                 break;
                 
             case MomentRequestTypeYueTaSend:
@@ -605,9 +615,8 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             
 
             if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
-            
+                
             }else{
-//                if (resultArray.count < 10) {
                 if (![Help canPerformLoadRequest:request.responseObject]) {
                     [weakSelf.tableView endRefreshNoMoreData];
                 }else{
@@ -636,7 +645,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
                 
             }else if (weakSelf.forumVCType == ForumVCTypeNoticeOrNearBy) {
                 
-             
+                
                 if (weakSelf.momentRequestType == MomentRequestTypeNotice) {
                     [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         [weakSelf.array addObject:[Notice modelWithDictionary:obj]];
@@ -660,7 +669,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
                         
                     }];
                     
-                }else if (weakSelf.momentRequestType == MomentRequestTypeFollows || weakSelf.momentRequestType == MomentRequestTypeFollowMe) {
+                }else if (weakSelf.momentRequestType == MomentRequestTypeFollows || weakSelf.momentRequestType == MomentRequestTypeFollowMe || weakSelf.momentRequestType == MomentRequestTypeBothFollowing) {
                     
                     [resultArray enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         [weakSelf.array addObject:[FollowsModel modelWithDictionary:obj]];
@@ -686,13 +695,20 @@ INS_P_ASSIGN(NSInteger, showEmpty);
                     
                 }];
                 
-                if (self.momentRequestType == MomentRequestTypeUserMomentDetail || self.momentRequestType == MomentRequestTypeMyMomentDetail) {
-                    if (self.commentArray.count > 0) {
+                if (weakSelf.momentRequestType == MomentRequestTypeUserMomentDetail || weakSelf.momentRequestType == MomentRequestTypeMyMomentDetail) {
+                    
+                    if (weakSelf.commentArray.count > 0) {
                         NewDynamicsLayout *layout = weakSelf.array[0];
-                        layout.commentLayoutArr = self.commentArray;
+                        layout.commentLayoutArr = weakSelf.commentArray;
                         [layout resetLayout];
                         [weakSelf.tableView reloadData];
+                    }else{
+                        
+                        [weakSelf fetchCommentData:YES];
+                        [weakSelf fetchLikeUserData];
                     }
+                    
+                    
                 }else{
                     if (weakSelf.array.count == 0) {
                         
@@ -712,6 +728,12 @@ INS_P_ASSIGN(NSInteger, showEmpty);
                     [weakSelf.array addObject:articleOrAdModel];
                     
                 }];
+                if (weakSelf.array.count == 0) {
+                    
+                    weakSelf.showEmpty = YES;
+                }else{
+                    weakSelf.showEmpty = NO;
+                }
                 [weakSelf.tableView reloadData];
                 [weakSelf.tableView reloadEmptyDataSet];
                 
@@ -932,7 +954,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             
             
             
-        }else if (self.momentRequestType == MomentRequestTypeFollows || self.momentRequestType == MomentRequestTypeFollowMe) {
+        }else if (self.momentRequestType == MomentRequestTypeFollows || self.momentRequestType == MomentRequestTypeFollowMe || self.momentRequestType == MomentRequestTypeBothFollowing) {
             
             FollowsModel *model = self.array[indexPath.row];
             cell.followsModel = model;
@@ -973,6 +995,8 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             cell.type = 2;
         }else if (self.momentRequestType == MomentRequestTypeYueTaReceived) {
             cell.type = 3;
+        }else if (self.momentRequestType == MomentRequestTypeAskWeChatCard) {
+            cell.type = 4;
         }
         
         cell.delegate = self;
@@ -1033,7 +1057,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
     }else if (_forumVCType == ForumVCTypePointsStore) {
         
         if (self.momentRequestType == MomentRequestTypePointSkus) {
-           
+            
             return 80;
             
         }else if (self.momentRequestType == MomentRequestTypePointSkusExchages) {
@@ -1118,7 +1142,7 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             
         }else if (self.momentRequestType == MomentRequestTypeJiFenList){
             
-        }else if (self.momentRequestType == MomentRequestTypeFollows || self.momentRequestType == MomentRequestTypeFollowMe) {
+        }else if (self.momentRequestType == MomentRequestTypeFollows || self.momentRequestType == MomentRequestTypeFollowMe || self.momentRequestType == MomentRequestTypeBothFollowing) {
             
             FollowsModel *model = self.array[indexPath.row];
             UserHomepageVC *vc = [UserHomepageVC new];
@@ -1141,6 +1165,8 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             return;
         }
     }else if (self.forumVCType == ForumVCTypeActivity) {
+        
+        ArticleOrAdModel *model = self.array[indexPath.row];
         
         AXWebViewController *webVC = [[AXWebViewController alloc]initWithAddress:@"https://www.baidu.com/"];
         webVC.showsToolBar = YES;
@@ -1176,7 +1202,8 @@ INS_P_ASSIGN(NSInteger, showEmpty);
             }
             nameTitle = model.to_customer.name;
         }else{
-            targetId = model.to_customer.user_id;
+//            targetId = model.to_customer.user_id;
+            targetId = model.to_customer.iD;
             nameTitle = model.to_customer.name;
         }
         
@@ -1300,16 +1327,16 @@ INS_P_ASSIGN(NSInteger, showEmpty);
                         // 线上约去聊天
                         if (weakSelf.momentRequestType == MomentRequestTypeYueTaReceived) {
                             content = [NSString stringWithFormat:@"Hi，我已同意您的邀约，我们来聊天吧"];
-                            targetId = model.customer.user_id;
+                            targetId = model.customer.iD;
                             if (targetId == 0) {
-                                targetId = model.customer.iD;
+                                targetId = model.customer.user_id;
                             }
                             chatName = model.customer.name;
                         }else if (weakSelf.momentRequestType == MomentRequestTypeYueTaSend) {
                             content = [NSString stringWithFormat:@"Hi，您已同意我的邀约，我们来聊天吧"];
-                            targetId = model.to_customer.user_id;
+                            targetId = model.to_customer.iD;
                             if (targetId == 0) {
-                                targetId = model.to_customer.iD;
+                                targetId = model.to_customer.user_id;
                             }
                             chatName = model.to_customer.name;
                         }
@@ -1388,10 +1415,37 @@ INS_P_ASSIGN(NSInteger, showEmpty);
     
 }
 
+
+- (void)goVip{
+    VipVC *vc = [VipVC new];
+    vc.type = 1;
+    vc.userId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
+    if (self.fatherVC) {
+        [self.fatherVC.navigationController pushViewController:vc animated:YES];
+    }else{
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
 #pragma mark 申请兑换商品
 - (void)exchangeBtnClicked:(NSIndexPath *)indexPath{
     
 //
+    if ([SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at) {
+        
+        NSDate *date = [[SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at sc_dateWithUTCString];
+        if (date) {
+            NSTimeInterval interval = [date timeIntervalSinceNow];
+            if (interval <=  0) {
+                [self goVip];
+                return;
+            }
+        }
+    }else{
+        [self goVip];
+        return;
+    }
+    
     
     PointsSkuModel *skuModel = self.array[indexPath.row];
     NSDictionary *dic = @{
@@ -1458,13 +1512,14 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
-        _participateTopicBtn.frame = CGRectMake(0, top, 0.4*kScreenWidth-10, 44);
-        _participateTopicBtn.centerX = 0.1*kScreenWidth+(0.2*kScreenWidth-5);
+        _participateTopicBtn.frame = CGRectMake(0, top, 106, 44);
+        _participateTopicBtn.centerX = kScreenWidth/2.0 - 15 - (53);;
         _participateTopicBtn.layer.cornerRadius = 22.f;
         _participateTopicBtn.layer.masksToBounds = YES;
         [_participateTopicBtn setTitle:@"立即参与" forState:UIControlStateNormal];
-        _participateTopicBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
-        [_participateTopicBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
+        _participateTopicBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+//        [_participateTopicBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
+        [_participateTopicBtn setBackgroundImage:[UIImage imageNamed:@"rectangle_bg"] forState:UIControlStateNormal];
         [_participateTopicBtn addTarget:self action:@selector(partiClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _participateTopicBtn;
@@ -1479,13 +1534,13 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
-        _joinDiscussion.frame = CGRectMake(0, top, 0.4*kScreenWidth-10, 44);
-        _joinDiscussion.centerX = kScreenWidth - 0.1*kScreenWidth - (0.2*kScreenWidth-5);
+        _joinDiscussion.frame = CGRectMake(0, top, 106, 44);
+        _joinDiscussion.centerX = kScreenWidth/2.0 + 15 + 53;
         _joinDiscussion.layer.cornerRadius = 22.f;
         _joinDiscussion.layer.masksToBounds = YES;
         [_joinDiscussion setTitle:@"加入讨论" forState:UIControlStateNormal];
-        _joinDiscussion.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
-        [_joinDiscussion setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
+        _joinDiscussion.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_joinDiscussion setBackgroundImage:[UIImage imageNamed:@"rectangle_bg"] forState:UIControlStateNormal];
         [_joinDiscussion addTarget:self action:@selector(joinClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _joinDiscussion;

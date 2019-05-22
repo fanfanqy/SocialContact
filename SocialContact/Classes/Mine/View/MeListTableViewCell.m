@@ -14,9 +14,10 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.titleLB.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.subTitleLB.font =  [UIFont fontWithName:@"Heiti SC" size:15];
+    self.titleLB.font = [UIFont systemFontOfSize:15];
+    self.subTitleLB.font =  [UIFont systemFontOfSize:15];
 }
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

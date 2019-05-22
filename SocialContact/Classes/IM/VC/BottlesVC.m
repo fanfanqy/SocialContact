@@ -185,7 +185,18 @@ INS_P_ASSIGN(NSInteger, showEmpty);
     
     // 进入聊天界面
     BottleModel *model = self.array[indexPath.row];
-    DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",model.customer.iD]];
+    
+//    NSInteger targetId = model.customer.user_id;
+//    if (targetId == 0) {
+//        targetId = model.customer.iD;
+//    }
+    
+    NSInteger targetId = model.customer.iD;
+    if (targetId == 0) {
+        targetId = model.customer.user_id;
+    }
+    
+    DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId]];
     vc.title = model.customer.name;
     if (self.fatherVC) {
         [self.fatherVC.navigationController pushViewController:vc animated:YES];

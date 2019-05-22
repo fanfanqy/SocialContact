@@ -13,7 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="VipView">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="741"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="1165"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="L99-B5-73R">
@@ -24,7 +24,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHs-gY-72r">
-                    <rect key="frame" x="115" y="120" width="42" height="21"/>
+                    <rect key="frame" x="115" y="110" width="42" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="0FA-3s-3w3"/>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="3ht-kA-f6F"/>
@@ -34,7 +34,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xaw-Jd-5TE">
-                    <rect key="frame" x="115" y="151" width="42" height="21"/>
+                    <rect key="frame" x="115" y="141" width="42" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="ncK-T3-oJW"/>
                         <constraint firstAttribute="height" constant="21" id="tHS-Rl-TAG"/>
@@ -125,8 +125,8 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIP特权" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZ3-DM-qpz">
-                    <rect key="frame" x="25" y="540.5" width="66.5" height="14"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="特权对比" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZ3-DM-qpz">
+                    <rect key="frame" x="25" y="529" width="73.5" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="8Rd-Ph-MOU"/>
                         <constraint firstAttribute="height" constant="14" id="u85-mH-Ki8"/>
@@ -208,34 +208,304 @@
                     </connections>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WDx-rY-PZC">
-                    <rect key="frame" x="25" y="569.5" width="325" height="83.5"/>
+                    <rect key="frame" x="25" y="558" width="325" height="499"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="70" id="iLh-Jj-6hE"/>
                     </constraints>
                     <attributedString key="attributedText">
-                        <fragment>
-                            <string key="content">1.个人无限畅聊，对方回复免费。让您不再错失良缘。
-2.漂流瓶无限使用，终会遇到有缘人。
-3.会员积分换好礼
-</string>
+                        <fragment content="普通会员">
                             <attributes>
-                                <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.6000000000000001" tighteningFactorForTruncation="0.0"/>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="16" name="PingFangSC-Semibold"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                             </attributes>
                         </fragment>
-                        <fragment content="4.尊享VIP个性标识，增加曝光度，让更多人看到您。">
+                        <fragment>
+                            <string key="content" base64-UTF8="YES">
+Cg
+</string>
                             <attributes>
-                                <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="5" lineHeightMultiple="1.6000000000000001" tighteningFactorForTruncation="0.0"/>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="1.">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="每天受限只能和三个人主动说话。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+2.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="每天受限漂流瓶只能扔三个瓶子和捡三个瓶子。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+3.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="不参与积分兑奖活动。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+4.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="曝光少，心仪的人发现你的几率小。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+5.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="14" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="不可以用请求微信交换功能。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content" base64-UTF8="YES">
+Cgo
+</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="vip">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="18" name="PingFangSC-Semibold"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="会员">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="16" name="PingFangSC-Semibold"/>
+                                <font key="NSOriginalFont" size="18" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+1.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="每天主动聊天人数不受限制，可以无线畅聊，大大增加你和有缘人配对的机会。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name="PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+2.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="可以申请与心仪的会员交换微信。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name="PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+3.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="漂流瓶收发瓶子不收限制，美好的缘分将不再等待。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name="PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+4.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="可以参加活跃度积分兑奖活动，你恋爱我送好礼">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="​">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="，欢乐享不停。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">
+5.</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="曝光度增加，让优秀的你显示在更多人面前。">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name="PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content" base64-UTF8="YES">
+Cgo
+</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="客服电话">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="16" name="PingFangSC-Semibold"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment>
+                            <string key="content">0310-8168800
+18534615243</string>
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".AppleSystemUIFont"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="（微信同号）">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <font key="NSOriginalFont" size="13" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" minimumLineHeight="19" maximumLineHeight="19" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                             </attributes>
                         </fragment>
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cw-BJ-taF">
-                    <rect key="frame" x="25" y="688" width="325" height="53"/>
+                    <rect key="frame" x="25" y="1092" width="325" height="53"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="53" id="9ja-mm-c95"/>
                     </constraints>
@@ -322,12 +592,12 @@
             <constraints>
                 <constraint firstItem="FXV-cv-aOL" firstAttribute="width" secondItem="d72-ZJ-T96" secondAttribute="width" id="07c-iu-Yun"/>
                 <constraint firstItem="WDx-rY-PZC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="25" id="1Nb-yh-XQH"/>
-                <constraint firstItem="dHs-gY-72r" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="100" id="1ap-Oc-2vE"/>
+                <constraint firstItem="dHs-gY-72r" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="90" id="1ap-Oc-2vE"/>
                 <constraint firstItem="9cw-BJ-taF" firstAttribute="top" secondItem="WDx-rY-PZC" secondAttribute="bottom" constant="35" id="1pP-Qh-6ag"/>
                 <constraint firstItem="d72-ZJ-T96" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="Cv0-DB-9mu"/>
                 <constraint firstItem="bic-xR-Lgf" firstAttribute="width" secondItem="d72-ZJ-T96" secondAttribute="width" id="CvT-Rl-8zT"/>
                 <constraint firstItem="xaw-Jd-5TE" firstAttribute="top" secondItem="dHs-gY-72r" secondAttribute="bottom" constant="10" id="Dkf-bc-Fz7"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="9cw-BJ-taF" secondAttribute="bottom" id="F3F-1Z-dZa"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="9cw-BJ-taF" secondAttribute="bottom" constant="20" id="F3F-1Z-dZa"/>
                 <constraint firstItem="FXV-cv-aOL" firstAttribute="top" secondItem="d72-ZJ-T96" secondAttribute="bottom" constant="10" id="Hbl-LI-1wk"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="j5L-XT-FnH" secondAttribute="trailing" constant="20" id="JsD-xg-sFc"/>
                 <constraint firstItem="peH-Gk-FgC" firstAttribute="leading" secondItem="xT7-TK-pPq" secondAttribute="trailing" constant="12" id="LlQ-as-VhG"/>
@@ -385,7 +655,7 @@
                 <outlet property="vip6_amount" destination="byi-zJ-VDd" id="lEr-0S-WN9"/>
                 <outlet property="vip6_title" destination="rv6-fy-It3" id="5aE-oZ-RWU"/>
             </connections>
-            <point key="canvasLocation" x="37.600000000000001" y="-19.340329835082461"/>
+            <point key="canvasLocation" x="37.600000000000001" y="173.16341829085459"/>
         </view>
     </objects>
 </document>

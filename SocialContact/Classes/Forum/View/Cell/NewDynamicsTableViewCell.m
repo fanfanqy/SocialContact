@@ -23,6 +23,7 @@
 	[self.contentView addSubview:self.portrait];
 	[self.contentView addSubview:self.nameLabel];
 	[self.contentView addSubview:self.commentLabel];
+    [self.contentView addSubview:self.dateLabel];
 }
 
 - (void)setLayout:(CommentLayout *)layout{
@@ -31,7 +32,7 @@
     _portrait.left = kMomentContentInsetLeft;
     _portrait.top = 10;
     _portrait.size = CGSizeMake(kMomentPortraitWH, kMomentPortraitWH);
-
+    
     if (_cell.layout.model.is_hidden_name) {
         _portrait.image = [UIImage imageNamed:@"anonymous_1"];
     }else{
@@ -71,6 +72,12 @@
     _commentLabel.textLayout = layout.commentLayout;
     _commentLabel.width = kScreenWidth  - kMomentPortraitWH - kMomentContentInsetRight * 2 - 10 ;
     _commentLabel.height = layout.commentHeight;
+    
+    _dateLabel.top = _portrait.top;
+    _dateLabel.width = 100;
+    _dateLabel.right = kScreenWidth - kMomentContentInsetRight;
+    _dateLabel.height = 20;
+    _dateLabel.text =  [layout.model.create_at sc_timeAgoWithUTCString];
 	
 }
 
@@ -122,7 +129,7 @@
 {
 	if (!_nameLabel) {
 		_nameLabel = [YYLabel new];
-		UIFont *font = [UIFont fontWithName:@"Heiti SC" size:14];
+		UIFont *font = [UIFont systemFontOfSize:14];
 		_nameLabel.font = font;
 		_nameLabel.textColor = UIColorHex(0D0E15);
 	}
@@ -138,6 +145,16 @@
 	return _commentLabel;
 }
 
+- (YYLabel *)dateLabel{
+    if (!_dateLabel) {
+        _dateLabel = [YYLabel new];
+        UIFont *font = [UIFont systemFontOfSize:13];
+        _dateLabel.font = font;
+        _dateLabel.textColor = UIColorHex(0D0E15);
+        _dateLabel.textAlignment = NSTextAlignmentRight;
+    }
+    return _dateLabel;
+}
 
 @end
 
@@ -192,7 +209,7 @@
     imgV.image = [UIImage imageNamed:@"find_comment"];
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(40, _cell.layout.zanUsersHeight + 15, kScreenWidth-50, 30)];
-    label.font = [UIFont fontWithName:@"Heiti SC" size:14];
+    label.font = [UIFont systemFontOfSize:14];
     label.textColor = Font_color333;
     if (self.commentArray.count == 0) {
         label.text = @"最新评论";
@@ -313,8 +330,8 @@
     self.time.height = kMomentPortraitWH/2.0;
     
     self.name.top = kMomentContentInsetTop;
-    self.name.left = kMomentContentInsetLeft + kMomentPortraitWH + kMomentAvatarRightNickLeft/2.0;
-    self.name.width = kScreenWidth-kMomentContentInsetRight-kMomentPortraitWH - kMomentAvatarRightNickLeft/2.0;
+    self.name.left = kMomentContentInsetLeft + kMomentPortraitWH + kMomentAvatarRightNickLeft;
+    self.name.width = kScreenWidth-kMomentContentInsetRight-kMomentPortraitWH - kMomentAvatarRightNickLeft;
     self.name.height = kMomentPortraitWH/2.0;
     
     self.address.top = self.name.bottom;
@@ -323,20 +340,19 @@
     self.address.height = kMomentPortraitWH/2.0;
     
     self.content.top = self.portrait.bottom + kMomentAvatarBottomContentTop;
-    self.content.left = kMomentContentInsetLeft;
-    self.content.width = kScreenWidth - 2*kMomentContentInsetRight;
+    self.content.left = kMomentContentInsetLeft + kMomentContentInsetLeft + kMomentPortraitWH ;
+    self.content.width = kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetRight - kMomentPortraitWH;
     self.content.height = 20;
     
     self.picContainerView.top = self.content.bottom + kMomentContentBottomPhotoContainTop;
-    self.picContainerView.left = kMomentContentInsetLeft;
-    self.picContainerView.width = kScreenWidth - 2*kMomentContentInsetRight;
+    self.picContainerView.left = self.content.left;
+    self.picContainerView.width = kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetRight - kMomentPortraitWH;
     self.picContainerView.height = 100;
     
-    self.topics.left = kMomentContentInsetLeft;
+    self.topics.left = self.content.left;
     self.topics.width = 200;
     self.topics.height = 20;
 
-    
     self.zanCount.width = 30;
     self.zanCount.right =  kScreenWidth-kMomentContentInsetRight;
     self.zanCount.height = 20;
@@ -357,27 +373,6 @@
     self.sectionView.width = kScreenWidth;
     self.sectionView.height = kDynamicsSectionViewHeight;
     
-
-
-    /*
-     
-     static CGFloat const kMomentContentInsetLeft = 15;
-     static CGFloat const kMomentContentInsetTop = 15;
-     static CGFloat const kMomentContentInsetRight = 15;
-     static CGFloat const kMomentContentInsetBootm = 15;
-     
-     
-     static CGFloat const kMomentAvatarRightNickLeft =20;
-     
-     static CGFloat const kMomentAvatarBottomContentTop =20;
-     
-     static CGFloat const kMomentContentBottomPhotoContainTop =20;
-     
-     static CGFloat const kMomentPhotoContainBottomTopicTop =20;
-
-     
-     */
-
     
 }
 
@@ -415,7 +410,10 @@
         }
         
         NSMutableAttributedString * attString = [[NSMutableAttributedString alloc] initWithString:model.customer.name?:@""];
-        attString.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        attString.font = [UIFont systemFontOfSize:15];
+        
+        NSMutableAttributedString * attKongString = [[NSMutableAttributedString alloc] initWithString:@"  "];
+        
         UIImage *image;
         if (model.customer.gender == 1) {
             image = [UIImage imageNamed:@"ic_male"];
@@ -423,7 +421,8 @@
             image = [UIImage imageNamed:@"ic_women"];
         }
         if (image) {
-            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(15, 15) alignToFont:[UIFont fontWithName:@"Heiti SC" size:15] alignment:YYTextVerticalAlignmentCenter];
+            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:image contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
+            [attString appendAttributedString:attKongString];
             [attString appendAttributedString:attachText];
         }
         
@@ -436,8 +435,18 @@
             }
         }
         if (vipImage) {
-            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(15, 15) alignToFont:[UIFont fontWithName:@"Heiti SC" size:15] alignment:YYTextVerticalAlignmentCenter];
+            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:vipImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(14, 14) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
+            [attString appendAttributedString:attKongString];
             [attString appendAttributedString:attachText];
+        }
+        
+        
+        if (model.customer.is_idcard_verified) {
+            UIImage *renzhenImage = [UIImage imageNamed:@"icon_shen_renzhen"];
+            NSMutableAttributedString *attachText = [NSMutableAttributedString attachmentStringWithContent:renzhenImage contentMode:UIViewContentModeScaleAspectFit attachmentSize:CGSizeMake(44, 14) alignToFont:[UIFont systemFontOfSize:15] alignment:YYTextVerticalAlignmentCenter];
+            [attString appendAttributedString:attKongString];
+            [attString appendAttributedString:attachText];
+            
         }
         
         self.name.attributedText = attString;
@@ -572,7 +581,7 @@
         _portrait = [UIImageView new];
         _portrait.userInteractionEnabled = YES;
         _portrait.backgroundColor = UIColorHex(DCDCDC);
-        _portrait.layer.cornerRadius = 20.0;
+        _portrait.layer.cornerRadius = kMomentPortraitWH/2.0;
         _portrait.layer.masksToBounds = YES;
         _portrait.layer.contentMode = UIViewContentModeScaleAspectFit;
         UITapGestureRecognizer *tapUser = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapUserPortrait:)];
@@ -586,7 +595,7 @@
     if (!_name) {
         _name = [YYLabel new];
 		_name.textVerticalAlignment = YYTextVerticalAlignmentTop;
-		UIFont *font = [UIFont fontWithName:@"Heiti SC" size:15];
+		UIFont *font = [UIFont systemFontOfSize:15];
 		_name.font = font;
         _name.textColor = Font_color333;
         
@@ -598,7 +607,7 @@
 	if (!_address) {
 		_address = [YYLabel new];
 //        _address.textAlignment = NSTextAlignmentCenter;
-		_address.font = [UIFont fontWithName:@"Heiti SC" size:12];
+		_address.font = [UIFont systemFontOfSize:12];
         _address.textColor = YD_Color666;
 //        _address.layer.borderColor = YD_Color666.CGColor;
 //        _address.layer.borderWidth = 1.f;
@@ -612,7 +621,7 @@
     if (!_time) {
         _time = [YYLabel new];
         _time.textAlignment = NSTextAlignmentRight;
-        _time.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _time.font = [UIFont systemFontOfSize:12];
         _time.textColor = YD_Color666;
     }
     return _time;
@@ -621,7 +630,7 @@
 - (YYLabel *)content{
     if (!_content) {
         _content = [YYLabel new];
-        _content.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _content.font = [UIFont systemFontOfSize:12];
         _content.textColor = YD_Color666;
         WEAKSELF;
         _content.highlightTapAction = ^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect) {
@@ -636,8 +645,8 @@
 - (YYLabel *)topics{
     if (!_topics) {
         _topics = [YYLabel new];
-        _topics.font = [UIFont fontWithName:@"Heiti SC" size:12];
-        _topics.textColor = m1;
+        _topics.font = [UIFont systemFontOfSize:12];
+        _topics.textColor = TopicColor;
         _topics.hidden = YES;
         _topics.userInteractionEnabled = YES;
         WEAKSELF;
@@ -669,7 +678,7 @@
     if (!_zanCount) {
         _zanCount = [YYLabel new];
         _zanCount.textAlignment = NSTextAlignmentLeft;
-        _zanCount.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _zanCount.font = [UIFont systemFontOfSize:12];
         _zanCount.textColor = Font_color333;
         WEAKSELF;
         [_zanCount jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
@@ -698,7 +707,7 @@
     if (!_commentCount) {
         _commentCount = [YYLabel new];
         _commentCount.textAlignment = NSTextAlignmentLeft;
-        _commentCount.font = [UIFont fontWithName:@"Heiti SC" size:12];
+        _commentCount.font = [UIFont systemFontOfSize:12];
         _commentCount.textColor = Font_color333;
         WEAKSELF;
         [_commentCount jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {

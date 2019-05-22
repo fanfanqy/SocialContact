@@ -11,6 +11,7 @@
 #import "VipVC.h"
 #import "XHPopMenu.h"
 #import "UserFeedBackViewController.h"
+#import "AuthenticationVC.h"
 
 typedef void(^CanChatBlock)(BOOL can);
 
@@ -40,6 +41,8 @@ typedef void(^CanChatBlock)(BOOL can);
 
 @property(nonatomic,strong) XHPopMenu *popMenu;
 
+@property (assign, nonatomic)NSInteger relation_status;
+
 @end
 
 @implementation DCIMChatViewController
@@ -66,6 +69,19 @@ typedef void(^CanChatBlock)(BOOL can);
 #pragma mark -
 
 - (void)sendMessage:(RCMessageContent *)messageContent pushContent:(NSString *)pushContent {
+    
+    if (![SCUserCenter sharedCenter].currentUser.userInfo.is_idcard_verified){
+
+        [SVProgressHUD showImage:AlertErrorImage status:@"请先进行实名认证"];
+        [SVProgressHUD dismissWithDelay:1.5];
+
+        AuthenticationVC *vc = [[AuthenticationVC alloc]initWithNibName:@"AuthenticationVC" bundle:nil];
+        vc.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+        vc.type = 2;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+        return;
+    }
     
     /*
      聊天限制
@@ -192,6 +208,17 @@ typedef void(^CanChatBlock)(BOOL can);
 - (void)canChatRequest{
     
     
+//    WEAKSELF;
+//    [self otherIsVip:^(BOOL can) {
+//        if (!can) {
+//            weakSelf.canChat = [weakSelf chatCountLocalJudge:NO];
+//        }else{
+//            weakSelf.canChat = YES;
+//        }
+//
+//    }];
+    
+    
     if ([[AppDelegate sharedDelegate].isBottleCharts containsObject:self.targetId]) {
         self.canChat = YES;
         return;
@@ -200,12 +227,11 @@ typedef void(^CanChatBlock)(BOOL can);
         if ([[AppDelegate sharedDelegate].isBottleCharts containsObject:[NSNumber numberWithInteger:[self.targetId integerValue]]]){
             self.canChat = YES;
             return;
-            
         }
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger myId = [SCUserCenter sharedCenter].currentUser.userInfo.user_id;
+        NSInteger myId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
         for (RCMessageModel *model in self.conversationDataRepository) {
             
             if ([model.userInfo.userId integerValue] != myId) {
@@ -218,7 +244,6 @@ typedef void(^CanChatBlock)(BOOL can);
     WEAKSELF;
     NSString *service_vip_expired_at = [SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at;
     if ([NSString ins_String:service_vip_expired_at]) {
-        
         
         [Help vipIsExpired:^(BOOL expired) {
             if (!expired) {
@@ -276,9 +301,17 @@ typedef void(^CanChatBlock)(BOOL can);
                             canChatBlock(NO);
                         }
                     }else{
-                        if (canChatBlock) {
-                            canChatBlock(YES);
+                        // 和对方的关系是屏蔽状态
+                        if (userInfo.relation_status == 0) {
+                            if (canChatBlock) {
+                                canChatBlock(NO);
+                            }
+                        }else{
+                            if (canChatBlock) {
+                                canChatBlock(YES);
+                            }
                         }
+                        
                     }
                 }else{
                     if (canChatBlock) {
@@ -341,11 +374,14 @@ typedef void(^CanChatBlock)(BOOL can);
             NSString *title;
             switch (i) {
                 case 0: {
-                    title = @"举报";
+                    title = @"用户主页";
                     break;
                 }
                 case 1: {
-                    
+                    title = @"举报";
+                    break;
+                }
+                case 2: {
                     title = @"屏蔽";
                     break;
                 }
@@ -360,8 +396,10 @@ typedef void(^CanChatBlock)(BOOL can);
         _popMenu = [[XHPopMenu alloc] initWithMenus:popMenuItems];
         _popMenu.popMenuDidSlectedCompled = ^(NSInteger index, XHPopMenuItem *popMenuItems) {
             if (index == 0) {
+                [weakSelf goUserHomeVC:weakSelf.targetId.integerValue];
+            }else if (index == 1) {
                 [weakSelf jubao];
-            }else if (index == 1 ) {
+            }else if (index == 2) {
                 [weakSelf lahei];
             }
         };
@@ -369,6 +407,15 @@ typedef void(^CanChatBlock)(BOOL can);
     return _popMenu;
 }
 
+// 用户主页
+- (void)goUserHomeVC:(NSInteger)userId{
+    // 获取用户信息
+    UserHomepageVC *vc = [UserHomepageVC new];
+    vc.userId = userId;
+    vc.name = @"";
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
 
 - (void)jubao{
     
@@ -394,7 +441,12 @@ typedef void(^CanChatBlock)(BOOL can);
             [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
             [SVProgressHUD dismissWithDelay:1.5];
         }else{
-            [weakSelf.view makeToast:@"已拉黑此人"];
+            [weakSelf.view makeToast:@"已拉黑"];
+            [[RCIMClient sharedRCIMClient]addToBlacklist:weakSelf.targetId success:^{
+                
+            } error:^(RCErrorCode status) {
+                
+            }];
         }
         
     }];

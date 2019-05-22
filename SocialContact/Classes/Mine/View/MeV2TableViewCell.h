@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 @interface MeV2TableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *lookMeUnreadCount;
+@property (weak, nonatomic) IBOutlet UIView *bgView;
 
 @property (weak, nonatomic) IBOutlet UILabel *askWeChatUnreadCountLB;
 @property (weak, nonatomic) IBOutlet UILabel *ziliaoT;
@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *renzhengT;
 @property (weak, nonatomic) IBOutlet UILabel *jifenT;
 @property (weak, nonatomic) IBOutlet UILabel *fenxiangT;
-@property (weak, nonatomic) IBOutlet UILabel *lookMeT;
+//@property (weak, nonatomic) IBOutlet UILabel *lookMeT;
 @property (weak, nonatomic) IBOutlet UILabel *receiveWechatT;
 @property (weak, nonatomic) IBOutlet UILabel *openVipT;
-@property (weak, nonatomic) IBOutlet UILabel *yueT;
+
 
 @property(nonatomic,weak) id <MeV2TableViewCellDelegate> delegate;
 

@@ -1,0 +1,57 @@
+/*
+ Localizable.strings
+ MGFaceIDDetect
+ 
+ Created by MegviiDev on 2017/7/17.
+ Copyright © 2017年 megvii. All rights reserved.
+ */
+
+"livenessCancelLeftPromptText"                 =           "取消";
+"livenessCancelRightPromptText"                 =           "确定";
+"livenessCancelTitlePromptText"                 =           "确定退出吗？";
+"livenessExitLeftPromptText"                 =           "结束验证";
+"livenessExitRightPromptText"                 =           "重新验证";
+"livenessExitTitlePromptText"                 =           "活体检测失败";
+"livenessHomePromptWaitText"                 =           "验证中，请稍候";
+"livenessHomePromptBlinkText"                 =           "请眨眼";
+"livenessHomePromptOpenMouthText"                 =           "请张嘴";
+"livenessHomePromptShakeHeadText"                 =           "请向左或向右缓慢转头";
+"livenessHomePromptNodText"                 =           "请缓慢点头";
+"livenessHomePromptFrontalFaceText" = "请让我看到您的正脸";
+"livenessHomePromptFaceEreaText" = "人脸有效面积太小";
+"livenessHomePromptBrighterText" = "请让光线再亮点";
+"livenessHomePromptDarkerText" = "请让光线再暗点";
+"livenessHomePromptCloserText" = "请再靠近一些";
+"livenessHomePromptFurtherText" = "请离屏幕远一些";
+"livenessHomePromptNoBacklightingText" = "请避免侧光或背光";
+"livenessHomePromptFrontalFaceInBoundingBoxText" = "请将正脸置于取景框内";
+"livenessHomePromptNoEyesOcclusionText" = "请勿遮挡眼睛";
+"livenessHomePromptNoMouthOcclusionText" = "请勿遮挡嘴巴";
+"livenessHomePromptVerticalText" = "请您拿起手机，保持手机垂直";
+"livenessHomePromptStayStillText" = "很好，请保持不动";
+
+//  关键词
+"key_space_mark"            =           "";
+"key_start"                 =           "开始";
+"key_get_back"                 =           "返回";
+"key_have_read"             =           "我已阅读并同意";
+"key_authentication"                 =           "身份验证";
+
+//  内容
+"message_face_agreement"                 =           "《FaceID 身份验证服务用户协议》";
+"message_face_agreement_detail"                 =           "用户协议";
+"message_please_read_agreement"             =           "请先同意《FaceID身份验证服务用户协议》";
+
+//  提醒
+"remind_guide_header"   = "FaceID 人脸核身服务";
+"remind_guide_center"   = "请正对屏幕，勿遮挡面部";
+"remind_action_live_detect_success"                 =           "验证中，请稍候";
+"remind_action_live_detect_failure"                 =           "检测失败";
+"remind_action_live_record_verify"                 =           "验证中，请稍候";
+
+//  错误
+"error_model_action_live"                 =           "资源读取失败！无法读取动作活体模型（MegActionLive），请检测资源文件。";
+"error_action_live_failure_reason"                 =           "检测失败的原因：\n";
+"error_faceid_detect_verify_error"                 =           "身份验证失败，请稍后重试";
+"error_live_detect_failure_reason_action_error"                 =           "活体检测失败";
+"error_live_detect_failure_reason_action_timeout"                 =           "活体检测超时";

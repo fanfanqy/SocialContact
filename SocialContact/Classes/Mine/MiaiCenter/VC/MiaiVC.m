@@ -21,43 +21,113 @@
 
 @property (nonatomic,strong) UIButton *exchangeBtn;
 
+@property (nonatomic,strong) SCUserInfo *userModel;
+
+@property (nonatomic,strong) UIButton *enjoyBtn;
+
 @end
 
 @implementation MiaiVC
 
 
-- (void)viewWillAppear:(BOOL)animated{
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
-}
+//- (void)viewWillAppear:(BOOL)animated{
+//    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated{
+//    [super viewWillDisappear:animated];
+//    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"相亲大厅";
-    self.fd_prefersNavigationBarHidden = NO;
+    self.fd_prefersNavigationBarHidden = YES;
+    
+    self.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+    
+    
+    [self createCustomTitleView:@"缘分星球" backgroundColor:[UIColor clearColor] rightItem:self.enjoyBtn backContainAlpha:NO];
     
     self.view.backgroundColor = [UIColor colorWithHexString:@"C9D6DE"];
     [self.view addSubview:self.sphereView];
     [self.view addSubview:self.exchangeBtn];
     
+    [self setupBackgroundImage:[UIImage imageNamed:@"miai_bg"]];
+    
     self.array = [NSMutableArray array];
     [self fetchData:YES];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"修改资料" style:UIBarButtonItemStylePlain target:self action:@selector(modifyUserInfo)];
-    self.navigationItem.rightBarButtonItem.tintColor = ORANGE;
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"修改资料" style:UIBarButtonItemStylePlain target:self action:@selector(modifyUserInfo)];
+//    self.navigationItem.rightBarButtonItem.tintColor = ORANGE;
     
 }
 
-- (void)modifyUserInfo{
+- (void)setupBackgroundImage:(UIImage *)backgroundImage {
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    backgroundImageView.image = backgroundImage;
+    [self.view insertSubview:backgroundImageView atIndex:0];
+}
+
+- (void)enjoyBtnClick{
+    if (self.userModel.is_rut) {
+        return;
+    }
+    self.userModel.is_rut = YES;
+    NSData *jsonData =  [self.userModel modelToJSONData];
+    
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
     
     
+    NSData *jsonDataImages = [NSJSONSerialization dataWithJSONObject:self.userModel.images options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *imagesJsonStr = [[NSString alloc] initWithData:jsonDataImages encoding:NSUTF8StringEncoding];
+    [dic setValue:imagesJsonStr forKey:@"images"];
+    
+    
+//    [self showLoading];
+    WEAKSELF;
+    POSTRequest *request = [POSTRequest requestWithPath:@"/customer/profile/" parameters:dic completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
+            [SVProgressHUD dismissWithDelay:1.5];
+        }else{
+            weakSelf.userModel = [SCUserInfo modelWithDictionary:request.responseObject[@"data"]];
+            
+            // 1.
+            [SCUserCenter sharedCenter].currentUser.userInfo = weakSelf.userModel;
+            [[SCUserCenter sharedCenter].currentUser updateToDB];
+            
+            if (weakSelf.userModel.is_rut) {
+                [SVProgressHUD showImage:AlertSuccessImage status:@"成功加入"];
+                [SVProgressHUD dismissWithDelay:1.5];
+            }else{
+                [SVProgressHUD showImage:AlertErrorImage status:@"加入失败"];
+                [SVProgressHUD dismissWithDelay:1.5];
+            }
+        }
+    }];
+    [InsNetwork addRequest:request];
     
 }
+
+- (UIButton *)enjoyBtn{
+    
+    if (!_enjoyBtn) {
+        _enjoyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        if (self.userModel.is_rut) {
+            [_enjoyBtn setTitle:@"已加入" forState:UIControlStateNormal];
+        }else{
+            [_enjoyBtn setTitle:@"加入星球" forState:UIControlStateNormal];
+        }
+        _enjoyBtn.titleLabel.textColor = [UIColor whiteColor];
+        _enjoyBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        _enjoyBtn.frame = CGRectMake(0, 0, 80, 44);
+        [_enjoyBtn addTarget:self action:@selector(enjoyBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _enjoyBtn;
+}
+
 
 - (UIButton *)exchangeBtn{
     
@@ -65,10 +135,10 @@
         _exchangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_exchangeBtn setTitle:@"换一批" forState:UIControlStateNormal];
         _exchangeBtn.titleLabel.textColor = [UIColor whiteColor];
-        _exchangeBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        _exchangeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
         _exchangeBtn.frame = CGRectMake(0, kScreenHeight-150, 100, 44);
         _exchangeBtn.centerX = self.view.centerX;
-        [_exchangeBtn setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
+        [_exchangeBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithWhite:1 alpha:0.3]] forState:UIControlStateNormal];
         _exchangeBtn.layer.cornerRadius = 22;
         _exchangeBtn.layer.masksToBounds = YES;
         [_exchangeBtn addTarget:self action:@selector(exchangeBtnClick) forControlEvents:UIControlEventTouchUpInside];

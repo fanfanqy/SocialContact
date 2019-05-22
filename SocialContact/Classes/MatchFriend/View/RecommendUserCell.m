@@ -14,15 +14,25 @@
     [super awakeFromNib];
     // Initialization code
     self.backgroundColor = [UIColor whiteColor];
-    self.layer.cornerRadius = 8;
-    self.layer.masksToBounds = YES;
+//    self.layer.cornerRadius = 10;
+//    self.layer.masksToBounds = YES;
+//    self.clipsToBounds = YES;
     
-    self.address.layer.borderColor = Font_color333.CGColor;
-    self.address.layer.borderWidth = .5;
-    self.address.layer.cornerRadius = 10.f;
+    self.contentView.backgroundColor = [UIColor whiteColor];
+//    self.contentView.layer.cornerRadius = 10;
+//    self.contentView.layer.masksToBounds = YES;
+//    self.contentView.clipsToBounds = YES;
+//
+//    self.img.layer.cornerRadius = 8.0;
+//    self.img.layer.masksToBounds = YES;
+//
     
-    self.nick.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.address.font = [UIFont fontWithName:@"Heiti SC" size:12];
+//    self.address.layer.borderColor = Font_color333.CGColor;
+//    self.address.layer.borderWidth = .3;
+//    self.address.layer.cornerRadius = 8.f;
+//    
+    self.nick.font = [UIFont systemFontOfSize:15];
+    self.address.font = [UIFont systemFontOfSize:10];
     
 }
 
@@ -40,18 +50,20 @@
     }else{
        self.img.image = placeholdImage;
     }
-   
+    
     if ([NSString ins_String:model.name]) {
         self.nick.text = model.name;
     }else{
         self.nick.text = [NSString stringWithFormat:@" %@ ",@"--"];
     }
     
-    if ([NSString ins_String:model.address_home]) {
-        self.address.text = [NSString stringWithFormat:@"  %@  ",model.address_home];
-    }else{
-        self.address.text = [NSString stringWithFormat:@"  %@  ",@"--"];
-    }
+    self.address.text = [NSString stringWithFormat:@"%@ %@",model.gender?@"男":@"女", model.address_home];
+    
+//    if ([NSString ins_String:model.address_home]) {
+//        self.address.text = [NSString stringWithFormat:@"  %@  ",model.address_home];
+//    }else{
+//        self.address.text = [NSString stringWithFormat:@"  %@  ",@"--"];
+//    }
     
 //    NSDate *date = [NSDate dateWithISOFormatString:_model.last_request_at];
 //    self.lastLoginTime.text =  [WBStatusHelper stringWithTimelineDate:date];

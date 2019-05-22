@@ -33,9 +33,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
 @implementation GeRenZiLiaoVC
 
 - (void)viewWillAppear:(BOOL)animated{
- 
     [super viewWillAppear:animated];
-    
     [self.tableView reloadData];
 }
 
@@ -55,24 +53,23 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
 
 - (void)done{
     
-    if (![NSString ins_String:self.userModel.name]) {
-        [self.view makeToast:@"请输入昵称"];
-        return;
+    if ([Help checkFillAllInfo:self.userModel ignoreAvatar:NO]) {
+        [self modifyUserinfo];
     }
-    
-    [self modifyUserinfo];
     
 }
 
 - (void)leftBarButtonItemClick{
     
-    
-    
     if (self.vcType == 1) {
-        [self.view makeToast:@"请先完善个人信息，点击右上角完成退出" duration:2 position:CSToastPositionCenter];
+        if ([Help checkFillAllInfo:self.userModel ignoreAvatar:NO]) {
+            [self modifyUserinfo];
+        }else{
+            [self.view makeToast:@"请您先完善个人信息，\n谈恋爱我们是认真的" duration:3 position:CSToastPositionCenter];
+        }
     }else{
-        
-        [self modifyUserinfo];
+        [self.navigationController popViewControllerAnimated:YES];
+//        [self modifyUserinfo];
         
     }
 }
@@ -125,8 +122,8 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             [SCUserCenter sharedCenter].currentUser.userInfo = weakSelf.userModel;
             [[SCUserCenter sharedCenter].currentUser updateToDB];
             
-            // 2.
-            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",[SCUserCenter sharedCenter].currentUser.user_id] name:[SCUserCenter sharedCenter].currentUser.name portrait:weakSelf.userModel.avatar_url] ;
+            // 2.[SCUserCenter sharedCenter].currentUser.user_id
+            RCUserInfo *rcUserInfo = [[RCUserInfo alloc]initWithUserId:[NSString stringWithFormat:@"%ld",weakSelf.userModel.iD] name:[SCUserCenter sharedCenter].currentUser.name portrait:weakSelf.userModel.avatar_url] ;
             [rcUserInfo updateToDB];
             [RCIM sharedRCIM].currentUserInfo = rcUserInfo;
             [[RCIM sharedRCIM] refreshUserInfoCache:rcUserInfo withUserId:rcUserInfo.userId];
@@ -352,13 +349,28 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             }else if (indexPath.row == 3) {
                 
                 title = @"性别";
+                if (self.vcType == 1) {
+                    [SVProgressHUD showImage:AlertErrorImage status:@"填写完成后，软件内不予以更改，请认真填写"];
+                    [SVProgressHUD dismissWithDelay:3];
+                    
+                }else{
+                    [SVProgressHUD showImage:AlertErrorImage status:@"已填写，软件内不予以更改，请联系客服更改"];
+                    [SVProgressHUD dismissWithDelay:3];
+                    title = nil;
+                }
+                
             }else if (indexPath.row == 4) {
                 
                 title = @"出生日期";
-            }else if (indexPath.row == 5) {
+            }
+            else if (indexPath.row == 5) {
+                
+                title = @"年龄";
+            }else if (indexPath.row == 6) {
                 
                 title = @"身高";
             }
+            
             
         }
             break;
@@ -377,14 +389,23 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
                 title = @"工作职业";
             }else if (indexPath.row == 3) {
                 
-                title = @"收入描述";
+                title = @"月收入";
             }else if (indexPath.row == 4) {
                 
-                title = @"婚姻状况";
+                title = @"学历";
             }else if (indexPath.row == 5) {
                 
-                title = @"有无子女";
+                title = @"房产";
             }else if (indexPath.row == 6) {
+                
+                title = @"车辆";
+            }else if (indexPath.row == 7) {
+                
+                title = @"婚姻状况";
+            }else if (indexPath.row == 8) {
+                
+                title = @"有无子女";
+            }else if (indexPath.row == 9) {
                 
                 title = @"打算几年内结婚";
             }
@@ -403,7 +424,6 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
     }
 }
 
-
 - (void)pickerTitle:(NSString *)title{
     WEAKSELF;
         if ([title isEqualToString:@"出生日期"]) {
@@ -412,35 +432,32 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             fmt.dateFormat = @"yyyy-MM-DDThh:mm:ss";
             NSString *nowStr = [fmt stringFromDate:now];
             
-            [CGXPickerView showDatePickerWithTitle:@"出生日期" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01T00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
+            [CGXPickerView showDatePickerWithTitle:@"出生日期" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01T00:00:00" MaxDateStr:nowStr IsAutoSelect:NO Manager:nil ResultBlock:^(NSString *selectValue) {
                 NSLog(@"%@",selectValue);
-//                weakSelf.userModel.birthday = selectValue;
+
                 weakSelf.userModel.birthday = [NSString stringWithFormat:@"%@T20:00:00",selectValue];
                 [weakSelf.tableView reloadData];
             }];
             
         }else if ([title isEqualToString:@"性别"]){
            
-            
-            [CGXPickerView showStringPickerWithTitle:@"性别" DataSource:@[@"男",@"女"] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"性别（填写完成后，不予以更改）" DataSource:@[@"男",@"女"] DefaultSelValue:nil IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.gender = [selectRow integerValue]+1;
                 [weakSelf.tableView reloadData];
             }];
             
-            
-            
-            
         }else if ([title isEqualToString:@"年龄"]){
             NSString *defaultSelValue = [[CGXPickerView showStringPickerDataSourceStyle:CGXStringPickerViewStyleAge] objectAtIndex:1];
-            [CGXPickerView showStringPickerWithTitle:@"年龄" DefaultSelValue:defaultSelValue IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"年龄" DefaultSelValue:defaultSelValue IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
-                
+                weakSelf.userModel.age = [selectValue integerValue];
+                [weakSelf.tableView reloadData];
             } Style:CGXStringPickerViewStyleAge];
         }else if ([title isEqualToString:@"身高"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"身高" DefaultSelValue:nil IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.height = [selectRow integerValue]+150;
@@ -449,7 +466,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             } Style:CGXStringPickerViewStylHeight];
         }else if ([title isEqualToString:@"工作地址"]){
 
-            [CGXPickerView showStringPickerWithTitle:@"工作地址" DataSource:@[@"邯郸市辖区",@"邯山区",@"丛台区",@"复兴区",@"高开区",@"峰峰矿区",@"肥乡区",@"永年区",@"临漳县",@"成安县",@"大名县",@"涉县",@"磁县",@"邱县",@"鸡泽县",@"广平县",@"馆陶县",@"魏县",@"曲周县",@"武安市"] DefaultSelValue:@"邯郸市辖区" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"工作地址" DataSource:@[@"邯郸市辖区",@"邯山区",@"丛台区",@"复兴区",@"高开区",@"峰峰矿区",@"肥乡区",@"永年区",@"临漳县",@"成安县",@"大名县",@"涉县",@"磁县",@"邱县",@"鸡泽县",@"广平县",@"馆陶县",@"魏县",@"曲周县",@"武安市"] DefaultSelValue:@"邯郸市辖区" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.address_company = selectValue;
@@ -460,7 +477,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
         }else if ([title isEqualToString:@"家庭地址"]){
             
             
-            [CGXPickerView showStringPickerWithTitle:@"家庭地址" DataSource:@[@"邯郸市辖区",@"邯山区",@"丛台区",@"复兴区",@"高开区",@"峰峰矿区",@"肥乡区",@"永年区",@"临漳县",@"成安县",@"大名县",@"涉县",@"磁县",@"邱县",@"鸡泽县",@"广平县",@"馆陶县",@"魏县",@"曲周县",@"武安市"] DefaultSelValue:@"邯郸市辖区" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"家庭地址" DataSource:@[@"邯郸市辖区",@"邯山区",@"丛台区",@"复兴区",@"高开区",@"峰峰矿区",@"肥乡区",@"永年区",@"临漳县",@"成安县",@"大名县",@"涉县",@"磁县",@"邱县",@"鸡泽县",@"广平县",@"馆陶县",@"魏县",@"曲周县",@"武安市"] DefaultSelValue:@"邯郸市辖区" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.address_home = selectValue;
@@ -470,7 +487,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             
         }
         else if ([title isEqualToString:@"工作职业"]){
-            [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"学生", @"一般私有企业", @"个体户私有业主", @"事业单位", @"公务员", @"医疗机构",@"暂时无业"] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"工作职业" DataSource:@[@"白领/一般职业", @"公务员/事业单位", @"自由职业/私营业主", @"暂时无业", @"退休", @"学生"] DefaultSelValue:nil IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.profession = [selectRow integerValue]+1;
@@ -478,9 +495,9 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
                 
             }];
             
-        }else if ([title isEqualToString:@"收入描述"]){
+        }else if ([title isEqualToString:@"月收入"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"月收入" DataSource:@[@"5000以下", @"5000-1万", @"1万-2万", @"2万以上"] DefaultSelValue:nil IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"月收入" DataSource:@[@"5000以下", @"5000-1万", @"1万-15000", @"15000以上"] DefaultSelValue:nil IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.income = [selectRow integerValue]+1;
@@ -489,7 +506,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             }];
         }else if ([title isEqualToString:@"婚姻状况"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"婚姻状况" DataSource:@[@"未婚", @"离异", @"丧偶"] DefaultSelValue:@"未婚" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"婚姻状况" DataSource:@[@"未婚", @"离异", @"丧偶"] DefaultSelValue:@"未婚" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.marital_status = [selectRow integerValue]+1;
@@ -498,7 +515,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             }];
         }else if ([title isEqualToString:@"有无子女"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"有无子女" DataSource:@[@"无", @"有，和我在一起", @"有，不和我在一起"] DefaultSelValue:@"无" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"有无子女" DataSource:@[@"无子女", @"有子女，和我在一起", @"有子女，不和我在一起"] DefaultSelValue:@"无子女" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.child_status = [selectRow integerValue]+1;
@@ -507,10 +524,37 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             }];
         }else if ([title isEqualToString:@"打算几年内结婚"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"打算几年内结婚" DataSource:@[@"1年内", @"1-2年内", @"2-3年内", @"3年以上"] DefaultSelValue:@"1年内" IsAutoSelect:YES Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"打算几年内结婚" DataSource:@[@"1年内", @"1-2年内", @"2-3年内", @"3年以上"] DefaultSelValue:@"1年内" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.years_to_marry = [selectRow integerValue]+1;
+                [weakSelf.tableView reloadData];
+                
+            }];
+        }else if ([title isEqualToString:@"房产"]){
+            
+            [CGXPickerView showStringPickerWithTitle:@"房产信息" DataSource:@[@"保密",@"已购住房", @"未购住房"] DefaultSelValue:@"保密" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.house_status = [selectRow integerValue];
+                [weakSelf.tableView reloadData];
+                
+            }];
+        }else if ([title isEqualToString:@"车辆"]){
+            
+            [CGXPickerView showStringPickerWithTitle:@"车辆信息" DataSource:@[@"保密",@"已购车辆", @"未购车辆"] DefaultSelValue:@"保密" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.car_status = [selectRow integerValue];
+                [weakSelf.tableView reloadData];
+                
+            }];
+        }else if ([title isEqualToString:@"学历"]){
+            
+            [CGXPickerView showStringPickerWithTitle:@"学历" DataSource:@[@"初中", @"高中",@"中专",@"大专",@"大学",@"硕士",@"博士",@"院士"] DefaultSelValue:@"大学" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+                NSLog(@"%@",selectValue);
+                
+                weakSelf.userModel.education = [selectRow integerValue]+1;
                 [weakSelf.tableView reloadData];
                 
             }];
@@ -523,7 +567,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
     if (indexPath.section == 0 ) {
         if (indexPath.row == 0) {
             UserAvatarCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserAvatarCell"];
-            [cell.avatarImg sc_setImgWithUrl:self.userModel.avatar_url placeholderImg:@""];
+            [cell.avatarImg sc_setImgWithUrl:self.userModel.avatar_url placeholderImg:@"icon_default_person"];
             return cell;
         }else{
             
@@ -549,15 +593,15 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             if (indexPath.row == 0) {
                 leftImage = @"";
                 title = @"昵称";
-                subTitle = self.userModel.name;
+                subTitle = self.userModel.name ?:@"未填写";
             }else if (indexPath.row == 1) {
                 leftImage = @"";
-                title = @"用户签名";
-                subTitle = self.userModel.intro?:@"";
+                title = @"自我介绍";
+                subTitle = self.userModel.intro?:@"未填写";
             }else if (indexPath.row == 2) {
                 leftImage = @"";
                 title = @"微信";
-                subTitle = self.userModel.wechat_id?:@"";
+                subTitle = self.userModel.wechat_id?:@"未填写";
             }else if (indexPath.row == 3) {
                 leftImage = @"";
                 title = @"性别";
@@ -570,11 +614,14 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
                 if (date) {
                     subTitle = [date stringWithFormat:@"yyyy-MM-dd"];
                 }else{
-                    subTitle = self.userModel.birthday;
+                    subTitle = self.userModel.birthday?:@"未填写";
                 }
                 
-                
             }else if (indexPath.row == 5) {
+                leftImage = @"";
+                title = @"年龄";
+                subTitle = [Help age:self.userModel.age];
+            }else if (indexPath.row == 6) {
                 leftImage = @"";
                 title = @"身高";
                 subTitle = [Help height:self.userModel.height];
@@ -584,30 +631,42 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             if (indexPath.row == 0) {
                 leftImage = @"";
                 title = @"家庭地址";
-                subTitle = self.userModel.address_home;
+                subTitle = self.userModel.address_home?:@"未填写";
             }else if (indexPath.row == 1) {
                 leftImage = @"";
                 title = @"工作地址";
-                subTitle = self.userModel.address_company;
+                subTitle = self.userModel.address_company?:@"未填写";
             }else if (indexPath.row == 2) {
                 leftImage = @"";
                 title = @"工作职业";
                 subTitle = [Help profession:self.userModel.profession];
             }else if (indexPath.row == 3) {
                 leftImage = @"";
-                title = @"收入描述";
+                title = @"月收入";
                 subTitle = [Help income:self.userModel.income];
             }else if (indexPath.row == 4) {
                 leftImage = @"";
+                title = @"学历";
+                subTitle = [Help education:self.userModel.education];
+            }else if (indexPath.row == 5) {
+                leftImage = @"";
+                title = @"房产";
+                subTitle = [Help house:self.userModel.house_status];
+            }else if (indexPath.row == 6) {
+                leftImage = @"";
+                title = @"车辆";
+                subTitle = [Help car:self.userModel.car_status];
+            }else if (indexPath.row == 7) {
+                leftImage = @"";
                 title = @"婚姻状况";
                 subTitle = [Help marital_status:self.userModel.marital_status];
-            }else if (indexPath.row == 5) {
+            }else if (indexPath.row == 8) {
                 leftImage = @"";
                 title = @"有无子女";
                 subTitle = [Help child_status:self.userModel.child_status];
-            }else if (indexPath.row == 6) {
+            }else if (indexPath.row == 9) {
                 leftImage = @"";
-                title = @"打算几年内结婚";
+                title = @"几年内结婚";
                 subTitle = [Help yearsToMarial:self.userModel.years_to_marry];
             }
             
@@ -641,10 +700,10 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             return 2;
             break;
         case 1:
-            return 6;
+            return 7;
             break;
         case 2:
-            return 7;
+            return 10;
             break;
         default:
             break;
@@ -655,7 +714,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0 ) {
         if (indexPath.row == 0) {
-            return 68;
+            return 120;
         }else{
 //            return ([UIScreen mainScreen].bounds.size.width-3.0)/4.0+40;
            return (kScreenWidth-20-6.0)/4.0 + 40;

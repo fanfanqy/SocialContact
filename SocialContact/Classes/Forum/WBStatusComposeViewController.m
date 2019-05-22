@@ -88,9 +88,9 @@
 - (void)_initNavBar {
 	self.title = @"分享动态";
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(_cancel)];
-    [button setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Heiti SC" size:16],
+    [button setTitleTextAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
                                      NSForegroundColorAttributeName : UIColorHex(0D0E15)} forState:UIControlStateNormal];
-	[button setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Heiti SC" size:16],
+	[button setTitleTextAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
 									 NSForegroundColorAttributeName : UIColorHex(0D0E15)} forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = button;
 	
@@ -108,7 +108,7 @@
 		_publishButton.frame = CGRectMake(0, 0, 54, 24);
 		_publishButton.layer.cornerRadius = 4.0;
 		_publishButton.layer.masksToBounds = YES;
-		_publishButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:14];
+		_publishButton.titleLabel.font = [UIFont systemFontOfSize:14];
 		[_publishButton setTitle:@"分享" forState:UIControlStateNormal];
 		[_publishButton setTitleColor:UIColorHex(FFFFFF) forState:UIControlStateNormal];
 		[_publishButton setBackgroundImage:[UIImage imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateDisabled];
@@ -128,13 +128,13 @@
     _textView.showsVerticalScrollIndicator = NO;
     _textView.alwaysBounceVertical = YES;
     _textView.allowsCopyAttributedString = NO;
-    _textView.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    _textView.font = [UIFont systemFontOfSize:16];
     _textView.textColor = Font_color333;
     _textView.delegate = self;
     _textView.inputAccessoryView = [UIView new];
 	
     TextLinePositionModifier *modifier = [TextLinePositionModifier new];
-    modifier.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    modifier.font = [UIFont systemFontOfSize:16];
     modifier.paddingTop = 12;
     modifier.paddingBottom = 12;
     modifier.lineHeightMultiple = 1.5;
@@ -145,7 +145,7 @@
     if (placeholderPlainText) {
         NSMutableAttributedString *atr = [[NSMutableAttributedString alloc] initWithString:placeholderPlainText];
         atr.color = UIColorHex(c4c4c4);
-        atr.font = [UIFont fontWithName:@"Heiti SC" size:16];
+        atr.font = [UIFont systemFontOfSize:16];
         _textView.placeholderAttributedText = atr;
     }
     _textView.tintColor = ORANGE;
@@ -167,7 +167,7 @@
     [self.view addSubview:_toolbar];
 	
     _toolbarTopicButton = [self _toolbarButtonWithImage:@"ic_topic" highlight:nil];
-    _toolbarTopicButton.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    _toolbarTopicButton.titleLabel.font = [UIFont systemFontOfSize:16];
     if (_topicModel) {
         [self topicSelected:_topicModel];
     }else{
@@ -187,7 +187,7 @@
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 80, kToolbarHeight)];
     label.text = @"公开";
     label.textColor = BLUE;
-    label.font = [UIFont fontWithName:@"Heiti SC" size:16];
+    label.font = [UIFont systemFontOfSize:16];
     label.centerX = _anonymButton.left - 25;
     _isAnoymLabel = label;
     [_toolbar addSubview:label];
@@ -387,8 +387,8 @@
             [dic setObject:self.pics[i] forKey:@"url"];
             [dic setObject:self.picsWidth[i] forKey:@"w"];
             [dic setObject:self.picsHeight[i] forKey:@"h"];
-            [dic setObject:@"1080" forKey:@"w"];
-            [dic setObject:@"1920" forKey:@"h"];
+//            [dic setObject:@"1080" forKey:@"w"];
+//            [dic setObject:@"1920" forKey:@"h"];
             [arr addObject:dic];
         }
         
@@ -590,12 +590,12 @@
 	TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 columnNumber:4 delegate:self pushPhotoPickerVc:YES];
 	imagePickerVc.statusBarStyle = UIStatusBarStyleDefault;
 	imagePickerVc.naviBgColor = [UIColor whiteColor];
-    imagePickerVc.naviTitleFont = [UIFont fontWithName:@"Heiti SC" size:16];
+    imagePickerVc.naviTitleFont = [UIFont systemFontOfSize:16];
     imagePickerVc.naviTitleColor = Font_color333;
     imagePickerVc.oKButtonTitleColorNormal = ORANGE;
     imagePickerVc.oKButtonTitleColorDisabled = kGuaCellHightColor;
     imagePickerVc.barItemTextColor = Font_color333;
-    imagePickerVc.barItemTextFont = [UIFont fontWithName:@"Heiti SC" size:15];
+    imagePickerVc.barItemTextFont = [UIFont systemFontOfSize:15];
     imagePickerVc.iconThemeColor = ORANGE;
 	imagePickerVc.showSelectedIndex = YES;
 	imagePickerVc.showPhotoCannotSelectLayer = YES;

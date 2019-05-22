@@ -40,7 +40,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
 		cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"settingcell"];
 		
 	}
-    cell.textLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+    cell.textLabel.font = [UIFont systemFontOfSize:15];
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
@@ -63,7 +63,7 @@ INS_P_STRONG(InsLoadDataTablView *, tableView);
             
         }
         cell1.textLabel.text = @"退出登录";
-        cell1.textLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
+        cell1.textLabel.font = [UIFont systemFontOfSize:15];
         cell1.textLabel.textAlignment = NSTextAlignmentCenter;
         return cell1;
     }

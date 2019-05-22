@@ -13,22 +13,22 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    self.vip.layer.borderColor = Font_color333.CGColor;
-    self.vip.layer.borderWidth = .7;
-    self.vip.layer.cornerRadius = 30;
+//    self.vip.layer.borderColor = Font_color333.CGColor;
+//    self.vip.layer.borderWidth = .7;
+//    self.vip.layer.cornerRadius = 30;
+//    
+//    self.exchangeWechat.layer.borderColor = Font_color333.CGColor;
+//    self.exchangeWechat.layer.borderWidth = .7;
+//    self.exchangeWechat.layer.cornerRadius = 30;
+//    
+//    self.yueTa.layer.borderColor = Font_color333.CGColor;
+//    self.yueTa.layer.borderWidth = .7;
+//    self.yueTa.layer.cornerRadius = 30;
     
-    self.exchangeWechat.layer.borderColor = Font_color333.CGColor;
-    self.exchangeWechat.layer.borderWidth = .7;
-    self.exchangeWechat.layer.cornerRadius = 30;
-    
-    self.yueTa.layer.borderColor = Font_color333.CGColor;
-    self.yueTa.layer.borderWidth = .7;
-    self.yueTa.layer.cornerRadius = 30;
-    
-    self.vipDayCount.font = [UIFont fontWithName:@"Heiti SC" size:15];
-    self.vipTitle.font =  [UIFont fontWithName:@"Heiti SC" size:13];
-    self.exchangeWechatTitle.font =  [UIFont fontWithName:@"Heiti SC" size:13];
-    self.yueTitle.font =  [UIFont fontWithName:@"Heiti SC" size:13];
+    self.vipDayCount.font = [UIFont systemFontOfSize:15];
+    self.vipTitle.font =  [UIFont systemFontOfSize:14];
+    self.exchangeWechatTitle.font =  [UIFont systemFontOfSize:14];
+    self.yueTitle.font =  [UIFont systemFontOfSize:14];
     
      if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
          self.vipTitle.text = @"线下服务";

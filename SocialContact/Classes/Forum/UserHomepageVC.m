@@ -12,7 +12,9 @@
 #import "VipVC.h"
 #import "DCIMChatViewController.h"
 #import "UserFeedBackViewController.h"
+#import "AuthenticationVC.h"
 
+#import "UserInfoHomePageV2Cell.h"
 #import "UserInfoHomePageCell.h"
 #import "VipStatusCell.h"
 #import "UserImagesCell.h"
@@ -58,6 +60,8 @@
 @property(nonatomic,strong) UIButton *moreBtn;
 
 @property(nonatomic,strong) NSMutableArray *showImagesArray;
+
+INS_P_ASSIGN(CGFloat, introduceHeight);
 
 INS_P_ASSIGN(BOOL, isSelf);
 
@@ -107,14 +111,14 @@ INS_P_ASSIGN(BOOL, isSelf);
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
-        _chatBtn.frame = CGRectMake(0, top, 0.4*kScreenWidth-10, 44);
-        _chatBtn.centerX = 0.1*kScreenWidth+(0.2*kScreenWidth-5);
+        _chatBtn.frame = CGRectMake(0, top, 106, 44);
+        _chatBtn.centerX = kScreenWidth/2.0 - 15 - (53);
         _chatBtn.layer.cornerRadius = 22.f;
         _chatBtn.layer.masksToBounds = YES;
-        [_chatBtn setTitle:@"  会话" forState:UIControlStateNormal];
-        _chatBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
-        [_chatBtn setImage:[UIImage imageNamed:@"ic_chat_white"] forState:UIControlStateNormal];
-        [_chatBtn setBackgroundImage:[UIImage imageWithColor:BLUE] forState:UIControlStateNormal];
+        [_chatBtn setTitle:@"对话" forState:UIControlStateNormal];
+        _chatBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+
+        [_chatBtn setBackgroundImage:[UIImage imageNamed:@"rectangle_bg"] forState:UIControlStateNormal];
         [_chatBtn addTarget:self action:@selector(chatBtnClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _chatBtn;
@@ -127,9 +131,14 @@ INS_P_ASSIGN(BOOL, isSelf);
     if (self.userInfo) {
 //        NSInteger userId = self.userInfo.user_id;
         
-        NSInteger targetId = _userInfo.user_id;
+//        NSInteger targetId = _userInfo.user_id;
+//        if (targetId == 0) {
+//            targetId = _userInfo.iD;
+//        }
+        
+        NSInteger targetId = _userInfo.iD;
         if (targetId == 0) {
-            targetId = _userInfo.iD;
+            targetId = _userInfo.user_id;
         }
         
         DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId]];
@@ -151,14 +160,14 @@ INS_P_ASSIGN(BOOL, isSelf);
         if (IS_IPHONEX) {
             top -= iPhoneXVirtualHomeHeight;
         }
-        _guanZhuBtn.frame = CGRectMake(0, top, 0.4*kScreenWidth-10, 44);
-        _guanZhuBtn.centerX = kScreenWidth - 0.1*kScreenWidth - (0.2*kScreenWidth-5);
+        _guanZhuBtn.frame = CGRectMake(0, top, 106, 44);
+        _guanZhuBtn.centerX = kScreenWidth/2.0 + 15 + (53);
         _guanZhuBtn.layer.cornerRadius = 22.f;
         _guanZhuBtn.layer.masksToBounds = YES;
-        _guanZhuBtn.titleLabel.font = [UIFont fontWithName:@"Heiti SC" size:15];
-        [_guanZhuBtn setTitle:@"  加关注" forState:UIControlStateNormal];
-        [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
-        [_guanZhuBtn setBackgroundImage:[UIImage imageWithColor:ORANGE] forState:UIControlStateNormal];
+        _guanZhuBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_guanZhuBtn setTitle:@"加关注" forState:UIControlStateNormal];
+
+        [_guanZhuBtn setBackgroundImage:[UIImage imageNamed:@"rectangle_bg"] forState:UIControlStateNormal];
         [_guanZhuBtn addTarget:self action:@selector(guanZhuClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _guanZhuBtn;
@@ -202,7 +211,9 @@ INS_P_ASSIGN(BOOL, isSelf);
         POSTRequest *request = [POSTRequest requestWithPath:url parameters:para completionHandler:^(InsRequest *request) {
             
             if (!request.error) {
-                [weakSelf.view makeToast:request.responseObject[@"msg"]?:@"操作成功"];
+                
+                [weakSelf.view makeToast:@"完成"];
+//                [weakSelf.view makeToast:request.responseObject[@"msg"]?:@"操作成功"];
                 weakSelf.userInfo.relation_status = targetStatus;
                 [weakSelf refresh];
             }else{
@@ -220,9 +231,21 @@ INS_P_ASSIGN(BOOL, isSelf);
         DELETERequest *request = [DELETERequest requestWithPath:url parameters:para completionHandler:^(InsRequest *request) {
             
             if (!request.error) {
-                [weakSelf.view makeToast:request.responseObject[@"msg"]?:@"操作成功"];
+                
+                [weakSelf.view makeToast:@"完成"];
+//                [weakSelf.view makeToast:request.responseObject[@"msg"]?:@"操作成功"];
                 weakSelf.userInfo.relation_status = targetStatus;
                 [weakSelf refresh];
+                
+                if (weakSelf.userInfo.relation_status == 0) {
+                    [[RCIMClient sharedRCIMClient]removeFromBlacklist:[NSString stringWithFormat:@"%ld",weakSelf.userInfo.iD] success:^{
+                        
+                    } error:^(RCErrorCode status) {
+                        
+                    }];
+                }
+                
+                
             }else{
                 [SVProgressHUD showImage:AlertErrorImage status:request.error.localizedDescription];
                 [SVProgressHUD dismissWithDelay:1.5];
@@ -264,7 +287,7 @@ INS_P_ASSIGN(BOOL, isSelf);
 - (XHPopMenu *)popMenu {
     if (!_popMenu) {
         _popMenu.backgroundColor = Black;
-//        [UIColor whiteColor];
+
         NSMutableArray *popMenuItems = [[NSMutableArray alloc] initWithCapacity:3];
         for (int i = 0; i < 3; i ++) {
             NSString *title;
@@ -329,6 +352,7 @@ INS_P_ASSIGN(BOOL, isSelf);
     
     WEAKSELF;
     
+
     NSDictionary *dic = @{
                           @"customer_id":[NSNumber numberWithInteger:self.userInfo.iD],
                           @"status":@(0),
@@ -343,29 +367,36 @@ INS_P_ASSIGN(BOOL, isSelf);
             [weakSelf.view makeToast:@"已屏蔽，不会再看到此人信息"];
             weakSelf.userInfo.relation_status = 0;
             [weakSelf refresh];
+            
+            [[RCIMClient sharedRCIMClient]addToBlacklist:[NSString stringWithFormat:@"%ld",weakSelf.userInfo.iD] success:^{
+                
+            } error:^(RCErrorCode status) {
+                
+            }];
         }
-        
     }];
     [InsNetwork addRequest:request];
+    
+    
 }
 
 - (void)fenxiang{
     
     
+    //    https://www.handanxiaohongniang.com/?invitecode=PQXWVFUR&from=groupmessage
+    NSString *shareUrl = [NSString stringWithFormat:@"%@?invitecode=%@&from=groupmessage",kSCShareLinkURL,self.userInfo.invitecode];
+    
     LCActionSheet *sheet = [LCActionSheet sheetWithTitle:@"分享软件" cancelButtonTitle:@"取消" clicked:^(LCActionSheet * _Nonnull actionSheet, NSInteger buttonIndex) {
         
-        //        WXSceneSession          = 0,   /**< 聊天界面    */
-        //        WXSceneTimeline         = 1,   /**< 朋友圈     */
-        //        WXSceneFavorite         = 2,   /**< 收藏       */
         if (buttonIndex == 1) {
             
-            [WXApiRequestHandler sendLinkURL:kSCShareLinkURL TagName:@"邯郸小红娘" Title:@"邯郸小红娘" Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneSession];
+            [WXApiRequestHandler sendLinkURL:shareUrl TagName:@"邯郸小红娘" Title:kSCShareTitle Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneSession];
         }else if (buttonIndex == 2) {
             
-            [WXApiRequestHandler sendLinkURL:kSCShareLinkURL TagName:@"邯郸小红娘" Title:@"邯郸小红娘" Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneTimeline];
+            [WXApiRequestHandler sendLinkURL:shareUrl TagName:@"邯郸小红娘" Title:kSCShareTitle Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneTimeline];
         }else if (buttonIndex == 3) {
             
-            [WXApiRequestHandler sendLinkURL:kSCShareLinkURL TagName:@"邯郸小红娘" Title:@"邯郸小红娘" Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneFavorite];
+            [WXApiRequestHandler sendLinkURL:shareUrl TagName:@"邯郸小红娘" Title:kSCShareTitle Description:kSCShareDes ThumbImage:[UIImage imageNamed:@"shareIcon"] InScene:WXSceneFavorite];
         }
         
         
@@ -443,6 +474,12 @@ INS_P_ASSIGN(BOOL, isSelf);
 //    1.
     [self.showImagesArray removeAllObjects];
     
+    if (self.userInfo.intro.length > 0) {
+        self.introduceHeight = [[self.userInfo.intro stringByAppendingString:@"自我介绍："] heightForFont:[UIFont systemFontOfSize:15] width:kScreenWidth-40];
+    }else{
+        self.introduceHeight = 0;
+    }
+
     for (NSInteger i=0; i<self.userInfo.images.count; i++) {
         NSString *tempUrl = self.userInfo.images[i];
         [self.showImagesArray addObject:tempUrl];
@@ -463,27 +500,27 @@ INS_P_ASSIGN(BOOL, isSelf);
     switch (self.userInfo.relation_status) {
         case 0:
             {
-                [_guanZhuBtn setTitle:@"  解除屏蔽" forState:UIControlStateNormal];
-                [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
+                [_guanZhuBtn setTitle:@"解除屏蔽" forState:UIControlStateNormal];
+//                [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
             }
             break;
         case 1:
         {
-            [_guanZhuBtn setTitle:@"  已关注" forState:UIControlStateNormal];
-            [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
+            [_guanZhuBtn setTitle:@"已关注" forState:UIControlStateNormal];
+//            [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
         }
             break;
         case 2:
         {
-            [_guanZhuBtn setTitle:@"  互相关注" forState:UIControlStateNormal];
-            [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
+            [_guanZhuBtn setTitle:@"互相关注" forState:UIControlStateNormal];
+//            [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
         }
             break;
             
         default:
         {
-            [_guanZhuBtn setTitle:@"  加关注" forState:UIControlStateNormal];
-            [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
+            [_guanZhuBtn setTitle:@"加关注" forState:UIControlStateNormal];
+//            [_guanZhuBtn setImage:[UIImage imageNamed:@"ic_guanzhu_white"] forState:UIControlStateNormal];
         }
             break;
     }
@@ -497,9 +534,10 @@ INS_P_ASSIGN(BOOL, isSelf);
         _cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0,  kScreenWidth, kScreenWidth)  delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
         _cycleScrollView.backgroundColor = BackGroundColor;
         _cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
+        _cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
         _cycleScrollView.currentPageDotColor = BLUE; // 自定义分页控件小圆标颜色
         _cycleScrollView.bannerImageViewContentMode = UIViewContentModeScaleAspectFill;
-        
+        _cycleScrollView.autoScrollTimeInterval = 5;
 //        //采用网络图片
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            cycleScrollView2.imageURLStringsGroup = imagesURLStrings;
@@ -574,27 +612,6 @@ INS_P_ASSIGN(BOOL, isSelf);
 /** 点击图片回调 */
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
     
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        
-//        NSMutableArray *items = @[].mutableCopy;
-//        
-//        for (int i = 0; i < self.showImagesArray.count; i++) {
-//            // Get the large image url
-//            NSString *url = self.showImagesArray[i];
-//            if (![url containsString:@"http"]) {
-//                url = [NSString stringWithFormat:@"%@%@",kQINIU_HOSTKey,url];
-//            }
-//            KSPhotoItem *item = [KSPhotoItem itemWithSourceView:nil imageUrl:[NSURL URLWithString:url]];
-//            [items addObject:item];
-//        }
-//        
-//        if (items.count > 0) {
-//            KSPhotoBrowser *browser = [KSPhotoBrowser browserWithPhotoItems:items selectedIndex:0];
-//            browser.backgroundStyle = KSPhotoBrowserBackgroundStyleBlurPhoto;
-//            browser.loadingStyle = KSPhotoBrowserImageLoadingStyleDeterminate;
-//            [browser showFromViewController:self];
-//        }
-//    });
 
 }
 
@@ -605,7 +622,22 @@ INS_P_ASSIGN(BOOL, isSelf);
         
         [SVProgressHUD showInfoWithStatus:@"线下购买相亲约会服务，我们将为您提供优质线下服务"];
         [SVProgressHUD dismissWithDelay:3];
+    }else{
+        
+        VipVC *vc = [[VipVC alloc]init];
+        vc.userId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
+        vc.type = 1;
+        [self.navigationController pushViewController:vc animated:YES];
+        
     }
+    
+}
+
+- (void)goVip{
+    VipVC *vc = [VipVC new];
+    vc.type = 1;
+    vc.userId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)exchangeWechatClicked{
@@ -615,15 +647,42 @@ INS_P_ASSIGN(BOOL, isSelf);
         return;
     }
     
+    if (![SCUserCenter sharedCenter].currentUser.userInfo.is_idcard_verified){
+        
+        [SVProgressHUD showImage:AlertErrorImage status:@"请先进行实名认证"];
+        [SVProgressHUD dismissWithDelay:1.5];
+        
+        AuthenticationVC *vc = [[AuthenticationVC alloc]initWithNibName:@"AuthenticationVC" bundle:nil];
+        vc.userModel = [SCUserCenter sharedCenter].currentUser.userInfo;
+        vc.type = 2;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+        return;
+    }
+    
+    
     if ([NSString ins_String:[SCUserCenter sharedCenter].currentUser.userInfo.wechat_id]) {
+        
+        if ([SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at) {
+            
+            NSDate *date = [[SCUserCenter sharedCenter].currentUser.userInfo.service_vip_expired_at sc_dateWithUTCString];
+            if (date) {
+                NSTimeInterval interval = [date timeIntervalSinceNow];
+                if (interval <=  0) {
+                    [self goVip];
+                    return;
+                }
+            }
+        }else{
+            [self goVip];
+            return;
+        }
         
         [self ask_wechat];
         
     }else{
         SCLAlertView *alert = [[SCLAlertView alloc] init];
         alert.shouldDismissOnTapOutside = YES;
-//        [alert removeTopCircle];
-        //    backgroundColor, borderWidth, borderColor, textColor
         alert.buttonFormatBlock = ^NSDictionary *{
             return @{
                      @"backgroundColor":ORANGE,
@@ -657,7 +716,7 @@ INS_P_ASSIGN(BOOL, isSelf);
         return;
     }
     
-    if ([SCUserCenter sharedCenter].currentUser.userInfo.user_id == self.userId) {
+    if ([SCUserCenter sharedCenter].currentUser.userInfo.iD == self.userId) {
         return;
     }
     VipVC *vc = [VipVC new];
@@ -706,24 +765,43 @@ INS_P_ASSIGN(BOOL, isSelf);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y<StatusBarHeight) {
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-    }else if (scrollView.contentOffset.y<kScreenWidth) {
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    }else{
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-    }
+//    if (scrollView.contentOffset.y<StatusBarHeight) {
+//        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+//    }else if (scrollView.contentOffset.y<kScreenWidth) {
+//        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+//    }else{
+//        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+//    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
     if (indexPath.section == 0) {
-        UserInfoHomePageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoHomePageCell"];
+//        UserInfoHomePageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoHomePageCell"];
+//        cell.userInfo = self.userInfo;
+//        return cell;
+        
+        UserInfoHomePageV2Cell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoHomePageV2Cell"];
         cell.userInfo = self.userInfo;
         return cell;
         
     }else if (indexPath.section == 1) {
+        
+        HorizontalScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HorizontalScrollCell"];
+        cell.delegate = self;
+        NSMutableArray *array = [NSMutableArray arrayWithArray:self.userInfo.images];
+        cell.dataSource = array;
+        cell.labelT.text = [NSString stringWithFormat:@"相册（共%ld张）",self.userInfo.images.count];
+        cell.labelT.font = [UIFont systemFontOfSize:16 weight:UIFontWeightBold];
+        return cell;
+        
+    }else if (indexPath.section == 2) {
+                UserInfoHomePageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoHomePageCell"];
+                cell.userInfo = self.userInfo;
+                return cell;
+    
+    }else if (indexPath.section == 3) {
         
         VipStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VipStatusCell"];
         cell.delegate = self;
@@ -752,26 +830,21 @@ INS_P_ASSIGN(BOOL, isSelf);
         }
         return cell;
         
-    }else if (indexPath.section == 2) {
+    }else if (indexPath.section == 4) {
         
         SelectConditionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SelectConditionCell"];
         cell.userInfo = self.userInfo;
         return cell;
         
-    }else if (indexPath.section == 3) {
-        
-        HorizontalScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HorizontalScrollCell"];
-        cell.delegate = self;
-        NSMutableArray *array = [NSMutableArray arrayWithArray:self.userInfo.images];
-        cell.dataSource = array;
-        cell.labelT.text = [NSString stringWithFormat:@"相册（共%ld张）",self.userInfo.images.count];
-        return cell;
-        
-    }else if (indexPath.section == 4) {
+    }else if (indexPath.section == 5) {
         
         MeListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MeListTableViewCell"];
         cell.titleLB.text = @"个人动态";
+        cell.titleLB.textColor = Font_color333;
+        cell.titleLB.font = [[UIFont systemFontOfSize:16]fontWithBold];
         cell.titleLBLeading.constant = -20;
+        cell.rightImg.image = [UIImage imageNamed:@"homepage_rightArrow"];
+        cell.rightImg.hidden = NO;
         return cell;
     }
     
@@ -780,7 +853,7 @@ INS_P_ASSIGN(BOOL, isSelf);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -801,6 +874,10 @@ INS_P_ASSIGN(BOOL, isSelf);
         
         return 1;
         
+    }else if (section == 5) {
+        
+        return 1;
+        
     }
     
     return 0;
@@ -809,26 +886,28 @@ INS_P_ASSIGN(BOOL, isSelf);
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
    
     if (indexPath.section == 0) {
-        
-        if(kScreenWidth>375){
-            return 280;
-        }else{
-            return 320;
-        }
+        return 85;
         
     }else if (indexPath.section == 1) {
-        return 102;
+        
+        return (kScreenWidth-20-6.0)/4.0 + 40;
         
     }else if (indexPath.section == 2) {
         
-        return 310;
+        if(kScreenWidth>375){
+            return 220+self.introduceHeight;
+        }else{
+            return 260+self.introduceHeight;
+        }
         
     }else if (indexPath.section == 3) {
-        
-//        return 160;
-        return (kScreenWidth-20-6.0)/4.0 + 40;
+        return 110;
         
     }else if (indexPath.section == 4) {
+        
+        return 500;
+        
+    }else if (indexPath.section == 5) {
         
         return 60;
         
@@ -840,7 +919,7 @@ INS_P_ASSIGN(BOOL, isSelf);
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 4) {
+    if (indexPath.section == 5) {
         ForumVC *vc = [ForumVC new];
         vc.title = [NSString stringWithFormat:@"%@的动态",self.userInfo.name];
         vc.momentUIType = MomentUITypeList;
@@ -860,13 +939,19 @@ INS_P_ASSIGN(BOOL, isSelf);
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+    if (section == 5) {
+        return [UIView new];
+    }
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 6)];
     view.backgroundColor = BackGroundColor;
     return view;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 10;
+    if (section == 5) {
+        return 0.0001;
+    }
+    return 6;
 }
 
 - (InsLoadDataTablView *)tableView {
@@ -882,9 +967,14 @@ INS_P_ASSIGN(BOOL, isSelf);
             _tableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
             
         }
+        
     
         _tableView.tableFooterView = [UIView new];
         _tableView.showsVerticalScrollIndicator = NO;
+        
+        
+        [_tableView registerNib:[UINib nibWithNibName:@"UserInfoHomePageV2Cell" bundle:nil] forCellReuseIdentifier:@"UserInfoHomePageV2Cell"];
+        
         [_tableView registerNib:[UINib nibWithNibName:@"VipStatusCell" bundle:nil] forCellReuseIdentifier:@"VipStatusCell"];
         [_tableView registerNib:[UINib nibWithNibName:@"UserImagesCell" bundle:nil] forCellReuseIdentifier:@"UserImagesCell"];
         

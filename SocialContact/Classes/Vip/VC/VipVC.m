@@ -88,7 +88,7 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
         
         [self.bgScrollView addSubview:self.bgImgView];
         [self.bgScrollView addSubview:self.viewTopView];
-        [self createCustomTitleView:@"置顶服务" backgroundColor:[UIColor colorWithHexString:@"FBE4EC"]  rightItem:nil backContainAlpha:NO];
+        [self createCustomTitleView:@"置顶服务" titleColor:Black backgroundColor:[UIColor colorWithHexString:@"FBE4EC"]  rightItem:nil backContainAlpha:NO];
         [self serviceProduct];
         
     }else if (_type == 1) {
@@ -116,13 +116,13 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
         
         if (_type == 2) {
             _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, GuaTopHeight, kScreenWidth, kScreenHeight-GuaTopHeight)];
-            _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 2.85*kScreenWidth+350);
+            _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 2.85*kScreenWidth+420);
         }else if (_type == 1) {
             _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-            _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 750);
+            _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 1270);
         }else if (_type == 3) {
             _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, GuaTopHeight, kScreenWidth, kScreenHeight-GuaTopHeight)];
-            _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 2.2*kScreenWidth);
+            _bgScrollView.contentSize = CGSizeMake(kScreenWidth, 2.3*kScreenWidth);
         }
         _bgScrollView.bounces = NO;
         _bgScrollView.delegate = self;
@@ -158,7 +158,7 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
     if (!_viewTopView) {
         _viewTopView = [[[NSBundle mainBundle]loadNibNamed:@"ViewTopView" owner:self options:nil] lastObject];
         _viewTopView.delegate = self;
-        _viewTopView.frame = CGRectMake(0, 2.85*kScreenWidth, kScreenWidth, 350);
+        _viewTopView.frame = CGRectMake(0, 2.85*kScreenWidth, kScreenWidth, 420);
         _viewTopView.hidden = YES;
     }
     return _viewTopView;
@@ -169,7 +169,7 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
     if (!_vipView) {
         _vipView = [[[NSBundle mainBundle]loadNibNamed:@"VipView" owner:self options:nil] lastObject];
         _vipView.delegate = self;
-        _vipView.frame = CGRectMake(0, 0, kScreenWidth,750);
+        _vipView.frame = CGRectMake(0, 0, kScreenWidth,1270);
         _vipView.hidden = YES;
     }
     return _vipView;
@@ -179,7 +179,7 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
     if (!_yueServiceView) {
         _yueServiceView = [[[NSBundle mainBundle]loadNibNamed:@"YueServiceView" owner:self options:nil] lastObject];
         _yueServiceView.delegate = self;
-        _yueServiceView.frame = CGRectMake(0, 0, kScreenWidth, 2.2*kScreenWidth);
+        _yueServiceView.frame = CGRectMake(0, 0, kScreenWidth, 2.3*kScreenWidth);
         _yueServiceView.hidden = YES;
     }
     return _yueServiceView;
@@ -366,10 +366,6 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
     }];
     
 }
-
-    
-
-
 
 - (void)checkPayService{
     
@@ -575,11 +571,11 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
                             weakSelf.serviceModel = model;
                             
                             if (model.pricelist.count > 4) {
-                                weakSelf.vipView.frame = CGRectMake(0, 0, kScreenWidth,750);
-                                weakSelf.bgScrollView.contentSize = CGSizeMake(kScreenWidth, 750);
+                                weakSelf.vipView.frame = CGRectMake(0, 0, kScreenWidth,1270);
+                                weakSelf.bgScrollView.contentSize = CGSizeMake(kScreenWidth, 1270);
                             }else{
-                                weakSelf.vipView.frame = CGRectMake(0, 0, kScreenWidth,650);
-                                weakSelf.bgScrollView.contentSize = CGSizeMake(kScreenWidth, 650);
+                                weakSelf.vipView.frame = CGRectMake(0, 0, kScreenWidth,1170);
+                                weakSelf.bgScrollView.contentSize = CGSizeMake(kScreenWidth, 1170);
                             }
                             
                         }
