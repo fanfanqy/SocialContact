@@ -23,4 +23,11 @@
 
 - (void)start;
 
+// 自定
+INS_P_ASSIGN(CGFloat, latitude); // 纬度
+
+INS_P_ASSIGN(CGFloat, longitude); // 精度
+
+INS_P_STRONG(NSString *, myLocation);
+
 @end

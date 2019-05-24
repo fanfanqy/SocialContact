@@ -117,10 +117,36 @@
     
 }
 
+- (void)requestAppConfig{
+    WEAKSELF;
+    GETRequest *request = [GETRequest requestWithPath:@"/appconfig/" parameters:nil completionHandler:^(InsRequest *request) {
+        
+        if (request.error) {
+            weakSelf.appConfigModel = [AppConfigModel new];
+            weakSelf.appConfigModel.isOnlineSwitch = NO;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf onceAgain];
+            });
+            
+        }else{
+            weakSelf.appConfigModel = [AppConfigModel modelWithDictionary:request.responseObject];
+        }
+    }];
+    [InsNetwork addRequest:request];
+    
+}
+
+- (void)onceAgain{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self requestAppConfig];
+    });
+}
+
 
 - (void)configRootVC{
     
-    
+    [self requestAppConfig];
     
     /**
      ios 11适配
@@ -176,6 +202,8 @@
             [[SCIM shared] startWithAppKey:kRongYunKey];
             
             [self requestBottleCharts];
+            [self requestAppConfig];
+            
             [self mapManagerConfig];
         }
         
@@ -294,7 +322,7 @@
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
     
-    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
 }
 

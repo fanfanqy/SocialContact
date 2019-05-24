@@ -30,10 +30,6 @@
     self.exchangeWechatTitle.font =  [UIFont systemFontOfSize:14];
     self.yueTitle.font =  [UIFont systemFontOfSize:14];
     
-     if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-         self.vipTitle.text = @"线下服务";
-         
-     }
     
 }
 

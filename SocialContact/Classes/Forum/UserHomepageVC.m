@@ -100,7 +100,7 @@ INS_P_ASSIGN(BOOL, isSelf);
     //设置状态栏背景字体颜色
     //(图片设置会导致全局白字,下面这句可以在个别界面设置成黑字)
     [self.cycleScrollView adjustWhenControllerViewWillAppera];
-    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
 - (UIButton *)chatBtn{
@@ -618,18 +618,11 @@ INS_P_ASSIGN(BOOL, isSelf);
 #pragma mark VipStatusCellDelegate
 - (void)vipClicked{
     
-    if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-        
-        [SVProgressHUD showInfoWithStatus:@"线下购买相亲约会服务，我们将为您提供优质线下服务"];
-        [SVProgressHUD dismissWithDelay:3];
-    }else{
-        
-        VipVC *vc = [[VipVC alloc]init];
-        vc.userId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
-        vc.type = 1;
-        [self.navigationController pushViewController:vc animated:YES];
-        
-    }
+ 
+    VipVC *vc = [[VipVC alloc]init];
+    vc.userId = [SCUserCenter sharedCenter].currentUser.userInfo.iD;
+    vc.type = 1;
+    [self.navigationController pushViewController:vc animated:YES];
     
 }
 
@@ -711,10 +704,11 @@ INS_P_ASSIGN(BOOL, isSelf);
     }
     
     if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-        
-        [self.view makeToast:@"申请已发送"];
+        [self goVip];
         return;
     }
+    
+
     
     if ([SCUserCenter sharedCenter].currentUser.userInfo.iD == self.userId) {
         return;
@@ -806,28 +800,25 @@ INS_P_ASSIGN(BOOL, isSelf);
         VipStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VipStatusCell"];
         cell.delegate = self;
         
-        if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-            cell.vipDayCount.text = @"";
-        }else{
-            if (self.userInfo.service_vip_expired_at) {
-                
-                NSDate *date = [self.userInfo.service_vip_expired_at sc_dateWithUTCString];
-                NSTimeInterval interval = [date timeIntervalSinceNow];
-                if (interval <= 0) {
-                    cell.vipDayCount.hidden = YES;
+        if (self.userInfo.service_vip_expired_at) {
+            
+            NSDate *date = [self.userInfo.service_vip_expired_at sc_dateWithUTCString];
+            NSTimeInterval interval = [date timeIntervalSinceNow];
+            if (interval <= 0) {
+                cell.vipDayCount.hidden = YES;
+            }else{
+                cell.vipDayCount.hidden = NO;
+                if (interval < 3600*24) {
+                    cell.vipDayCount.text = @"1天";
                 }else{
-                    cell.vipDayCount.hidden = NO;
-                    if (interval < 3600*24) {
-                        cell.vipDayCount.text = @"1天";
-                    }else{
-                        
-                        NSInteger count = interval/(3600*24) + 1;
-                        cell.vipDayCount.text = [NSString stringWithFormat:@"%ld天",count];
-                    }
                     
+                    NSInteger count = interval/(3600*24) + 1;
+                    cell.vipDayCount.text = [NSString stringWithFormat:@"%ld天",count];
                 }
+                
             }
         }
+    
         return cell;
         
     }else if (indexPath.section == 4) {
@@ -964,7 +955,7 @@ INS_P_ASSIGN(BOOL, isSelf);
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
         if (!_isSelf) {
-            _tableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
+            _tableView.contentInset = UIEdgeInsetsMake(0, 0, 90, 0);
             
         }
         

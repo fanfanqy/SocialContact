@@ -63,7 +63,7 @@ static CGFloat const kMomentContentInsetBootm = 15;
 
 static CGFloat const kMomentAvatarRightNickLeft = 15;
 
-static CGFloat const kMomentAvatarBottomContentTop = 0;
+static CGFloat const kMomentAvatarBottomContentTop = 5;
 
 static CGFloat const kMomentContentBottomPhotoContainTop =20;
 

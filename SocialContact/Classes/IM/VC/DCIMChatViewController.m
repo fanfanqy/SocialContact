@@ -151,6 +151,9 @@ typedef void(^CanChatBlock)(BOOL can);
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshCanChat:) name:@"RefreshOtherMessageIsVip" object:nil];
     
+    if ([self.title isEqualToString:@"客服"]) {
+        return;
+    }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.moreBtn];

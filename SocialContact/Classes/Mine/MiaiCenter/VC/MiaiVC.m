@@ -101,6 +101,8 @@
             if (weakSelf.userModel.is_rut) {
                 [SVProgressHUD showImage:AlertSuccessImage status:@"成功加入"];
                 [SVProgressHUD dismissWithDelay:1.5];
+                [weakSelf.enjoyBtn setTitle:@"已加入" forState:UIControlStateNormal];
+                
             }else{
                 [SVProgressHUD showImage:AlertErrorImage status:@"加入失败"];
                 [SVProgressHUD dismissWithDelay:1.5];

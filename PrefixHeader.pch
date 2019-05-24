@@ -27,7 +27,7 @@
 #import <RongIMLib/RongIMLib.h>
 #import "AFNetworking.h"
 #import "IQKeyboardManager.h"
-#import <AMapFoundationKit/AMapFoundationKit.h>
+//#import <AMapFoundationKit/AMapFoundationKit.h>
 #import "RSKImageCropper.h"
 #import "TZImagePickerController.h"
 #import "MJRefresh.h"

@@ -103,7 +103,9 @@
 	attString.color = Font_color333;
 	attString.alignment = NSTextAlignmentJustified;
 	
-	YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(kScreenWidth - 2*kMomentContentInsetLeft , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont systemFontOfSize:15] withWidth:(kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetLeft -  kMomentPortraitWH)]) ];//3是特殊标点或者表情会多占用的空间
+    CGFloat width = kScreenWidth - 2*kMomentContentInsetLeft - kMomentContentInsetLeft -  kMomentPortraitWH;
+    
+	YYTextContainer * container = [YYTextContainer containerWithSize:CGSizeMake(width , [self getSpaceLabelHeightwithText:attString Speace:6 withFont:[UIFont systemFontOfSize:15] withWidth:width]) ];//3是特殊标点或者表情会多占用的空间
     container.truncationType = YYTextTruncationTypeEnd;
     _contentLayout = [YYTextLayout layoutWithContainer:container text:attString];
     _contentHeight = _contentLayout.textBoundingSize.height;
@@ -143,6 +145,9 @@
     NSDictionary *dic = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paraStyle, NSKernAttributeName:@1.5f
                           };
     CGSize size = [attStr.string boundingRectWithSize:CGSizeMake(width,MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
+    if (size.height <40) {
+        size.height = 40;
+    }
     return size.height;
 }
 

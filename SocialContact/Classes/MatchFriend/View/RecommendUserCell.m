@@ -30,7 +30,16 @@
 //    self.address.layer.borderColor = Font_color333.CGColor;
 //    self.address.layer.borderWidth = .3;
 //    self.address.layer.cornerRadius = 8.f;
-//    
+//
+//
+//    self.bgView.layer.shadowColor = [UIColor colorWithRed:139/255.0 green:139/255.0 blue:139/255.0 alpha:0.28].CGColor;
+//    self.bgView.layer.shadowOffset = CGSizeMake(0,1);
+//    self.bgView.layer.shadowOpacity = 1;
+//    self.bgView.layer.shadowRadius = 3;
+//    self.bgView.layer.cornerRadius = 3.3;
+//    self.contentView.layer.borderColor = [UIColor colorWithHexString:@"666666"].CGColor;
+//    self.contentView.layer.borderWidth = .1;
+    
     self.nick.font = [UIFont systemFontOfSize:15];
     self.address.font = [UIFont systemFontOfSize:10];
     

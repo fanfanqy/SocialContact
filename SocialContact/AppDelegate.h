@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppConfigModel.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) MapManager *mapManager;
+
+@property (strong, nonatomic) AppConfigModel *appConfigModel;
 
 +(AppDelegate *)sharedDelegate;
 

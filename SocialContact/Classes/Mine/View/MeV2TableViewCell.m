@@ -29,6 +29,8 @@
     self.bgView.layer.shadowOpacity = 1;
     self.bgView.layer.shadowRadius = 3;
     self.bgView.layer.cornerRadius = 3.3;
+    self.bgView.layer.borderColor = [UIColor colorWithHexString:@"666666"].CGColor;
+    self.bgView.layer.borderWidth = .1;
     
 }
 - (IBAction)gerenziliaoClick:(id)sender {

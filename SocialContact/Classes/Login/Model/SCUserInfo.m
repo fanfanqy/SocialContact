@@ -21,7 +21,11 @@
 }
 
 - (BOOL)isOnlineSwitch{
-    return YES;
+    AppConfigModel *model = [AppDelegate sharedDelegate].appConfigModel;
+    if (model) {
+        return model.isOnlineSwitch;
+    }
+    return NO;
 }
 
 @end

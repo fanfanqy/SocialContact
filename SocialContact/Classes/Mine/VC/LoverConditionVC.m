@@ -155,8 +155,6 @@ INS_P_STRONG(UIButton *, doneBtn);
     
     [self.view addSubview:self.tableView];
     
-    self.tableView.tableFooterView = self.footerView;
-    
     if ([self.title isEqualToString:@"择偶标准"]) {
         WEAKSELF;
         [self.tableView setLoadNewData:^{
@@ -166,6 +164,8 @@ INS_P_STRONG(UIButton *, doneBtn);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self getUserInfo];
         });
+    }else{
+        self.tableView.tableFooterView = self.footerView;
     }
 }
 

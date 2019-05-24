@@ -567,6 +567,13 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 #pragma mark 客服按钮点击
 - (void)customerBtnClick{
 #pragma mark TODO
+   
+    NSInteger targetId = [[AppDelegate sharedDelegate].appConfigModel.kefuid integerValue];
+
+    DCIMChatViewController *vc = [[DCIMChatViewController alloc]initWithConversationType:ConversationType_PRIVATE targetId: [NSString stringWithFormat:@"%ld",targetId]];
+    vc.isActiveChat = YES;
+    vc.title = @"客服";
+    [self.navigationController pushViewController:vc animated:YES];
     
 }
 
@@ -598,6 +605,13 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
 
 - (void)wantToTopClick{
     
+    if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+        
+        VipVC *vc = [VipVC new];
+        vc.type = 1;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     
     VipVC *vc = [VipVC new];
     vc.type = 2;
@@ -637,9 +651,9 @@ INS_P_STRONG(ZLSwipeableView *, swipeableView);
         [_tableViewHeaderView addSubview:self.todayRecommend];
         
         // 是否上线了
-        if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+//        if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
             [_tableViewHeaderView addSubview:self.wantToTop];
-        }
+//        }
         
         [_tableViewHeaderView addSubview:self.orangeRightArrowImgView];
         

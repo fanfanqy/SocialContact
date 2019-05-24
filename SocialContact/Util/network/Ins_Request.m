@@ -545,8 +545,8 @@
     NSString *shortVersion = [ORAppUtil appShortVersion];
     [request setValue:shortVersion forHTTPHeaderField:@"version"];
     
-    [request setValue:[NSString stringWithFormat:@"%lf",[SCUserCenter sharedCenter].currentUser.userInfo.latitude] forHTTPHeaderField:@"latitude"];
-    [request setValue:[NSString stringWithFormat:@"%lf",[SCUserCenter sharedCenter].currentUser.userInfo.longitude] forHTTPHeaderField:@"longitude"];
+    [request setValue:[NSString stringWithFormat:@"%lf",[AppDelegate sharedDelegate].mapManager.latitude] forHTTPHeaderField:@"latitude"];
+    [request setValue:[NSString stringWithFormat:@"%lf",[AppDelegate sharedDelegate].mapManager.longitude] forHTTPHeaderField:@"longitude"];
     
 }
 

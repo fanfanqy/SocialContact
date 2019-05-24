@@ -322,17 +322,11 @@ INS_P_ASSIGN(NSInteger, lookMeUnreadCount);
 }
 
 - (void)openVipBtnClicked{
-    
-    if (![SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
-        FeedBackVC *vc = [FeedBackVC new];
-        [self.navigationController pushViewController:vc animated:YES];
-        
-    }else{
-        VipVC *vc = [VipVC new];
-        vc.type = 1;
-        vc.userId = self.userModel.iD;
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+
+    VipVC *vc = [VipVC new];
+    vc.type = 1;
+    vc.userId = self.userModel.iD;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)yueClicked{
@@ -557,7 +551,7 @@ INS_P_ASSIGN(NSInteger, lookMeUnreadCount);
         _tableView = [[InsLoadDataTablView alloc] initWithFrame:CGRectMake(0, StatusBarHeight, kScreenWidth, kScreenHeight - UITabBarHeight - StatusBarHeight ) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundColor =  [UIColor clearColor];
 //        _tableView.backgroundColor = [UIColor colorWithHexString:@"FAFAFA"];
 //        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 15, _tableView.separatorInset.bottom, 15);
 //        _tableView.separatorColor = Line;

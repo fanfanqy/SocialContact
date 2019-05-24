@@ -238,10 +238,10 @@ INS_P_ASSIGN(NSInteger,offline_card_count);// 线下红娘服务卡数量
 // 距离
 INS_P_STRONG(NSString *,distance);
 
-// 自定
-INS_P_ASSIGN(CGFloat, latitude); // 纬度
-
-INS_P_ASSIGN(CGFloat, longitude); // 精度
+//// 自定
+//INS_P_ASSIGN(CGFloat, latitude); // 纬度
+//
+//INS_P_ASSIGN(CGFloat, longitude); // 精度
 
 //INS_P_STRONG(CLPlacemark *, placemark);
 
@@ -250,7 +250,7 @@ INS_P_STRONG(NSString *, myLocation);
 // 是否是打招呼
 INS_P_ASSIGN(BOOL,isSelectedSayHi);
 
-// 是否上线开关标识
+// 是否上线开关标识,NO 没上线，Yes 上线了
 INS_P_ASSIGN(BOOL,isOnlineSwitch);
 
 // 是否进行了身份认证

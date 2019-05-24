@@ -27,8 +27,10 @@
 
 #pragma mark 定位
 - (void)mapManager:(MapManager *)manager didUpdateAndGetLastCLLocation:(CLLocation *)location{
-    [SCUserCenter sharedCenter].currentUser.userInfo.latitude = location.coordinate.latitude;
-    [SCUserCenter sharedCenter].currentUser.userInfo.longitude = location.coordinate.longitude;
+//    self.latitude = location.coordinate.latitude;
+//    self.longitude = location.coordinate.longitude;
+    manager.latitude = location.coordinate.latitude;
+    manager.longitude = location.coordinate.longitude;
 }
 
 - (void)mapManager:(MapManager *)manager didReverseCLLocation:(CLPlacemark *)placemark{
@@ -47,8 +49,8 @@
     if (!street) {
         street = @"";
     }
-    [SCUserCenter sharedCenter].currentUser.userInfo.myLocation = [NSString stringWithFormat:@"%@%@%@%@",state?:@"",city?:@"",subLocality?:@"",street?:@""];
-  
+    manager.myLocation = [NSString stringWithFormat:@"%@%@%@%@",state?:@"",city?:@"",subLocality?:@"",street?:@""];
+    
 }
 
 - (void)mapManager:(MapManager *)manager didFailed:(NSError *)error{

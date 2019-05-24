@@ -397,9 +397,9 @@
 //        [mutableDic setObject:self.pics forKey:@"images"];
     }
     
-    if ([SCUserCenter sharedCenter].currentUser.userInfo.latitude != 0) {
-        [mutableDic setObject:[NSNumber numberWithFloat:[SCUserCenter sharedCenter].currentUser.userInfo.latitude] forKey:@"latitude"];
-        [mutableDic setObject:[NSNumber numberWithFloat:[SCUserCenter sharedCenter].currentUser.userInfo.longitude] forKey:@"longitude"];
+    if ([AppDelegate sharedDelegate].mapManager.latitude != 0) {
+        [mutableDic setObject:[NSNumber numberWithFloat:[AppDelegate sharedDelegate].mapManager.latitude] forKey:@"latitude"];
+        [mutableDic setObject:[NSNumber numberWithFloat:[AppDelegate sharedDelegate].mapManager.longitude] forKey:@"longitude"];
     }
     
     if ([SCUserCenter sharedCenter].currentUser.userInfo.myLocation) {
@@ -411,7 +411,7 @@
     [mutableDic setObject:@(1) forKey:@"function_type"];
     
     if (_topicModel) {
-        [mutableDic setObject:_topicModel.name forKey:@"topics"];
+        [mutableDic setObject:[NSString stringWithFormat:@"#%@#",_topicModel.name] forKey:@"topics"];
     }
     
     WEAKSELF;

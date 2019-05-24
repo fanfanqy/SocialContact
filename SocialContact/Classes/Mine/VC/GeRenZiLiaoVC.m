@@ -551,7 +551,7 @@ INS_P_ASSIGN(BOOL,isModifyAvatar);
             }];
         }else if ([title isEqualToString:@"学历"]){
             
-            [CGXPickerView showStringPickerWithTitle:@"学历" DataSource:@[@"初中", @"高中",@"中专",@"大专",@"大学",@"硕士",@"博士",@"院士"] DefaultSelValue:@"大学" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
+            [CGXPickerView showStringPickerWithTitle:@"学历" DataSource:@[@"初中", @"高中",@"中专",@"大专",@"本科",@"硕士",@"博士",@"院士"] DefaultSelValue:@"大学" IsAutoSelect:NO Manager:nil ResultBlock:^(id selectValue, id selectRow) {
                 NSLog(@"%@",selectValue);
                 
                 weakSelf.userModel.education = [selectRow integerValue]+1;

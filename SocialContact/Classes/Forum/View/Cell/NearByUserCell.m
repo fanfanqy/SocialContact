@@ -184,7 +184,13 @@
     }
     [self.address sizeToFit];
     
-    self.distance.text = [NSString stringWithFormat:@"%@米",userInfo.distance?:@"-"];
+    CGFloat distance = [userInfo.distance floatValue];
+    if (distance >=1000) {
+        distance = distance/1000.0;
+        self.distance.text = [NSString stringWithFormat:@"%.1lfkm",distance];
+    }else{
+        self.distance.text = [NSString stringWithFormat:@"%.0lfm",distance];
+    }
     
 }
 

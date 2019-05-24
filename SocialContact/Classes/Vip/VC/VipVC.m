@@ -14,6 +14,9 @@
 #import "WechatOrderModel.h"
 #import "WXApiManager.h"
 #import "VipView.h"
+//#import "IAPHelper.h"
+//#import "IAPShare.h"
+#import "SCIAPManager.h"
 
 @interface VipVC ()<ViewTopViewDelegate,YueServiceViewDelegate,UIScrollViewDelegate,WXApiManagerDelegate,VipViewDelegate>
 // 所有服务卡
@@ -132,16 +135,6 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
     
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-//    if ( _type == 1 || _type == 2) {
-//        if (scrollView.contentOffset.y<StatusBarHeight) {
-//            [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-//        }else{
-//            [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-//        }
-//    }
-}
 
 
 - (UIImageView *)bgImgView{
@@ -428,9 +421,49 @@ INS_P_ASSIGN(NSInteger, selectedServiceCardIndex);
 
 - (void)vipDredgeBtnClicked{
     
-    [self checkPayService];
     
-    [self selectPayMethod:_selectedIndex];
+    if ([SCUserCenter sharedCenter].currentUser.userInfo.isOnlineSwitch) {
+        
+        [self checkPayService];
+    
+        [self selectPayMethod:_selectedIndex];
+    }else{
+    
+        NSString *produceID = @"com.dd.hn.10001";
+        if (_selectedIndex == 0) {
+            produceID = @"com.dd.hn.10001";
+        }else if (_selectedIndex == 1) {
+            produceID = @"com.dd.hn.10002";
+        }else if (_selectedIndex == 2) {
+            produceID = @"com.dd.hn.10003";
+        }
+        WEAKSELF;
+        [SVProgressHUD show];
+        
+        [[SCIAPManager shareIAPManager]startIAPWithProductID:produceID completeHandle:^(IAPResultType type, NSData * _Nonnull data) {
+            /*
+            IAPResultSuccess = 0,       // 购买成功
+            IAPResultFailed = 1,        // 购买失败
+            IAPResultCancle = 2,        // 取消购买
+            */
+            [SVProgressHUD dismiss];
+            
+            if (type == IAPResultSuccess || type == IAPResultVerSuccess) {
+                [SVProgressHUD showImage:AlertErrorImage status:@"购买成功"];
+                [SVProgressHUD dismissWithDelay:1.5];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                });
+            }else if(type == IAPResultCancle){
+                [SVProgressHUD showImage:AlertErrorImage status:@"购买取消"];
+                [SVProgressHUD dismissWithDelay:1.5];
+            }else{
+                [SVProgressHUD showImage:AlertErrorImage status:@"购买失败"];
+                [SVProgressHUD dismissWithDelay:1.5];
+            }
+        }];
+    }
+
 }
 
 - (void)PayBackApp{

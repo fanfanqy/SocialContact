@@ -58,6 +58,8 @@
 
 - (void)sayHi{
     
+    [SVProgressHUD show];
+    
     // 融云发消息
     
     [self backgroundTap];
@@ -67,8 +69,12 @@
     sayHiCount --;
     [[NSUserDefaults standardUserDefaults]setObject:@(sayHiCount) forKey:kSayHiCount];
     
-    
-    for (SCUserInfo *userInfo in self.dataArray) {
+    for (NSInteger i=0; i<self.dataArray.count; i++) {
+        
+        if (i%5== 0 && i != 0 ) {
+            sleep(1);
+        }
+        SCUserInfo *userInfo = self.dataArray[i];
         
         if (!userInfo.isSelectedSayHi) {
             continue;
@@ -100,6 +106,9 @@
             }];
         }
     }
+    
+    [SVProgressHUD dismiss];
+    
     
     [SVProgressHUD showImage:AlertSuccessImage status:@"打招呼成功"];
     [SVProgressHUD dismissWithDelay:1.5];

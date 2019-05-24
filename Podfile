@@ -6,7 +6,7 @@ target "SocialContact" do
 
 pod 'AFNetworking'
 pod 'IQKeyboardManager'
-pod 'AMapLocation-NO-IDFA'
+#pod 'AMapLocation-NO-IDFA'
 pod 'RSKImageCropper'
 pod 'TZImagePickerController'
 pod 'MJRefresh'
@@ -46,4 +46,5 @@ pod 'AXWebViewController'
 pod 'KSPhotoBrowser'
 pod 'YYKit'
 pod 'TTTAttributedLabel'
+#pod 'IAPHelper'
 end

@@ -20,6 +20,8 @@
     self.bgView.layer.shadowOpacity = 1;
     self.bgView.layer.shadowRadius = 3;
     self.bgView.layer.cornerRadius = 3.3;
+    self.bgView.layer.borderColor = [UIColor colorWithHexString:@"666666"].CGColor;
+    self.bgView.layer.borderWidth = .1;
     
     self.avatarImg.layer.cornerRadius = 50.f;
     self.avatarImg.layer.masksToBounds = YES;
@@ -36,12 +38,35 @@
     self.guanzhuWodeBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     self.huxiangGuanZhuBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     
-    self.lookMeCountLB.font = [UIFont systemFontOfSize:14];
-    self.woGuanzhuCountLB.font = [UIFont systemFontOfSize:14];
-    self.guanzhuWodeCountLB.font = [UIFont systemFontOfSize:14];
-    self.huxiangGuanZhuCountLB.font = [UIFont systemFontOfSize:14];
+    self.lookMeCountLB.font = [UIFont systemFontOfSize:15];
+    self.woGuanzhuCountLB.font = [UIFont systemFontOfSize:15];
+    self.guanzhuWodeCountLB.font = [UIFont systemFontOfSize:15];
+    self.huxiangGuanZhuCountLB.font = [UIFont systemFontOfSize:15];
     
     self.nickL.textAlignment = NSTextAlignmentCenter;
+    
+    WEAKSELF;
+    [self.lookMeCountLB jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(kanguoWoBtnClicked)]) {
+            [weakSelf.delegate kanguoWoBtnClicked];
+        }
+    }];
+    
+    [self.woGuanzhuCountLB jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(woguanzhuBtnClicked)]) {
+            [weakSelf.delegate woguanzhuBtnClicked];
+        }
+    }];
+    [self.guanzhuWodeCountLB jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(guanzhuWoBtnClicked)]) {
+            [weakSelf.delegate guanzhuWoBtnClicked];
+        }
+    }];
+    [self.huxiangGuanZhuCountLB jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(huxiangGuanZhuBtnClicked)]) {
+            [weakSelf.delegate huxiangGuanZhuBtnClicked];
+        }
+    }];
     
 }
 
@@ -66,17 +91,21 @@
 
     NSString *avatarUrlStr = userModel.avatar_url;
     
+    self.verifyStatusL.backgroundColor = [UIColor clearColor];
+    
     if (userModel.avatar_status == 0) {
         self.verifyStatusL.image = [UIImage imageNamed:@"verifing"];
+        self.verifyStatusL.backgroundColor = [UIColor whiteColor];
     }else if (userModel.avatar_status == 2) {
         self.verifyStatusL.image = [UIImage imageNamed:@"verifyFailed"];
+        self.verifyStatusL.backgroundColor = [UIColor whiteColor];
     }
     
     [self.avatarImg sc_setImgWithUrl:avatarUrlStr placeholderImg:@"icon_default_person"];
     
     NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:userModel.name?:@""];
-    attString.font = [UIFont systemFontOfSize:16];
-    attString.color = [UIColor colorWithHexString:@"3B3B3B"];
+    attString.font = [[UIFont systemFontOfSize:17]fontWithBold];
+    attString.color = [UIColor colorWithHexString:@"333333"];
     attString.alignment = NSTextAlignmentCenter;
     NSMutableAttributedString * attKongString = [[NSMutableAttributedString alloc] initWithString:@" "];
     

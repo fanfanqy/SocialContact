@@ -16,9 +16,6 @@ PODS:
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - AlipaySDK-iOS (15.5.9)
-  - AMapFoundation-NO-IDFA (1.5.6)
-  - AMapLocation-NO-IDFA (2.6.1):
-    - AMapFoundation-NO-IDFA (~> 1.4)
   - Aspects (1.4.1)
   - AXIndicatorView (0.1.1)
   - AXNavigationBackItemInjection (0.0.2)
@@ -93,7 +90,6 @@ DEPENDENCIES:
   - AAPullToRefresh
   - AFNetworking
   - AlipaySDK-iOS
-  - AMapLocation-NO-IDFA
   - AXWebViewController
   - CocoaSecurity
   - CYLTabBarController
@@ -131,8 +127,6 @@ SPEC REPOS:
     - AAPullToRefresh
     - AFNetworking
     - AlipaySDK-iOS
-    - AMapFoundation-NO-IDFA
-    - AMapLocation-NO-IDFA
     - Aspects
     - AXIndicatorView
     - AXNavigationBackItemInjection
@@ -177,8 +171,6 @@ SPEC CHECKSUMS:
   AAPullToRefresh: 9170fe976bad38329656fc852ee84f8095d3718e
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   AlipaySDK-iOS: 1c5283b30977a24acecc0114662697f7dc78f618
-  AMapFoundation-NO-IDFA: 40d723b352992d0f95abe2976f0c0ecda3c3ffc3
-  AMapLocation-NO-IDFA: ffd69b8b88f553d0b252d4967bf301ad2afff9c0
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
   AXIndicatorView: 566b490a2dd9781d4ffbcc9752be9b9cdc6e728e
   AXNavigationBackItemInjection: efe0446967f3cbcc85a9118decd1e145138912dd
@@ -219,6 +211,6 @@ SPEC CHECKSUMS:
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
   ZLSwipeableView: df385760ff4838935cdbcb62878ac5acd7355949
 
-PODFILE CHECKSUM: 652e631eb5be58daf346818eb04d5695a6a8e307
+PODFILE CHECKSUM: 3537ff9bf96917ac0525a3d38f251c60201826c6
 
 COCOAPODS: 1.5.3

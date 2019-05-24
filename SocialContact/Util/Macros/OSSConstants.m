@@ -92,7 +92,7 @@ NSString *const kUserMessageUnreadCount = @"UserMessageUnreadCount";
 
 //new:  x18ywvqfxcc6c
 //old:  mgb7ka1nmdwtg
-NSString *const kRongYunKey = @"mgb7ka1nmdwtg";
+NSString *const kRongYunKey = @"x18ywvqfxcc6c";
 
 NSString *const kQINIU_TokenKey = @"";
 

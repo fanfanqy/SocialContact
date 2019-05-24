@@ -236,6 +236,14 @@
 		00BCBFBC225E68EC00D5BDC9 /* AbountUsVC1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00BCBFBA225E68EC00D5BDC9 /* AbountUsVC1.xib */; };
 		00DEDDEF2237B2CC00D709D8 /* WechatOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DEDDEE2237B2CC00D709D8 /* WechatOrderModel.m */; };
 		00DEDDF32237B57F00D709D8 /* WXApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DEDDF22237B57F00D709D8 /* WXApiManager.m */; };
+		00F0341522952ED1007FD618 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F0341422952ED1007FD618 /* StoreKit.framework */; };
+		00F034182295474C007FD618 /* SCIAPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F034172295474C007FD618 /* SCIAPManager.m */; };
+		00F03421229630A4007FD618 /* DemoMegNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F0341A229630A4007FD618 /* DemoMegNetwork.m */; };
+		00F03422229630A4007FD618 /* MGFaceIDDetect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F0341D229630A4007FD618 /* MGFaceIDDetect.framework */; };
+		00F03423229630A4007FD618 /* MGFaceIDBaseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F0341E229630A4007FD618 /* MGFaceIDBaseKit.framework */; };
+		00F03424229630A4007FD618 /* MGFaceIDDetectResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00F03420229630A4007FD618 /* MGFaceIDDetectResource.bundle */; };
+		00F03429229684B5007FD618 /* ActivityDetialVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F03427229684B5007FD618 /* ActivityDetialVC.m */; };
+		00F0342D22969328007FD618 /* AppConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F0342C22969328007FD618 /* AppConfigModel.m */; };
 		00F3C61921E834B0005CA742 /* SCCommonUIDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F3C61821E834B0005CA742 /* SCCommonUIDefine.m */; };
 		00F3C61C21E8353F005CA742 /* AppDelegate+ThirdLibraryConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F3C61B21E8353F005CA742 /* AppDelegate+ThirdLibraryConfig.m */; };
 		00F3C61F21E835F8005CA742 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F3C61E21E835F8005CA742 /* BaseNavigationController.m */; };
@@ -316,10 +324,6 @@
 		00F4B1F02281893200690950 /* MatchV2TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00F4B1EE2281893200690950 /* MatchV2TableViewCell.xib */; };
 		00F4B1F92282AECA00690950 /* UserInfoHomePageV2Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F4B1F72282AECA00690950 /* UserInfoHomePageV2Cell.m */; };
 		00F4B1FA2282AECA00690950 /* UserInfoHomePageV2Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00F4B1F82282AECA00690950 /* UserInfoHomePageV2Cell.xib */; };
-		00FD727C2271D28300071A82 /* MGFaceIDDetectResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00FD72782271D28000071A82 /* MGFaceIDDetectResource.bundle */; };
-		00FD727D2271D28300071A82 /* MGFaceIDDetect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FD727A2271D28300071A82 /* MGFaceIDDetect.framework */; };
-		00FD727E2271D28300071A82 /* MGFaceIDBaseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FD727B2271D28300071A82 /* MGFaceIDBaseKit.framework */; };
-		00FD72872271D7D900071A82 /* DemoMegNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FD72862271D7D900071A82 /* DemoMegNetwork.m */; };
 		925E34E9CB0F9E17968DF167 /* Pods_SocialContact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE67218EB998E29565781AAD /* Pods_SocialContact.framework */; };
 /* End PBXBuildFile section */
 
@@ -748,6 +752,19 @@
 		00DEDDEE2237B2CC00D709D8 /* WechatOrderModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WechatOrderModel.m; sourceTree = "<group>"; };
 		00DEDDF12237B57F00D709D8 /* WXApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiManager.h; sourceTree = "<group>"; };
 		00DEDDF22237B57F00D709D8 /* WXApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiManager.m; sourceTree = "<group>"; };
+		00F0341422952ED1007FD618 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		00F034162295474C007FD618 /* SCIAPManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCIAPManager.h; sourceTree = "<group>"; };
+		00F034172295474C007FD618 /* SCIAPManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCIAPManager.m; sourceTree = "<group>"; };
+		00F0341A229630A4007FD618 /* DemoMegNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoMegNetwork.m; sourceTree = "<group>"; };
+		00F0341B229630A4007FD618 /* DemoMegNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoMegNetwork.h; sourceTree = "<group>"; };
+		00F0341D229630A4007FD618 /* MGFaceIDDetect.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MGFaceIDDetect.framework; sourceTree = "<group>"; };
+		00F0341E229630A4007FD618 /* MGFaceIDBaseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MGFaceIDBaseKit.framework; sourceTree = "<group>"; };
+		00F03420229630A4007FD618 /* MGFaceIDDetectResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MGFaceIDDetectResource.bundle; sourceTree = "<group>"; };
+		00F0342522965216007FD618 /* SocialContact.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SocialContact.entitlements; sourceTree = "<group>"; };
+		00F03426229684B5007FD618 /* ActivityDetialVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActivityDetialVC.h; sourceTree = "<group>"; };
+		00F03427229684B5007FD618 /* ActivityDetialVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActivityDetialVC.m; sourceTree = "<group>"; };
+		00F0342B22969328007FD618 /* AppConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConfigModel.h; sourceTree = "<group>"; };
+		00F0342C22969328007FD618 /* AppConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppConfigModel.m; sourceTree = "<group>"; };
 		00F3C61721E834B0005CA742 /* SCCommonUIDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCCommonUIDefine.h; sourceTree = "<group>"; };
 		00F3C61821E834B0005CA742 /* SCCommonUIDefine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCCommonUIDefine.m; sourceTree = "<group>"; };
 		00F3C61A21E8353F005CA742 /* AppDelegate+ThirdLibraryConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+ThirdLibraryConfig.h"; sourceTree = "<group>"; };
@@ -906,11 +923,6 @@
 		00F4B1F62282AECA00690950 /* UserInfoHomePageV2Cell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInfoHomePageV2Cell.h; sourceTree = "<group>"; };
 		00F4B1F72282AECA00690950 /* UserInfoHomePageV2Cell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInfoHomePageV2Cell.m; sourceTree = "<group>"; };
 		00F4B1F82282AECA00690950 /* UserInfoHomePageV2Cell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInfoHomePageV2Cell.xib; sourceTree = "<group>"; };
-		00FD72782271D28000071A82 /* MGFaceIDDetectResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MGFaceIDDetectResource.bundle; sourceTree = "<group>"; };
-		00FD727A2271D28300071A82 /* MGFaceIDDetect.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MGFaceIDDetect.framework; sourceTree = "<group>"; };
-		00FD727B2271D28300071A82 /* MGFaceIDBaseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MGFaceIDBaseKit.framework; sourceTree = "<group>"; };
-		00FD72852271D7D800071A82 /* DemoMegNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoMegNetwork.h; sourceTree = "<group>"; };
-		00FD72862271D7D900071A82 /* DemoMegNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoMegNetwork.m; sourceTree = "<group>"; };
 		835C4669338074ACA97E423E /* Pods-SocialContact.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialContact.release.xcconfig"; path = "Pods/Target Support Files/Pods-SocialContact/Pods-SocialContact.release.xcconfig"; sourceTree = "<group>"; };
 		DE67218EB998E29565781AAD /* Pods_SocialContact.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SocialContact.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9BA5A1E66E2A0A53ACC725C /* Pods-SocialContact.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialContact.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SocialContact/Pods-SocialContact.debug.xcconfig"; sourceTree = "<group>"; };
@@ -921,9 +933,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00FD727E2271D28300071A82 /* MGFaceIDBaseKit.framework in Frameworks */,
+				00F03423229630A4007FD618 /* MGFaceIDBaseKit.framework in Frameworks */,
+				00F0341522952ED1007FD618 /* StoreKit.framework in Frameworks */,
 				925E34E9CB0F9E17968DF167 /* Pods_SocialContact.framework in Frameworks */,
-				00FD727D2271D28300071A82 /* MGFaceIDDetect.framework in Frameworks */,
+				00F03422229630A4007FD618 /* MGFaceIDDetect.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1836,6 +1849,7 @@
 		00BB681E21E37F9F00ED831F /* SocialContact */ = {
 			isa = PBXGroup;
 			children = (
+				00F0342522965216007FD618 /* SocialContact.entitlements */,
 				0087CF8B221A81FD00161CA6 /* Resources */,
 				001802A921FC3C00007E0656 /* ReadMe.rtf */,
 				0088DBA721E48D5900C52C76 /* PrefixHeader.pch */,
@@ -1847,6 +1861,8 @@
 				00BB683621E3890800ED831F /* Util */,
 				00BB681F21E37F9F00ED831F /* AppDelegate.h */,
 				00BB682021E37F9F00ED831F /* AppDelegate.m */,
+				00F0342B22969328007FD618 /* AppConfigModel.h */,
+				00F0342C22969328007FD618 /* AppConfigModel.m */,
 				00F3C61A21E8353F005CA742 /* AppDelegate+ThirdLibraryConfig.h */,
 				00F3C61B21E8353F005CA742 /* AppDelegate+ThirdLibraryConfig.m */,
 				00BB682221E37F9F00ED831F /* ViewController.h */,
@@ -1926,8 +1942,38 @@
 			children = (
 				00DEDDF12237B57F00D709D8 /* WXApiManager.h */,
 				00DEDDF22237B57F00D709D8 /* WXApiManager.m */,
+				00F034162295474C007FD618 /* SCIAPManager.h */,
+				00F034172295474C007FD618 /* SCIAPManager.m */,
 			);
 			path = Pay;
+			sourceTree = "<group>";
+		};
+		00F03419229630A4007FD618 /* FaceId */ = {
+			isa = PBXGroup;
+			children = (
+				00F0341A229630A4007FD618 /* DemoMegNetwork.m */,
+				00F0341B229630A4007FD618 /* DemoMegNetwork.h */,
+				00F0341C229630A4007FD618 /* sdk */,
+				00F0341F229630A4007FD618 /* resource */,
+			);
+			path = FaceId;
+			sourceTree = "<group>";
+		};
+		00F0341C229630A4007FD618 /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				00F0341D229630A4007FD618 /* MGFaceIDDetect.framework */,
+				00F0341E229630A4007FD618 /* MGFaceIDBaseKit.framework */,
+			);
+			path = sdk;
+			sourceTree = "<group>";
+		};
+		00F0341F229630A4007FD618 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				00F03420229630A4007FD618 /* MGFaceIDDetectResource.bundle */,
+			);
+			path = resource;
 			sourceTree = "<group>";
 		};
 		00F3C6E521E83793005CA742 /* Classes */ = {
@@ -2018,6 +2064,8 @@
 				0018029221FB4651007E0656 /* UserHomepageVC.m */,
 				0018028E21FB3B41007E0656 /* ForumVC+Delegate.h */,
 				0018028F21FB3B41007E0656 /* ForumVC+Delegate.m */,
+				00F03426229684B5007FD618 /* ActivityDetialVC.h */,
+				00F03427229684B5007FD618 /* ActivityDetialVC.m */,
 			);
 			path = Forum;
 			sourceTree = "<group>";
@@ -2138,7 +2186,7 @@
 		00F3C7C221E9B784005CA742 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				00FD72762271D26C00071A82 /* FaceId */,
+				00F03419229630A4007FD618 /* FaceId */,
 				00BCBFB1225DF1EC00D5BDC9 /* PayView */,
 				0003285722283E5C000EAEDE /* HHRefreshManager */,
 				00775A0D221FE0DC00054619 /* PopMenu */,
@@ -2403,34 +2451,6 @@
 			path = Emoji;
 			sourceTree = "<group>";
 		};
-		00FD72762271D26C00071A82 /* FaceId */ = {
-			isa = PBXGroup;
-			children = (
-				00FD72852271D7D800071A82 /* DemoMegNetwork.h */,
-				00FD72862271D7D900071A82 /* DemoMegNetwork.m */,
-				00FD72772271D28000071A82 /* resource */,
-				00FD72792271D28300071A82 /* sdk */,
-			);
-			path = FaceId;
-			sourceTree = "<group>";
-		};
-		00FD72772271D28000071A82 /* resource */ = {
-			isa = PBXGroup;
-			children = (
-				00FD72782271D28000071A82 /* MGFaceIDDetectResource.bundle */,
-			);
-			path = resource;
-			sourceTree = "<group>";
-		};
-		00FD72792271D28300071A82 /* sdk */ = {
-			isa = PBXGroup;
-			children = (
-				00FD727A2271D28300071A82 /* MGFaceIDDetect.framework */,
-				00FD727B2271D28300071A82 /* MGFaceIDBaseKit.framework */,
-			);
-			path = sdk;
-			sourceTree = "<group>";
-		};
 		3608DFB45B55F0CBA24032B3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2443,6 +2463,7 @@
 		CB51B01F98A7A57CAC40ED82 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00F0341422952ED1007FD618 /* StoreKit.framework */,
 				DE67218EB998E29565781AAD /* Pods_SocialContact.framework */,
 			);
 			name = Frameworks;
@@ -2482,6 +2503,14 @@
 				TargetAttributes = {
 					00BB681B21E37F9E00ED831F = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -2512,7 +2541,6 @@
 				0054791521F3A97000B74054 /* BottomToolView.xib in Resources */,
 				00105D0B2223C841002176E4 /* AuthenticationConfirmVC.xib in Resources */,
 				0088DBA621E48CE200C52C76 /* BaseTableViewCell.xib in Resources */,
-				00FD727C2271D28300071A82 /* MGFaceIDDetectResource.bundle in Resources */,
 				00BB682C21E37FA200ED831F /* LaunchScreen.storyboard in Resources */,
 				00F3C76D21E85CB9005CA742 /* NewPasswordViewController.xib in Resources */,
 				00F3C84821E9C656005CA742 /* TopicCell.xib in Resources */,
@@ -2550,6 +2578,7 @@
 				001802B221FC46F9007E0656 /* NearByUserCell.xib in Resources */,
 				00829C2421EF149300A1F297 /* MatchTableViewCell.xib in Resources */,
 				00105CEE22239EDD002176E4 /* ExchangeWeChatListCell.xib in Resources */,
+				00F03424229630A4007FD618 /* MGFaceIDDetectResource.bundle in Resources */,
 				002088652213F35800F1E666 /* UserInfoHomePageCell.xib in Resources */,
 				00105CFD2223B5C5002176E4 /* InviteListTableViewCell.xib in Resources */,
 				004B4A5E224C9BAF00A00AA6 /* VipView.xib in Resources */,
@@ -2728,6 +2757,7 @@
 				0003286B22283E5C000EAEDE /* HHHeaderRefreshView.m in Sources */,
 				0088DC1721E4A55F00C52C76 /* NSString+Date.m in Sources */,
 				00F3C77121E85CB9005CA742 /* ForgetViewController.m in Sources */,
+				00F034182295474C007FD618 /* SCIAPManager.m in Sources */,
 				00105D242224DC2B002176E4 /* ArticleOrAdCell.m in Sources */,
 				0003286922283E5C000EAEDE /* HHBaseRefreshView.m in Sources */,
 				0054790321F3775D00B74054 /* LoveSkillVC.m in Sources */,
@@ -2742,6 +2772,7 @@
 				0088DB9E21E4843000C52C76 /* Ins_ViewController.m in Sources */,
 				00F3C75421E848F4005CA742 /* MatchFriendVC.m in Sources */,
 				0003286A22283E5C000EAEDE /* HHCircleRefreshView.m in Sources */,
+				00F0342D22969328007FD618 /* AppConfigModel.m in Sources */,
 				004B4A6B224CC8AF00A00AA6 /* SayHiCell.m in Sources */,
 				00F3C77F21E862A1005CA742 /* SCUserCenter.m in Sources */,
 				0054786F21F0D9CE00B74054 /* GeRenZiLiaoVC.m in Sources */,
@@ -2875,6 +2906,7 @@
 				00F3C77B21E85F87005CA742 /* POSTRequest.m in Sources */,
 				00F3C79A21E8FD54005CA742 /* MatchCardsView.m in Sources */,
 				00105D4322277C7F002176E4 /* YueServiceView.m in Sources */,
+				00F03421229630A4007FD618 /* DemoMegNetwork.m in Sources */,
 				00F3C77021E85CB9005CA742 /* VerifyCodeButton.m in Sources */,
 				005478A321F3162400B74054 /* CGXPickerUIBaseView.m in Sources */,
 				0020886F2214238400F1E666 /* VipVC.m in Sources */,
@@ -2920,7 +2952,6 @@
 				00F3C75121E83CC4005CA742 /* MainTabBarController.m in Sources */,
 				00BCBFBB225E68EC00D5BDC9 /* AbountUsVC1.m in Sources */,
 				0087CF7C2219304100161CA6 /* ModifyPasswordVC.m in Sources */,
-				00FD72872271D7D900071A82 /* DemoMegNetwork.m in Sources */,
 				000328762228E0F0000EAEDE /* InviteFriendModel.m in Sources */,
 				006D674C2251AE7800908ECD /* XiaShangYueMessageContent.m in Sources */,
 				0084761A224E0AB5000AA834 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */,
@@ -2965,6 +2996,7 @@
 				005478A921F3162400B74054 /* ZDropScrollView.m in Sources */,
 				0088DC0F21E4A55F00C52C76 /* NSString+Pinyin.m in Sources */,
 				0088DBD321E49C6E00C52C76 /* SecurityUtil.m in Sources */,
+				00F03429229684B5007FD618 /* ActivityDetialVC.m in Sources */,
 				0054787521F1988000B74054 /* WBStatusComposeViewController.m in Sources */,
 				00775A14221FE0DC00054619 /* XHPopMenu.m in Sources */,
 				00105D0E2223CAD1002176E4 /* InviteFriendHeaderView.m in Sources */,
@@ -3112,8 +3144,9 @@
 			baseConfigurationReference = F9BA5A1E66E2A0A53ACC725C /* Pods-SocialContact.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SocialContact/SocialContact.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4QWV55KF5M;
+				DEVELOPMENT_TEAM = 246F982QRL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -3130,7 +3163,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WeChatSDK1.8.4",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cvmars.handan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dd.hongniang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -3141,8 +3174,9 @@
 			baseConfigurationReference = 835C4669338074ACA97E423E /* Pods-SocialContact.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SocialContact/SocialContact.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4QWV55KF5M;
+				DEVELOPMENT_TEAM = 246F982QRL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -3159,7 +3193,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WeChatSDK1.8.4",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cvmars.handan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dd.hongniang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -12,6 +12,7 @@
 #import "UserHomepageVC.h"
 #import "ModifyUserInfoVC.h"
 #import "VipVC.h"
+#import "ActivityDetialVC.h"
 
 #import "TopicCell.h"
 #import "TopicListsHeaderView.h"
@@ -1168,14 +1169,17 @@ INS_P_ASSIGN(NSInteger, showEmpty);
         
         ArticleOrAdModel *model = self.array[indexPath.row];
         
-        AXWebViewController *webVC = [[AXWebViewController alloc]initWithAddress:@"https://www.baidu.com/"];
-        webVC.showsToolBar = YES;
-        webVC.reviewsAppInAppStore = YES;
-        webVC.navigationType = AXWebViewControllerNavigationToolItem;
+        ActivityDetialVC *vc = [[ActivityDetialVC alloc]init];
+        vc.articleModel = model;
+        
+//        AXWebViewController *webVC = [[AXWebViewController alloc]initWithAddress:@"https://www.baidu.com/"];
+//        webVC.showsToolBar = YES;
+//        webVC.reviewsAppInAppStore = YES;
+//        webVC.navigationType = AXWebViewControllerNavigationToolItem;
         if (self.fatherVC) {
-            [self.fatherVC.navigationController pushViewController:webVC animated:YES];
+            [self.fatherVC.navigationController pushViewController:vc animated:YES];
         }else{
-            [self.navigationController pushViewController:webVC animated:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }
         
     }else if (_forumVCType == ForumVCTypeAskWeChatOrYueTa) {

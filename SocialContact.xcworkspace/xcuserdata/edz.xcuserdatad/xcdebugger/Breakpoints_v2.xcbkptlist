@@ -148,11 +148,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/ViewModle/NewDynamicsLayout.m"
-            timestampString = "580121308.0111949"
+            timestampString = "580303924.548722"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
             landmarkName = "-layoutZanUsers"
             landmarkType = "7">
          </BreakpointContent>
@@ -180,7 +180,7 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/DangQianJiFenVC.m"
-                  timestampString = "579792887.670752"
+                  timestampString = "580301081.690729"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "187"
@@ -195,7 +195,7 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/DangQianJiFenVC.m"
-                  timestampString = "579792887.67883"
+                  timestampString = "580301081.693406"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "187"
@@ -210,7 +210,7 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/DangQianJiFenVC.m"
-                  timestampString = "579792887.68334"
+                  timestampString = "580301081.695964"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "135"
@@ -355,11 +355,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/AppDelegate.m"
-            timestampString = "580121308.012601"
+            timestampString = "580303924.549596"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "464"
+            endingLineNumber = "464"
             landmarkName = "-application:handleOpenURL:"
             landmarkType = "7">
          </BreakpointContent>
@@ -371,11 +371,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Vip/VC/VipVC.m"
-            timestampString = "580121308.012823"
+            timestampString = "580303924.549673"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "473"
-            endingLineNumber = "473"
+            startingLineNumber = "506"
+            endingLineNumber = "506"
             landmarkName = "-PayBackApp"
             landmarkType = "7">
          </BreakpointContent>
@@ -387,59 +387,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Vip/VC/VipVC.m"
-            timestampString = "580121308.0130039"
+            timestampString = "580303924.549754"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "719"
-            endingLineNumber = "719"
-            landmarkName = "-payOrder:payType:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[VipVC payOrder:payType:]"
-                  moduleName = "SocialContact"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Vip/VC/VipVC.m"
-                  timestampString = "579792887.881757"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "720"
-                  endingLineNumber = "720"
-                  offsetFromSymbolStart = "84">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__26-[VipVC payOrder:payType:]_block_invoke"
-                  moduleName = "SocialContact"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Vip/VC/VipVC.m"
-                  timestampString = "579792887.886722"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "721"
-                  endingLineNumber = "721"
-                  offsetFromSymbolStart = "72">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SocialContact/Classes/Vip/VC/VipVC.m"
-            timestampString = "580121308.0131969"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "670"
-            endingLineNumber = "670"
+            startingLineNumber = "703"
+            endingLineNumber = "703"
             landmarkName = "-buy:pay_type:payServiceModel:"
             landmarkType = "7">
          </BreakpointContent>
@@ -450,24 +402,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SocialContact/Classes/Forum/WBStatusComposeViewController.m"
-            timestampString = "580121308.013441"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "422"
-            endingLineNumber = "422"
-            landmarkName = "-uploadFriendCircle"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/LoverConditionVC.m"
-            timestampString = "580121308.013649"
+            timestampString = "580303924.549831"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "81"
@@ -483,7 +419,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/LoverConditionVC.m"
-            timestampString = "580121308.0140181"
+            timestampString = "580303924.549912"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "85"
@@ -579,7 +515,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-            timestampString = "580121308.015255"
+            timestampString = "580303924.550472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "458"
@@ -595,11 +531,11 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-                  timestampString = "579792888.0179501"
+                  timestampString = "580301082.0508519"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "576"
-                  endingLineNumber = "576"
+                  startingLineNumber = "458"
+                  endingLineNumber = "458"
                   offsetFromSymbolStart = "1376">
                </Location>
                <Location
@@ -610,11 +546,11 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-                  timestampString = "579792888.0220881"
+                  timestampString = "580301082.053512"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "576"
-                  endingLineNumber = "576"
+                  startingLineNumber = "458"
+                  endingLineNumber = "458"
                   offsetFromSymbolStart = "1408">
                </Location>
             </Locations>
@@ -627,7 +563,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-            timestampString = "580121308.015837"
+            timestampString = "580303924.550537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "469"
@@ -643,41 +579,41 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-                  timestampString = "579792888.038815"
+                  timestampString = "580301082.076398"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "587"
-                  endingLineNumber = "587"
+                  startingLineNumber = "469"
+                  endingLineNumber = "469"
                   offsetFromSymbolStart = "1756">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__29-[GeRenZiLiaoVC pickerTitle:]_block_invoke.556"
+                  symbolName = "__29-[GeRenZiLiaoVC pickerTitle:]_block_invoke.494"
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-                  timestampString = "579792888.1399781"
+                  timestampString = "580301082.078904"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "588"
-                  endingLineNumber = "588"
+                  startingLineNumber = "470"
+                  endingLineNumber = "470"
                   offsetFromSymbolStart = "96">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.560"
+                  symbolName = "__destroy_helper_block_.498"
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-                  timestampString = "579792888.144491"
+                  timestampString = "580301082.081304"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "587"
-                  endingLineNumber = "587"
+                  startingLineNumber = "469"
+                  endingLineNumber = "469"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
@@ -690,7 +626,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/LoverConditionVC.m"
-            timestampString = "580121308.016439"
+            timestampString = "580303924.550598"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "185"
@@ -706,11 +642,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/ForumVC.m"
-            timestampString = "580121308.016848"
+            timestampString = "580303924.55066"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1306"
-            endingLineNumber = "1306"
+            startingLineNumber = "1310"
+            endingLineNumber = "1310"
             landmarkName = "-replyWithModel:refuse:agree:type:"
             landmarkType = "7">
             <Locations>
@@ -722,11 +658,11 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Forum/ForumVC.m"
-                  timestampString = "579792888.171725"
+                  timestampString = "580301082.100282"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1306"
-                  endingLineNumber = "1306"
+                  startingLineNumber = "1310"
+                  endingLineNumber = "1310"
                   offsetFromSymbolStart = "456">
                </Location>
                <Location
@@ -737,26 +673,26 @@
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Forum/ForumVC.m"
-                  timestampString = "579792888.176412"
+                  timestampString = "580301082.103037"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1308"
-                  endingLineNumber = "1308"
+                  startingLineNumber = "1312"
+                  endingLineNumber = "1312"
                   offsetFromSymbolStart = "52">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.754"
+                  symbolName = "__destroy_helper_block_.746"
                   moduleName = "SocialContact"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/edz/Library/Mobile%20Documents/com~apple~CloudDocs/Documents/%E7%A4%BE%E4%BA%A4/%E7%9B%B8%E4%BA%B2APP/SocialContact/SocialContact/Classes/Forum/ForumVC.m"
-                  timestampString = "579792888.181861"
+                  timestampString = "580301082.105854"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1306"
-                  endingLineNumber = "1306"
+                  startingLineNumber = "1310"
+                  endingLineNumber = "1310"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
@@ -769,11 +705,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/ForumVC.m"
-            timestampString = "580121308.017218"
+            timestampString = "580303924.550724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1309"
-            endingLineNumber = "1309"
+            startingLineNumber = "1313"
+            endingLineNumber = "1313"
             landmarkName = "-replyWithModel:refuse:agree:type:"
             landmarkType = "7">
          </BreakpointContent>
@@ -801,7 +737,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-            timestampString = "580121308.017778"
+            timestampString = "580303924.550874"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "431"
@@ -832,28 +768,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SocialContact/Classes/Forum/Util/EaseConvertToCommonEmoticonsHelper.m"
-            timestampString = "575798694.3167779"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "289"
-            endingLineNumber = "289"
-            landmarkName = "+convertToSystemEmoticons:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/ForumVC.m"
-            timestampString = "580121308.01855"
+            timestampString = "580303924.5510401"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1184"
-            endingLineNumber = "1184"
+            startingLineNumber = "1188"
+            endingLineNumber = "1188"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -865,7 +785,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/UserHomepageVC.m"
-            timestampString = "580121308.018937"
+            timestampString = "580303924.551149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "233"
@@ -881,7 +801,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/IM/VC/DCIMChatViewController.m"
-            timestampString = "580121308.019325"
+            timestampString = "580303924.551221"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "57"
@@ -897,11 +817,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/IM/VC/DCIMChatViewController.m"
-            timestampString = "580121308.0194679"
+            timestampString = "580303924.551285"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
             landmarkName = "-canChatRequest"
             landmarkType = "7">
          </BreakpointContent>
@@ -913,12 +833,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/IM/VC/DCIMChatViewController.m"
-            timestampString = "580121308.019654"
+            timestampString = "580303924.551348"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "-refreshCanChat:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -929,7 +849,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/IM/VC/DCIMChatViewController.m"
-            timestampString = "580121308.01983"
+            timestampString = "580303924.55141"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "89"
@@ -961,7 +881,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/UserHomepageVC.m"
-            timestampString = "580121308.02016"
+            timestampString = "580303924.551587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "591"
@@ -977,7 +897,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/UserHomepageVC.m"
-            timestampString = "580121308.020516"
+            timestampString = "580303924.551657"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "599"
@@ -993,7 +913,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Login/VC/LoginViewController.m"
-            timestampString = "580121308.020919"
+            timestampString = "580269579.553143"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "973"
@@ -1009,7 +929,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/Authentication/VC/AuthenticationVC.m"
-            timestampString = "580121308.021039"
+            timestampString = "580303924.551842"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "188"
@@ -1025,7 +945,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/UserHomepageVC.m"
-            timestampString = "580121308.021168"
+            timestampString = "580303924.551905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "366"
@@ -1041,7 +961,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/LoverConditionVC.m"
-            timestampString = "580121308.021526"
+            timestampString = "580303924.551968"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "42"
@@ -1057,7 +977,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/MatchFriend/MatchFriendVC.m"
-            timestampString = "580121308.021857"
+            timestampString = "580303924.552031"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "369"
@@ -1073,13 +993,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/IM/VC/DCIMChatViewController.m"
-            timestampString = "580121308.023118"
+            timestampString = "580303924.552954"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "475"
-            endingLineNumber = "475"
-            landmarkName = "DCIMChatViewController"
-            landmarkType = "3">
+            startingLineNumber = "478"
+            endingLineNumber = "478"
+            landmarkName = "-viewWillAppear:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1089,7 +1009,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/MatchFriend/MatchFriendVC.m"
-            timestampString = "580121308.023232"
+            timestampString = "580303924.553019"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "360"
@@ -1105,7 +1025,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/LoverConditionVC.m"
-            timestampString = "580121308.024215"
+            timestampString = "580303924.553708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "435"
@@ -1121,11 +1041,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/MatchFriend/MatchFriendVC.m"
-            timestampString = "580121308.0245399"
+            timestampString = "580303924.553769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "575"
-            endingLineNumber = "575"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
             landmarkName = "-conditionSelectClick"
             landmarkType = "7">
          </BreakpointContent>
@@ -1137,11 +1057,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Greet/VC/GreetVC.m"
-            timestampString = "580121308.025517"
+            timestampString = "580303924.5544471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "-fetchData"
             landmarkType = "7">
          </BreakpointContent>
@@ -1169,7 +1089,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/MiaiCenter/VC/MiaiVC.m"
-            timestampString = "580121308.025996"
+            timestampString = "580303924.5546581"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "48"
@@ -1201,11 +1121,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Forum/ForumVC.m"
-            timestampString = "580121308.026512"
+            timestampString = "580303924.554846"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "564"
-            endingLineNumber = "564"
+            startingLineNumber = "565"
+            endingLineNumber = "565"
             landmarkName = "-fetchData:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1217,7 +1137,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SocialContact/Classes/Mine/VC/GeRenZiLiaoVC.m"
-            timestampString = "580121308.02686"
+            timestampString = "580303924.554912"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "113"
@@ -1232,13 +1152,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SocialContact/Classes/Mine/View/GFLCell.m"
-            timestampString = "580121308.027326"
+            filePath = "SocialContact/Classes/Login/Model/SCUserInfo.m"
+            timestampString = "580303924.554974"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "-setUserModel:"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "-isOnlineSwitch"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1248,13 +1168,61 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SocialContact/Util/Help/Help.m"
-            timestampString = "580121308.027616"
+            filePath = "SocialContact/Classes/Vip/VC/VipVC.m"
+            timestampString = "580303924.555042"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "+age:"
+            startingLineNumber = "425"
+            endingLineNumber = "425"
+            landmarkName = "-vipDredgeBtnClicked"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SocialContact/Classes/Forum/ViewModle/NewDynamicsLayout.m"
+            timestampString = "580303924.5551111"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "-layoutDetail"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SocialContact/Classes/Forum/ViewModle/NewDynamicsLayout.m"
+            timestampString = "580303924.555178"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "-layoutDetail"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SocialContact/Classes/Forum/ActivityDetialVC.m"
+            timestampString = "580303924.555246"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "-setUpUI"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
